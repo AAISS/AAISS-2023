@@ -1,18 +1,36 @@
-version: '3'
+version: '3.8'
 
 services:
-  web:
+  migrate_db:
     build: .
-    command: bash -c "python3 manage.py migrate && python3 manage.py collectstatic --noinput && gunicorn aaiss_backend.wsgi:application --bind 0.0.0.0:6446"
+    command: ./manage.py migrate
     volumes:
-      - .:/backend_aaiss
+      - aaiss_backend_db:/backend-aaiss/data
+
+  web:
+    depends_on:
+      migrate_db:
+        condition: service_completed_successfully
+    build: .
+    command: gunicorn aaiss_backend.wsgi:application --bind 0.0.0.0:6446
+    volumes:
+      - aaiss_backend_db:/backend-aaiss/data
     expose:
       - 6446
+    healthcheck:
+      test: [ "CMD", "curl", "localhost:6446/admin" ]
+      timeout: 2s
+      retries: 10
+
   nginx:
+    depends_on:
+      web:
+        condition: service_healthy
     build: ./nginx
     volumes:
       - .:/backend_aaiss
     ports:
-      - 6446:80
-    depends_on:
-      - web
+      - "80:80"
+
+volumes:
+  aaiss_backend_db:

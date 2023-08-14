@@ -1,12 +1,16 @@
-FROM python:3
+FROM python:3.9.6
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
-ENV HOME=/
-ENV APP_HOME=/backend_aaiss
-RUN mkdir /backend_aaiss
-RUN mkdir $APP_HOME/media
-WORKDIR /backend_aaiss
-COPY requirements.txt /backend_aaiss/
-RUN pip install --upgrade pip
-RUN pip3 install -r requirements.txt
-COPY . /backend_aaiss/
+
+ENV RUN_DIR=/backend-aaiss
+RUN mkdir -p $RUN_DIR $RUN_DIR/media
+WORKDIR $RUN_DIR
+
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+COPY . .
+RUN ./manage.py collectstatic --noinput
+
+EXPOSE 6446
+CMD gunicorn aaiss_backend.wsgi:application --bind 0.0.0.0:6446

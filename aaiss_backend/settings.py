@@ -9,19 +9,14 @@ https://docs.djangoproject.com/en/3.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
-import configparser
-import os
 import environ
-import mimetypes
-
-# To make css load
-mimetypes.add_type("text/html", ".css", True)
+from pathlib import Path
 
 env = environ.Env()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-environ.Env.read_env(BASE_DIR + '/.env')
+BASE_DIR = Path(__file__).resolve().parent.parent
+environ.Env.read_env(BASE_DIR.joinpath('.env'))
 
 # production/development key
 SECRET_KEY = env.str("SECRET_KEY", 'orlch#mu_+2-my=fo)akh_3+^j7+7tc@v*-*z^(g*%(&lih@pv')
@@ -57,13 +52,12 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'aaiss_backend.urls'
-APPEND_SLASH = False
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            BASE_DIR + '/templates/html/'
+            BASE_DIR / 'templates/html/'
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -78,7 +72,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
         'DIRS': [
-            BASE_DIR + '/templates/html/'],
+            BASE_DIR / 'templates/html/'],
     },
 ]
 WSGI_APPLICATION = 'aaiss_backend.wsgi.application'
@@ -89,7 +83,7 @@ WSGI_APPLICATION = 'aaiss_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': BASE_DIR / 'data' / 'db.sqlite3',
     }
 }
 
@@ -128,14 +122,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 APPEND_SLASH = True
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / "static"
 
 # Default auth model
 AUTH_USER_MODEL = 'backend_api.Account'
 
 # media
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
 
 # CORS
@@ -169,3 +163,6 @@ DEFAULT_FROM_EMAIL = env.str('DEFAULT_FROM_EMAIL', '')
 DISCORD_BOT_TOKEN = env.str('DISCORD_BOT_TOKEN', '')
 
 BASE_URL = 'https://aaiss.ce.aut.ac.ir/'
+
+# https://docs.djangoproject.com/en/4.2/releases/3.2/#customizing-type-of-auto-created-primary-keys
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
