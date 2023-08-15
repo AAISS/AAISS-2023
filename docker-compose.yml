@@ -15,6 +15,7 @@ services:
     command: gunicorn aaiss_backend.wsgi:application --bind 0.0.0.0:6446
     volumes:
       - aaiss_backend_db:/backend-aaiss/data
+      - backend_static_files:/backend-aaiss/static
     expose:
       - 6446
     healthcheck:
@@ -29,8 +30,10 @@ services:
     build: ./nginx
     volumes:
       - .:/backend_aaiss
+      - backend_static_files:/static
     ports:
       - "80:80"
 
 volumes:
   aaiss_backend_db:
+  backend_static_files:
