@@ -1,13 +1,25 @@
-aaisss.adibov.tech {
-	file_server /static/ {
-		root /static
+aaiss.adibov.ir {
+	@statics {
+		path /static/*
+	}
+	@backend {
+		not path /static/*
 	}
 
-	reverse_proxy / {
+	file_server @statics {
+		root /
+	}
+
+	reverse_proxy @backend {
 		to web:6446
+	}
+
+	log {
+		level info
+		output stdout
 	}
 }
 
-www.aaiss.adibov.tech {
-	redir https://aaiss.adibov.tech{uri}
+www.aaiss.adibov.ir {
+	redir https://aaiss.adibov.ir{uri}
 }
