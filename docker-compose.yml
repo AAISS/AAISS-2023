@@ -15,6 +15,7 @@ services:
     command: gunicorn aaiss_backend.wsgi:application --bind 0.0.0.0:6446
     volumes:
       - aaiss_backend_db:/backend-aaiss/data
+      - backend_static_files:/backend-aaiss/static
     expose:
       - 6446
     healthcheck:
@@ -22,15 +23,19 @@ services:
       timeout: 2s
       retries: 10
 
-  nginx:
+  caddy:
     depends_on:
       web:
         condition: service_healthy
-    build: ./nginx
+    image: caddy:2.7.3
     volumes:
-      - .:/backend_aaiss
+      - ./caddy:/etc/caddy
+      - backend_static_files:/static
+      - ./dist:/dist
     ports:
       - "80:80"
+      - "443:443"
 
 volumes:
   aaiss_backend_db:
+  backend_static_files:
