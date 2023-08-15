@@ -3,7 +3,10 @@ aaiss.adibov.ir {
 		path /static/*
 	}
 	@backend {
-		not path /static/*
+		path /admin* /api*
+	}
+	@frontend {
+	    not path /static/* /admin* /api*
 	}
 
 	file_server @statics {
@@ -13,6 +16,13 @@ aaiss.adibov.ir {
 	reverse_proxy @backend {
 		to web:6446
 	}
+
+    handle @frontend {
+        # TODO: dockerize the frontend project to be able to build the dist directory automatically
+        root * /dist
+        try_files {path} /index.html
+        file_server
+    }
 
 	log {
 		level info

@@ -31,6 +31,7 @@ services:
     volumes:
       - ./caddy:/etc/caddy
       - backend_static_files:/static
+      - ./dist:/dist
     ports:
       - "80:80"
       - "443:443"
