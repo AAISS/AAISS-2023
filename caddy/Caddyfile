@@ -1,0 +1,13 @@
+aaisss.adibov.tech {
+	file_server /static/ {
+		root /static
+	}
+
+	reverse_proxy / {
+		to web:6446
+	}
+}
+
+www.aaiss.adibov.tech {
+	redir https://aaiss.adibov.tech{uri}
+}

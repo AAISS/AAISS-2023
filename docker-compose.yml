@@ -23,16 +23,17 @@ services:
       timeout: 2s
       retries: 10
 
-  nginx:
+  caddy:
     depends_on:
       web:
         condition: service_healthy
-    build: ./nginx
+    image: caddy:2.7.3
     volumes:
-      - .:/backend_aaiss
+      - ./caddy:/etc/caddy
       - backend_static_files:/static
     ports:
       - "80:80"
+      - "443:443"
 
 volumes:
   aaiss_backend_db:
