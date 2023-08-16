@@ -1,4 +1,4 @@
-aaiss.adibov.ir {
+aaiss.ir {
 	@statics {
 		path /static/*
 	}
@@ -30,6 +30,6 @@ aaiss.adibov.ir {
 	}
 }
 
-www.aaiss.adibov.ir {
-	redir https://aaiss.adibov.ir{uri}
+www.aaiss.ir {
+	redir https://aaiss.ir{uri}
 }
