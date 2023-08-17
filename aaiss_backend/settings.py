@@ -23,11 +23,8 @@ SECRET_KEY = env.str("SECRET_KEY", 'orlch#mu_+2-my=fo)akh_3+^j7+7tc@v*-*z^(g*%(&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG", False)
 
-ALLOWED_HOSTS = ['aaiss.ir']
-CSRF_TRUSTED_ORIGINS = ['https://aaiss.ir']
-if DEBUG:
-    ALLOWED_HOSTS += ['localhost', '127.0.0.1']
-    CSRF_TRUSTED_ORIGINS += ['http://localhost', 'http://127.0.0.1']
+ALLOWED_HOSTS = ['aaiss.ir', '127.0.0.1', 'localhost']
+CSRF_TRUSTED_ORIGINS = ['https://aaiss.ir', 'http://localhost', 'http://127.0.0.1']
 
 # Application definition
 
@@ -108,6 +105,20 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "WARNING",
+    },
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/

@@ -32,6 +32,7 @@ services:
       - ./caddy:/etc/caddy
       - backend_static_files:/static
       - ./dist:/dist
+      - caddy_data:/data/caddy
     ports:
       - "80:80"
       - "443:443"
@@ -39,3 +40,4 @@ services:
 volumes:
   aaiss_backend_db:
   backend_static_files:
+  caddy_data:
