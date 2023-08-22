@@ -5,7 +5,7 @@ services:
     build: .
     command: ./manage.py migrate
     volumes:
-      - aaiss_backend_db:/backend-aaiss/data
+      - ./data:/backend-aaiss/data
 
   web:
     depends_on:
@@ -14,7 +14,7 @@ services:
     build: .
     command: gunicorn aaiss_backend.wsgi:application --bind 0.0.0.0:6446
     volumes:
-      - aaiss_backend_db:/backend-aaiss/data
+      - ./data:/backend-aaiss/data
       - backend_static_files:/backend-aaiss/static
     expose:
       - 6446
@@ -38,6 +38,5 @@ services:
       - "443:443"
 
 volumes:
-  aaiss_backend_db:
   backend_static_files:
   caddy_data:
