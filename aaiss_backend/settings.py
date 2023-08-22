@@ -24,7 +24,7 @@ SECRET_KEY = env.str("SECRET_KEY", 'orlch#mu_+2-my=fo)akh_3+^j7+7tc@v*-*z^(g*%(&
 DEBUG = env.bool("DEBUG", False)
 
 ALLOWED_HOSTS = ['aaiss.ir', '127.0.0.1', 'localhost']
-CSRF_TRUSTED_ORIGINS = ['https://aaiss.ir', 'http://localhost', 'http://127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['https://aaiss.ir', 'https://localhost', 'https://127.0.0.1']
 
 # Application definition
 
@@ -138,14 +138,14 @@ USE_TZ = True
 APPEND_SLASH = True
 
 STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / "static"
+STATIC_ROOT = BASE_DIR / 'static'
 
 # Default auth model
 AUTH_USER_MODEL = 'backend_api.Account'
 
 # media
+MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-MEDIA_URL = '/media/'
 
 # CORS
 CORS_URLS_REGEX = r'^/api/.*$'

@@ -15,7 +15,8 @@ services:
     command: gunicorn aaiss_backend.wsgi:application --bind 0.0.0.0:6446
     volumes:
       - ./data:/backend-aaiss/data
-      - backend_static_files:/backend-aaiss/static
+      - ./static:/backend-aaiss/static
+      - ./media:/backend-aaiss/media
     expose:
       - 6446
     healthcheck:
@@ -30,7 +31,8 @@ services:
     image: caddy:2.7.3
     volumes:
       - ./caddy:/etc/caddy
-      - backend_static_files:/static
+      - ./static:/static
+      - ./media:/media
       - ./dist:/dist
       - caddy_data:/data/caddy
     ports:
@@ -38,5 +40,4 @@ services:
       - "443:443"
 
 volumes:
-  backend_static_files:
   caddy_data:

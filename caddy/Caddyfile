@@ -1,12 +1,12 @@
 aaiss.ir {
 	@statics {
-		path /static/*
+		path /static/* /media/*
 	}
 	@backend {
 		path /admin* /api*
 	}
 	@frontend {
-	    not path /static/* /admin* /api*
+	    not path /static/* /admin* /api* /media*
 	}
 
 	file_server @statics {
@@ -25,7 +25,7 @@ aaiss.ir {
     }
 
 	log {
-		level info
+		level error
 		output stdout
 	}
 }
