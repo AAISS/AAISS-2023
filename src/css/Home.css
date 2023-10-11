@@ -1,0 +1,10 @@
+.home {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: row;
+}
+.cms {
+    padding-top: 1200px;
+    padding-bottom: 1200px;
+}

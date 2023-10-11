@@ -1,14 +1,10 @@
-
+import '../css/Home.css'
 const Home = () => {
   return (
-    <>
-
-      <div className="main">
+      <div className="home">
         <h1 className="cms">Coming Soon</h1>
       </div>
 
-      
-    </>
   );
 };
 

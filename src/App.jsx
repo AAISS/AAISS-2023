@@ -11,10 +11,10 @@ function App() {
   const [sect, setSect] = useState("/");
 
   return (
-    <>
+    <div className="main">
       <nav className="nav">
       <div className="logo-container">
-          <Link to="/" className="nav-item">
+          <Link to="/" className="logo-item">
             <img
               src={AAISS}
               alt="Logo"
@@ -47,7 +47,7 @@ function App() {
         <Route path="/" element={<Home />} />
       </Routes>
       <FooterNew />
-    </>
+    </div>
   );
 }
 
