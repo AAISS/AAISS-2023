@@ -1,4 +1,4 @@
-import * as React from "react";
+
 import footer from '../assets/footer.png'
 import '../css/Footer.css'
 const FooterNew = () => {

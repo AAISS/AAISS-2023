@@ -1,28 +1,40 @@
 #root {
-  max-width: 1280px;
-  /* margin: 0 auto; */
+  max-width: 1300px;
   padding: 2rem;
-  text-align: center;
-  /* background-color: blue; */
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
 }
 
 .main {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 }
+.nav{
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: row;
 
-.cms {
-  font-size: 3.2em;
-  line-height: 1.1;
-  /* color: #747bff; */
-  padding: 300px
 }
 .nav-item-container{
-  width: 3000px;
+  width: 1200px;
+}
+
+.logo-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .logo-container{
-  width: 675px;
+  width: 200px;
+
 }
 
+.aaiss {
+  width: 45%;
+}
