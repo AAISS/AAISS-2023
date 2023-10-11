@@ -1,0 +1,18 @@
+.nav {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-bottom: 10px;
+    /* padding: 25px; */
+}
+
+.nav-item{
+    color: white;
+    padding: 2.5px;
+    
+}
+.nav-item:hover {
+    color: lightblue;
+}
+
+

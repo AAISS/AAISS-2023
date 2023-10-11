@@ -5,25 +5,27 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #2e1340;
+
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-  direction: rtl;
+  /* direction: rtl; */
 }
 
 
 body {
   margin: 0;
-  display: flex;
+  /* display: flex; */
   place-items: center;
   min-width: 320px;
-  min-height: 100vh;
-  background-color : #2e1340;
+  min-height: 100vh; 
   background-image: url(assets/background.png);
 
 }
-
+/* .MuiButton-outlined  {
+  background-color: green;
+} */
