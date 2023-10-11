@@ -1,0 +1,16 @@
+.nav {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+
+.nav-item:hover {
+    color: lightblue;
+}
+
+
+.aaiss {
+    width: 50%;
+    height: 50%;
+  }
