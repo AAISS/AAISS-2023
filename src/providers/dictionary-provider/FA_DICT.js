@@ -1,6 +1,6 @@
 const FA_DICT = {
     header: {
-        title: "hlo"
+        title: "هلو"
     },
     pages: {
         home: {}
