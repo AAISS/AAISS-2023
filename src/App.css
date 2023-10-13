@@ -26,7 +26,8 @@
   width: 100%;
 }
 .nav-item-container{
-  width: 1200px;
+  width: 90%;
+  height: 100%;
 }
 
 .logo-item {
@@ -36,7 +37,6 @@
 }
 
 .logo-container{
-  width: 200px;
+  width: 10%;
   height: 100%;
-
 }
