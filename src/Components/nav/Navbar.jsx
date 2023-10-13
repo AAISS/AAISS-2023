@@ -31,7 +31,10 @@ export default function Navbar() {
             <div className="nav-item-container">
                 {Object.keys(ROUTES).map(name => {
                     return (
-                        <NavItem route={ROUTES[name]}/>
+                        <NavItem
+                            key={name}
+                            route={ROUTES[name]}
+                        />
                     )
                 })}
             </div>
