@@ -19,10 +19,10 @@
   justify-content: flex-start;
   flex-direction: row;
   position: fixed;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
   top:0;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.5);
   width: 100%;
 }
 .nav-item-container{
