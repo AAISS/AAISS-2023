@@ -8,7 +8,7 @@ export default function PresenterCard({ name, photo, link, desc }) {
             <Image
             src={IMG}
             style={{
-                width: "400px",
+                width: "300px",
                 height: "inherit",
             }}/>
             <h1>{name}</h1>
