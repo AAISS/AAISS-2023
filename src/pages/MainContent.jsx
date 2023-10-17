@@ -4,8 +4,9 @@ import Home from "../Components/Home.jsx";
 import FooterNew from "../Components/Footer.jsx";
 import Navbar from "../Components/nav/Navbar.jsx";
 import MobileNavbar from "../Components/nav/MobileNavBar.jsx";
-import PresenterCard from "../Components/PresenterCard.jsx";
-import StaffCard from "../Components/StaffCard.jsx";
+import PresenterCard from "../Components/presenters/PresenterCard.jsx";
+import StaffCard from "../Components/staff/StaffCard.jsx";
+import Team from "../Components/staff/Team.jsx";
 export default function MainContent() {
 
     return (
@@ -17,6 +18,7 @@ export default function MainContent() {
                 <Route path="/" element={<Home/>}/>
                 <Route path="/pctest" element={<PresenterCard/>}/>
                 <Route path="/sctest" element={<StaffCard/>}/>
+                <Route path="/ttest" element={<Team section="tech"/>}/>
             </Routes>
             <FooterNew/>
         </div>

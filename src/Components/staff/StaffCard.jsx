@@ -1,6 +1,5 @@
-import IMG from '../assets/brain.png'
-import Image from './image/Image'
-import "../css/StaffCard.css"
+import Image from "../image/Image"
+import IMG from "../../assets/brain.png"
 export default function StaffCard({
     name,
     image,
@@ -14,8 +13,8 @@ export default function StaffCard({
                 width: "200px",
                 height: "inherit",
             }}/>
-            <h1>NAME</h1>
-            <h3>ROLE</h3>
+            <h1>{name}</h1>
+            <h3>{role}</h3>
         </div>
     )
 }

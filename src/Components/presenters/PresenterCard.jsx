@@ -1,6 +1,6 @@
-import '../css/PresenterCard.css'
-import Image from './image/Image'
-import IMG from '../assets/brain.png'
+import '../../css/PresenterCard.css'
+import Image from '../image/Image'
+import IMG from '../../assets/brain.png'
 export default function PresenterCard({ name, photo, link, desc }) {
 
     return (
