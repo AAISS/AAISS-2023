@@ -4,6 +4,7 @@ import Home from "../Components/Home.jsx";
 import FooterNew from "../Components/Footer.jsx";
 import Navbar from "../Components/nav/Navbar.jsx";
 import MobileNavbar from "../Components/nav/MobileNavBar.jsx";
+import PresenterCard from "../Components/PresenterCard.jsx";
 export default function MainContent() {
 
     return (
@@ -13,6 +14,7 @@ export default function MainContent() {
             <HeaderNew/>
             <Routes>
                 <Route path="/" element={<Home/>}/>
+                <Route path="/pctest" element={<PresenterCard/>}/>
             </Routes>
             <FooterNew/>
         </div>
