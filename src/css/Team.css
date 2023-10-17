@@ -1,0 +1,15 @@
+.team-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.team-people-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    /* padding: 2rwe; */
+}

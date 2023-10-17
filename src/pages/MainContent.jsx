@@ -18,7 +18,7 @@ export default function MainContent() {
                 <Route path="/" element={<Home/>}/>
                 <Route path="/pctest" element={<PresenterCard/>}/>
                 <Route path="/sctest" element={<StaffCard/>}/>
-                <Route path="/ttest" element={<Team section="tech"/>}/>
+                <Route path="/ttest" element={<Team section="Technical"/>}/>
             </Routes>
             <FooterNew/>
         </div>

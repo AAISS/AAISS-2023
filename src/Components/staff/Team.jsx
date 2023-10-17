@@ -1,7 +1,7 @@
 import StaffCard from './StaffCard.jsx'
 // import '../../css/Team.css'
 import DATA from '../../assets/people.json'
-
+import '../../css/Team.css'
 console.log(DATA[0])
 export default function({ section }) {
     return (
