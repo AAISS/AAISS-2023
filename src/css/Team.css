@@ -1,0 +1,18 @@
+.team-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 20px;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.team-people-container{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Create 4 equally-sized columns */
+    gap: 16px; /* Adjust the gap between grid items */
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
+    /* padding: 2rwe; */
+}
