@@ -1,0 +1,9 @@
+.presenters-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    background-color: rgba(0,0,0,0.5);
+    
+    /* margin: ; */
+}
