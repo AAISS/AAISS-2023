@@ -1,5 +1,5 @@
 import {useConfig} from "../config-provider/ConfigProvider.jsx";
-import {createContext, useCallback, useContext, useEffect, useState} from "react";
+import {createContext, useCallback, useContext, useState} from "react";
 import EN_DICT from "./EN_DICT.js";
 
 export function DictionaryProvider({children}) {
@@ -13,7 +13,6 @@ export function DictionaryProvider({children}) {
             case CONFIG.languages.en:
                 import("./EN_DICT.js")
                     .then(config => {
-                        console.log("en", config.default)
                         setDict(config.default)
                     });
                 break;
@@ -21,7 +20,6 @@ export function DictionaryProvider({children}) {
             case CONFIG.languages.fa:
                 import("./FA_DICT.js")
                     .then(config => {
-                        console.log("fa", config.default)
                         setDict(config.default)
                     });
                 break;
@@ -29,7 +27,6 @@ export function DictionaryProvider({children}) {
             default:
                 import("./EN_DICT.js")
                     .then(config => {
-                        console.log("en", config.default)
                         return config.default
                     });
                 break;
@@ -38,10 +35,6 @@ export function DictionaryProvider({children}) {
 
     const [dict, setDict] = useState(EN_DICT)
     getCurrentDict()
-
-    useEffect(() => {
-        console.log("dict", dict)
-    }, [dict])
 
     const context = {
         dict
