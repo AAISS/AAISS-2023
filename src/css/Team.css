@@ -9,10 +9,10 @@
 
 .team-people-container{
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* Create 4 equally-sized columns */
-    gap: 16px; /* Adjust the gap between grid items */
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px; 
     align-items: center;
     justify-content: center;
     justify-items: center;
-    /* padding: 2rwe; */
+
 }

@@ -1,15 +1,14 @@
 import Image from "../image/Image"
-import IMG from "../../assets/brain.png"
 import '../../css/StaffCard.css'
 export default function StaffCard({
     name,
-    image,
+    photo,
     role
 }) {
     return (
         <div className="staff-card">
             <Image
-            src={IMG}
+            src={photo}
             style={{
                 width: "200px",
                 height: "inherit",
