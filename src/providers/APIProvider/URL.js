@@ -13,6 +13,7 @@ const URL = {
         committee: "committee/",
         presenter: "presenter/",
         teacher: "teacher/",
+        presentation: "presentation/"
     }
 }
 

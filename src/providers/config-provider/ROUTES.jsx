@@ -1,7 +1,11 @@
+import Home from "../../Components/Home.jsx";
+import SchedulePage from "../../pages/schedule/SchedulePage.jsx";
+
 const ROUTES = {
     home: {
         path: "/",
         title: "Home",
+        component: <Home />
     },
     about: {
         path: "/about",
@@ -22,6 +26,7 @@ const ROUTES = {
     schedule: {
         path: "/schedule",
         title: "Schedule",
+        component: <SchedulePage />
     },
     organizer: {
         path: "/organizer",

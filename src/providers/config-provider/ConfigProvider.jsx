@@ -1,6 +1,6 @@
 import {createContext, useContext, useEffect, useState} from "react";
 import CONFIG from "./CONFIG.js";
-import ROUTES from "./ROUTES.js";
+import ROUTES from "./ROUTES.jsx";
 
 export function ConfigProvider({children}) {
     const [lang, setLang] = useState(CONFIG.defaultLanguage)
