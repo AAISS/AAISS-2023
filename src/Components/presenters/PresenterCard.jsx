@@ -11,7 +11,7 @@ export default function PresenterCard({ name, photo, link, desc }) {
                 width: "300px",
                 height: "inherit",
             }}/>
-            <a href={link}><h1>{name}</h1></a>
+            <a href={link} className='presenter-card-name'><h1 >{name}</h1></a>
             <p>{desc}</p>
         </div>
     )

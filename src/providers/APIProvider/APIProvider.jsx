@@ -32,7 +32,7 @@ export function APIProvider({children}) {
     }, [service])
 
     const getTeachersData = useCallback(async ()=> {
-        service.get(`${URL.baseURL}${URL.services["2021"]}${URL.endpoints.teacher}`)
+        service.get(`${URL.baseURL}${URL.services["2021"]}${URL.endpoints.presenter}`)
             .then(response => setTeachersData(response.data))
     }, [service, ])
 
