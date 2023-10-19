@@ -1,11 +1,12 @@
 import '../../css/PresenterCard.css'
 import Image from '../image/Image'
+import IMG from '../../assets/Brain.png'
 export default function PresenterCard({ name, photo, link, desc }) {
 
     return (
         <div className="presenter-card">
             <Image
-            src={photo}
+            src={IMG}
             style={{
                 width: "300px",
                 height: "inherit",
