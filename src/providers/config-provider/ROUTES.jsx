@@ -1,6 +1,6 @@
 import Home from "../../Components/Home.jsx";
 import SchedulePage from "../../pages/schedule/SchedulePage.jsx";
-
+import PresenterPage from "../../pages/presenters/PresentersPage.jsx";
 const ROUTES = {
     home: {
         path: "/",
@@ -22,6 +22,7 @@ const ROUTES = {
     committee: {
         path: "/committee",
         title: "Committee",
+        component: <PresenterPage/>
     },
     schedule: {
         path: "/schedule",

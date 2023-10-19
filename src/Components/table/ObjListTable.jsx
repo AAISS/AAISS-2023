@@ -6,7 +6,7 @@ export default function ObjListTable({
                                      }) {
     return (
         <section>
-            {data &&
+            {!data ? <h1 style={{height: "500px"}}>loading...</h1> :
                 <div>
                     <section className={"table-container"}>
                         <h3>{title}</h3>

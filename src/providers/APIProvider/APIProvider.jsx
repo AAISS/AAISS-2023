@@ -9,7 +9,7 @@ export function APIProvider({children}) {
     const [registerData, setRegisterData] = useState()
     const [workshopsData, setWorkshopsData] = useState()
     const [presentationsData, setPresentationsData] = useState()
-
+    const [teachersData ,setTeachersData] = useState()
     const getRegisterData = useCallback(async () => {
         service.get(`${URL.baseURL}${URL.services["2021"]}${URL.endpoints.misc.register}`)
             .then(response => {
@@ -31,6 +31,12 @@ export function APIProvider({children}) {
             })
     }, [service])
 
+    const getTeachersData = useCallback(async ()=> {
+        service.get(`${URL.baseURL}${URL.services["2021"]}${URL.endpoints.teacher}`)
+            .then(response => setTeachersData(response.data))
+    }, [service, ])
+
+
     const context = {
         registerData,
         getRegisterData,
@@ -38,6 +44,8 @@ export function APIProvider({children}) {
         getWorkshopsData,
         presentationsData,
         getPresentationsData,
+        teachersData,
+        getTeachersData,
     }
 
     return (
