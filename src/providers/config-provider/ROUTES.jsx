@@ -12,35 +12,39 @@ const ROUTES = {
         title: "About",
     },
     speakers: {
-        path: "/speakers",
-        title: "Speakers",
+        path: "/presenters",
+        title: "Presenters",
+        component: <PresenterPage/>
     },
     workshops: {
         path: "/workshops",
         title: "Workshops",
     },
-    committee: {
-        path: "/committee",
-        title: "Committee",
-        component: <PresenterPage/>
-    },
+    // committee: {
+    //     path: "/committee",
+    //     title: "Committee",
+    // },
     schedule: {
         path: "/schedule",
         title: "Schedule",
         component: <SchedulePage />
     },
-    organizer: {
-        path: "/organizer",
-        title: "Organizer",
-    },
-    wnp: {
-        path: "/wnp",
-        title: "Workshops and Presentations",
-    },
+    // organizer: {
+    //     path: "/organizer",
+    //     title: "Organizer",
+    // },
+    // wnp: {
+    //     path: "/wnp",
+    //     title: "Workshops and Presentations",
+    // },
     staff: {
         path: "/staff",
         title: "Staff",
     },
+    history: {
+        path: '/history',
+        title: 'History'
+    }
 }
 
 export default ROUTES
