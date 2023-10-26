@@ -13,7 +13,7 @@ export default function() {
             <FormTextField type="password" label="Password"/>
             <FormControlLabel control={<Checkbox/> } label="Keep Me Logged In"/>
 
-            <a href="/" className="forgot-password">
+            <a href="/forgotpassword" className="forgot-password">
                 <h3>Forgotpassword</h3>
             </a>
             <Button color='primary' variant="contained">Submit</Button>
