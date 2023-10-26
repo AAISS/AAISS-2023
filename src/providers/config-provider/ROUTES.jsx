@@ -1,6 +1,8 @@
 import Home from "../../Components/Home.jsx";
 import SchedulePage from "../../pages/schedule/SchedulePage.jsx";
 import PresenterPage from "../../pages/presenters/PresentersPage.jsx";
+import Signup from "../../pages/Signup/Signup.jsx";
+import Login from "../../pages/Login/Login.jsx";
 const ROUTES = {
     home: {
         path: "/",
@@ -44,6 +46,16 @@ const ROUTES = {
     history: {
         path: '/history',
         title: 'History'
+    },
+    signup: {
+        path: '/signup',
+        title: 'Signup',
+        component: <Signup/>
+    },
+    login: {
+        path: '/login',
+        title: 'Login',
+        component: <Login/>
     }
 }
 
