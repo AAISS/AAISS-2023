@@ -23,7 +23,7 @@ export default function MobileNavbar() {
                         height: "inherit",
                     }}
                 />
-                <Button color="secondary" className="menu-btn" onClick={displayChange}>
+                <Button color="primary" className="menu-btn" onClick={displayChange}>
                     MENU
                 </Button>
             </div>

@@ -13,7 +13,10 @@ export default function Presenters({ presenters }) {
                     return (
                         <PresenterCard
                         name={item.name}
-                        desc={item.workplace}/>
+                        desc={item.workplace}
+                        photo={item.pic}
+                        
+                        />
                     )
                 })
             }

@@ -22,7 +22,7 @@ export default function NavItem({
             <Button
                 variant={getVariant(route.path, currentRoute.path)}
                 onClick={() => setCurrentRoute(route)}
-                color="secondary"
+                color="primary"
             >
                 {route.title}
             </Button>
