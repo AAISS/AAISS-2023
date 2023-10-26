@@ -1,0 +1,8 @@
+.form-text-item {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+    padding-bottom: 1rem;
+    color: rgb(0,0,0)
+}
