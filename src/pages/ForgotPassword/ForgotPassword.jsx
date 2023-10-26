@@ -4,7 +4,7 @@ import FormTextField from '../../Components/Form/FormTextField'
 import '../../css/ForgotPassword.css'
 export default function ForgotPassword() {
   return (
-    <div class='forgot-container'>
+    <div className='forgot-container'>
         <FormControl>
             <FormTextField type="text" label="Email"/>
             <Button variant="contained">Send Verification Email</Button>

@@ -8,8 +8,8 @@ export default function() {
 
     return (
         <div className="login-container"> 
-            <FormControl>
-            <FormTextField type="text" label="Email"/>
+            <FormControl >
+            <FormTextField  type="text" label="Email"/>
             <FormTextField type="password" label="Password"/>
             <FormControlLabel control={<Checkbox/> } label="Keep Me Logged In"/>
 
