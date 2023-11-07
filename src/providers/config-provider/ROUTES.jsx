@@ -3,6 +3,7 @@ import SchedulePage from "../../pages/schedule/SchedulePage.jsx";
 import PresenterPage from "../../pages/presenters/PresentersPage.jsx";
 import Signup from "../../pages/Signup/Signup.jsx";
 import Login from "../../pages/Login/Login.jsx";
+import MyAccount from "../../pages/my-account/MyAccount.jsx";
 const ROUTES = {
     home: {
         path: "/",
@@ -56,6 +57,11 @@ const ROUTES = {
         path: '/login',
         title: 'Login',
         component: <Login/>
+    },
+    myAccount: {
+       path: "/my-account",
+       title: "My Account",
+       component: <MyAccount />
     }
 }
 
