@@ -23,8 +23,10 @@ StaffSerializer = all_serializer_creator(models.Staff)
 CommitteeSerializer = all_serializer_creator(models.Committee)
 
 
-class AccountSerializer(serializers.Serializer):
-    email = serializers.EmailField(required=True)
+class AccountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = ('email', 'password')
 
 
 class UserSerializer(serializers.ModelSerializer):
