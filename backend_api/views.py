@@ -1,34 +1,27 @@
-import base64
+import datetime
 import datetime
 import json
 from threading import Thread
 
-from django.template.loader import render_to_string
-
-from aaiss_backend import settings
-from backend_api.email import send_simple_email
-from backend_api.idpay import IdPayRequest, IDPAY_PAYMENT_DESCRIPTION, \
-    IDPAY_CALL_BACK, IDPAY_STATUS_201, IDPAY_STATUS_100, IDPAY_STATUS_101, \
-    IDPAY_STATUS_200, IDPAY_STATUS_10
-from django.db.utils import IntegrityError
 from django.shortcuts import get_object_or_404, redirect
-from rest_framework.decorators import action
+from django.template.loader import render_to_string
+from rest_framework import status
+from rest_framework import viewsets
 from rest_framework.permissions import (
     IsAuthenticated,
     IsAdminUser,
     AllowAny
 )
-from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import viewsets
-from rest_framework import status
 
-from zeep import Client
-
-from aaiss_backend.settings import env
+from aaiss_backend import settings
 from backend_api import models
 from backend_api import serializers
-from backend_api.admin import MailerThread
+from backend_api.email import send_simple_email
+from backend_api.idpay import IdPayRequest, IDPAY_PAYMENT_DESCRIPTION, \
+    IDPAY_CALL_BACK, IDPAY_STATUS_201, IDPAY_STATUS_100, IDPAY_STATUS_101, \
+    IDPAY_STATUS_200
+from backend_api.models import User
 
 
 class FieldOfInterestViewSet(viewsets.ViewSet):
@@ -181,75 +174,26 @@ class MiscViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
 
-class UserAPIView(APIView):
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
     serializer_class = serializers.UserSerializer
+    permission_classes_by_action = {
+        # TODO: assert that the owner of the target object is the same as the user requesting
+        'list': [IsAdminUser],
+        'create': [AllowAny],
+        'retrieve': [IsAuthenticated],
+        'destroy': [IsAdminUser],
+        'update': [IsAuthenticated],
+        'partial_update': [IsAuthenticated],
+    }
 
-    def get(self, request, pk=None, format=None):
-        if request.META.get('HTTP_DAUTH') == settings.DISCORD_BOT_TOKEN:
-            try:
-                model_user = models.User.objects.get(account__email=(pk.lower()))
-            except KeyError as e:
-                return Response(status=status.HTTP_404_NOT_FOUND)
-            user = dict()
-            user['email'] = model_user.account.email
-            user['presentation'] = model_user.registered_for_presentations
-            user['name'] = model_user.name
-            user['fields_of_interest'] = []
-            for model_foi in model_user.fields_of_interest.all():
-                foi = dict()
-                foi['name'] = model_foi.name
-                user['fields_of_interest'].append(foi)
-
-            user['workshops'] = []
-            for model_workshop in model_user.registered_workshops.all():
-                workshop = dict()
-                workshop['name'] = model_workshop.name
-                user['workshops'].append(workshop)
-
-            return Response({'user': user})
-        else:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
-
-    def post(self, request):
-        serializer = self.serializer_class(data=request.data)
-
-        if serializer.is_valid():
-            foi_queryset = models.FieldOfInterest.objects.all()
-            # Fields of interest array
-            fois = []
-            if serializer.validated_data.get('fields_of_interest') is not None:
-                for pkid in serializer.validated_data.get('fields_of_interest'):
-                    foi = get_object_or_404(foi_queryset, pk=pkid)
-                    fois.append(foi)
-            try:
-                account = models.Account.objects.create_user(
-                    email=str(serializer.validated_data.get('email')).lower(),
-                    password='nothing'
-                )
-            except IntegrityError:
-                try:
-                    user = models.User.objects.get(account__email=(str(serializer.validated_data.get('email')).lower()))
-                except:
-                    return Response(str(serializer.validated_data.get('email')).lower())
-                user_workshops = []
-                for workshop in user.registered_workshops.all():
-                    user_workshops.append(workshop.id)
-
-                return Response({"message": "User already exist", 'workshops': user_workshops,
-                                 'presentations': user.registered_for_presentations}, status=status.HTTP_202_ACCEPTED)
-            account.save()
-            user = models.User.objects.create(
-                account=account,
-                name=serializer.validated_data.get('name'),
-                phone_number=serializer.validated_data.get('phone_number'),
-            )
-            user.fields_of_interest.set(fois)
-            user.registered_workshops.set([])
-            user.save()
-
-            return Response({'message': 'User created'})
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get_permissions(self):
+        try:
+            # return permission_classes depending on `action`
+            return [permission() for permission in self.permission_classes_by_action[self.action]]
+        except KeyError:
+            # action is not set return default permission_classes
+            return [permission() for permission in self.permission_classes]
 
 
 def send_register_email(user, workshops, presentation):

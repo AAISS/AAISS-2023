@@ -45,7 +45,18 @@ misc_route = [
     path(r'<int:year>/misc/<pk>/', views.MiscViewSet.as_view({'get': 'retrieve'})),
 ]
 
-
+user_route = [
+    path('user/', views.UserViewSet.as_view({
+        'get': 'list',
+        'post': 'create'
+    })),
+    path(r'user/<pk>', views.UserViewSet.as_view({
+        'get': 'retrieve',
+        'put': 'update',
+        'patch': 'partial_update',
+        'delete': 'destroy'
+    }))
+]
 
 urlpatterns = [
     path('', include(router.urls)),
@@ -56,8 +67,7 @@ urlpatterns = [
     path('', include(misc_route)),
     path('', include(staff_routes)),
     path('', include(committee_routes)),
-    path('user/', views.UserAPIView.as_view()),
-    path(r'user/<pk>/', views.UserAPIView.as_view()),
-    path('payment/', views.NewPaymentAPIView.as_view({'post':'payment'})),
-    path('payment/verify/', views.NewPaymentAPIView.as_view({'post':'verify'})),
+    path('', include(user_route)),
+    path('payment/', views.NewPaymentAPIView.as_view({'post': 'payment'})),
+    path('payment/verify/', views.NewPaymentAPIView.as_view({'post': 'verify'})),
 ]

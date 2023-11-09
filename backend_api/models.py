@@ -173,7 +173,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
         (0, 'admin'),
         (1, 'User')
     )
-    account_type = models.PositiveSmallIntegerField(choices=ACCOUNT_TYPE_CHOICES)
+    account_type = models.PositiveSmallIntegerField(choices=ACCOUNT_TYPE_CHOICES, default=1)
     email = models.EmailField(max_length=SMALL_MAX_LENGTH, unique=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)

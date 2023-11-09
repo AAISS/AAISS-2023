@@ -1,7 +1,7 @@
-from django.core.validators import RegexValidator
 from rest_framework import serializers
 
 from backend_api import models, validators
+from backend_api.models import User, Account, FieldOfInterest
 
 
 def all_serializer_creator(selected_model):
@@ -23,11 +23,28 @@ StaffSerializer = all_serializer_creator(models.Staff)
 CommitteeSerializer = all_serializer_creator(models.Committee)
 
 
-class UserSerializer(serializers.Serializer):
+class AccountSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
-    name = serializers.CharField(max_length=255, required=True)
-    fields_of_interest = serializers.ListField(child=serializers.IntegerField(min_value=0), required=False)
-    phone_number = serializers.CharField(max_length=12, validators=[validators.validate_all_number], required=True)
+
+
+class UserSerializer(serializers.ModelSerializer):
+    account = AccountSerializer()
+
+    class Meta:
+        model = User
+        fields = ('account', 'name', 'fields_of_interest', 'phone_number')
+
+    def create(self, validated_data):
+        account_data = validated_data.pop('account')
+        account = Account.objects.create(**account_data)
+        fields_of_interest = []
+        if 'fields_of_interest' in validated_data:
+            fields_of_interest = validated_data.pop('fields_of_interest')
+        user = User.objects.create(account=account, **validated_data)
+        for foi in fields_of_interest:
+            user.fields_of_interest.add(foi)
+        user.save()
+        return user
 
 
 class PaymentInitSerializer(serializers.Serializer):
