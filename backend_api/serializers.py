@@ -22,6 +22,7 @@ MiscSerializer = all_serializer_creator(models.Misc)
 StaffSerializer = all_serializer_creator(models.Staff)
 CommitteeSerializer = all_serializer_creator(models.Committee)
 
+
 class UserSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
     name = serializers.CharField(max_length=255, required=True)
@@ -29,7 +30,7 @@ class UserSerializer(serializers.Serializer):
     phone_number = serializers.CharField(max_length=12, validators=[validators.validate_all_number], required=True)
 
 
-class PaymentInitSerialier(serializers.Serializer):
+class PaymentInitSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
     workshops = serializers.ListField(child=serializers.IntegerField(min_value=0), required=False)
     presentations = serializers.BooleanField(required=False)

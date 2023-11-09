@@ -39,25 +39,6 @@ class AccountManager(BaseUserManager):
         return admin
 
 
-class Account(AbstractBaseUser, PermissionsMixin):
-    """Default user model for database"""
-    ACCOUNT_TYPE_CHOICES = (
-        (0, 'admin'),
-        (1, 'User')
-    )
-    account_type = models.PositiveSmallIntegerField(choices=ACCOUNT_TYPE_CHOICES)
-    email = models.EmailField(max_length=SMALL_MAX_LENGTH, unique=True)
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
-
-    objects = AccountManager()
-
-    USERNAME_FIELD = 'email'
-
-    def __str__(self):
-        return f"User with id {self.id}: {self.email}"
-
-
 class FieldOfInterest(models.Model):
     """Field of interest which user can add to their profile"""
     name = models.CharField(max_length=SMALL_MAX_LENGTH)
@@ -184,6 +165,25 @@ class Presentation(models.Model):
             name += presenter.name + " "
         print(name)
         return f"{name}: {self.name}"
+
+
+class Account(AbstractBaseUser, PermissionsMixin):
+    """Default user model for database"""
+    ACCOUNT_TYPE_CHOICES = (
+        (0, 'admin'),
+        (1, 'User')
+    )
+    account_type = models.PositiveSmallIntegerField(choices=ACCOUNT_TYPE_CHOICES)
+    email = models.EmailField(max_length=SMALL_MAX_LENGTH, unique=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+
+    objects = AccountManager()
+
+    USERNAME_FIELD = 'email'
+
+    def __str__(self):
+        return f"User with id {self.id}: {self.email}"
 
 
 class User(models.Model):
