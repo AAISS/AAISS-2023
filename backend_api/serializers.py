@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from backend_api import models, validators
-from backend_api.models import User, Account, FieldOfInterest
+from backend_api import models
+from backend_api.models import User, Account
 
 
 def all_serializer_creator(selected_model):
@@ -38,7 +38,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         account_data = validated_data.pop('account')
-        account = Account.objects.create(**account_data)
+        account = Account.objects.create_user(**account_data)
         fields_of_interest = []
         if 'fields_of_interest' in validated_data:
             fields_of_interest = validated_data.pop('fields_of_interest')

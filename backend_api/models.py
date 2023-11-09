@@ -1,12 +1,12 @@
 import datetime
 
-from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
-from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
-from django.core.validators import RegexValidator
+from django.contrib.auth.models import PermissionsMixin
+from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from aaiss_backend import settings
 from backend_api import validators
 
 SMALL_MAX_LENGTH = 255
@@ -14,29 +14,30 @@ BIG_MAX_LENGTH = 65535
 
 
 class AccountManager(BaseUserManager):
-    def create_user(self, email, password):
-        """Creates User Accounts to use in user model"""
+    def _create_user(self, email, password, **extra_fields):
+        """
+        Creates and saves a User with the given email and password.
+        """
         if not email:
-            raise ValueError("Users must have an email address")
-
-        email = email.lower()
-        user = self.model(email=email, account_type=1)
+            raise ValueError('The given email must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, password):
-        """Creates default superusers"""
-        if not email:
-            raise ValueError("Admins must have an email address")
+    def create_user(self, email, password, **extra_fields):
+        """Creates User Accounts to use in user model"""
+        extra_fields.setdefault('account_type', 1)
+        return self._create_user(email, password, **extra_fields)
 
-        email = email.lower()
-        admin = self.model(email=email, account_type=0)
-        admin.set_password(password)
-        admin.is_superuser = True
-        admin.is_staff = True
-        admin.save()
-        return admin
+    def create_superuser(self, email, password, **extra_fields):
+        """Creates default superusers"""
+        extra_fields.setdefault('is_superuser', True)
+
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+        return self._create_user(email, password, **extra_fields)
 
 
 class FieldOfInterest(models.Model):
@@ -188,7 +189,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
 
 class User(models.Model):
     """Generic non-admin user profile data"""
-    account = models.OneToOneField(Account, on_delete=models.CASCADE, primary_key=True)
+    account = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
     name = models.CharField(max_length=SMALL_MAX_LENGTH)
     fields_of_interest = models.ManyToManyField(FieldOfInterest, blank=True)
     registered_workshops = models.ManyToManyField(Workshop, blank=True)
