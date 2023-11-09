@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from backend_api import models
-from backend_api.models import User, Account
+from backend_api.models import User, Account, Presentation
 
 
 def all_serializer_creator(selected_model):
@@ -31,10 +31,19 @@ class AccountSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     account = AccountSerializer()
+    registered_workshops = WorkshopSerializer(many=True)
+    participated_presentations = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ('account', 'name', 'fields_of_interest', 'phone_number')
+        fields = (
+            'account', 'name', 'fields_of_interest', 'phone_number', 'registered_workshops',
+            'participated_presentations')
+
+    def get_participated_presentations(self, obj):
+        if obj.registered_for_presentations:
+            return PresentationSerializer(Presentation.objects.all(), many=True).data
+        return None
 
     def create(self, validated_data):
         account_data = validated_data.pop('account')
