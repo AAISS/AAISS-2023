@@ -21,7 +21,7 @@ from backend_api.email import send_simple_email
 from backend_api.idpay import IdPayRequest, IDPAY_PAYMENT_DESCRIPTION, \
     IDPAY_CALL_BACK, IDPAY_STATUS_201, IDPAY_STATUS_100, IDPAY_STATUS_101, \
     IDPAY_STATUS_200
-from backend_api.models import User
+from backend_api.models import User, Account
 
 
 class FieldOfInterestViewSet(viewsets.ViewSet):
@@ -175,7 +175,6 @@ class MiscViewSet(viewsets.ViewSet):
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
     serializer_class = serializers.UserSerializer
     permission_classes_by_action = {
         # TODO: assert that the owner of the target object is the same as the user requesting
@@ -186,6 +185,15 @@ class UserViewSet(viewsets.ModelViewSet):
         'update': [IsAuthenticated],
         'partial_update': [IsAuthenticated],
     }
+
+    def get_queryset(self):
+        """
+        Superusers can see all users, normal users can only see themselves
+        """
+        user: Account = self.request.user
+        if user.is_superuser:
+            return models.User.objects.all()
+        return User.objects.filter(pk=user.pk)
 
     def get_permissions(self):
         try:
