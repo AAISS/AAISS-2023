@@ -9,8 +9,9 @@ https://docs.djangoproject.com/en/3.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
-import environ
 from pathlib import Path
+
+import environ
 
 env = environ.Env()
 
@@ -36,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'rest_framework.authtoken',
+    'rest_framework_simplejwt',
     'corsheaders',
     'backend_api',
 ]
@@ -51,6 +52,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
 
 ROOT_URLCONF = 'aaiss_backend.urls'
 
@@ -166,7 +173,6 @@ EMAIL_USE_SSL = False
 ANYMAIL = {
     "SENDINBLUE_API_KEY": env.str("SENDINBLUE_API_KEY", "")
 }
-
 
 ALT_EMAIL_HOST = env.str("ALT_EMAIL_HOST", '')
 ALT_EMAIL_HOST_USER = env.str("ALT_EMAIL_HOST_USER", '')
