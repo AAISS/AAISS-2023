@@ -1,12 +1,13 @@
 import datetime
 import datetime
 import json
-from threading import Thread
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404, redirect
 from django.template.loader import render_to_string
 from rest_framework import status
 from rest_framework import viewsets
+from rest_framework.decorators import action
 from rest_framework.permissions import (
     IsAuthenticated,
     IsAdminUser,
@@ -17,11 +18,12 @@ from rest_framework.response import Response
 from aaiss_backend import settings
 from backend_api import models
 from backend_api import serializers
-from backend_api.email import send_simple_email
+from backend_api.email import MailerThread
 from backend_api.idpay import IdPayRequest, IDPAY_PAYMENT_DESCRIPTION, \
     IDPAY_CALL_BACK, IDPAY_STATUS_201, IDPAY_STATUS_100, IDPAY_STATUS_101, \
     IDPAY_STATUS_200
 from backend_api.models import User, Account
+from utils.renderers import new_detailed_response
 
 
 class FieldOfInterestViewSet(viewsets.ViewSet):
@@ -184,6 +186,7 @@ class UserViewSet(viewsets.ModelViewSet):
         'destroy': [IsAdminUser],
         'update': [IsAuthenticated],
         'partial_update': [IsAuthenticated],
+        'activate': [AllowAny]
     }
 
     def get_queryset(self):
@@ -203,13 +206,29 @@ class UserViewSet(viewsets.ModelViewSet):
             # action is not set return default permission_classes
             return [permission() for permission in self.permission_classes]
 
+    def create(self, request, *args, **kwargs):
+        serializer = serializers.UserSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user: User = serializer.save()
+        user.account.is_active = False
+        user.account.save()
+        user.account.send_registration_email()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-def send_register_email(user, workshops, presentation):
-    subject = 'AAISS registration'
-    body = render_to_string('AAISS_Info.html',
-                            {'name': user.name, 'workshops_text': ', '.join([w.name for w in workshops]),
-                             'presentation': presentation})
-    Thread(target=send_simple_email, args=(subject, user.account.email, body)).start()
+    @action(methods=['GET'], detail=False)
+    def activate(self, request):
+        if not request.query_params.get('token'):
+            return Response(new_detailed_response(
+                status.HTTP_400_BAD_REQUEST, "Token must be in query params"))
+        token = request.query_params.get('token')
+        try:
+            account = Account.objects.get(activation_code=token)
+        except ObjectDoesNotExist:
+            return Response(new_detailed_response(
+                status.HTTP_400_BAD_REQUEST, "Token didn't match with any user"))
+        account.is_active = True
+        account.save()
+        return Response(new_detailed_response(status.HTTP_200_OK, "User activated successfully"))
 
 
 class NewPaymentAPIView(viewsets.ModelViewSet):
@@ -262,8 +281,8 @@ class NewPaymentAPIView(viewsets.ModelViewSet):
                 user.registered_workshops.set(new_registered_workshops)
                 user.registered_for_presentations = presentation or user.registered_for_presentations
                 user.save()
-                send_register_email(user=user, workshops=workshops,
-                                    presentation=presentation)
+                # send_register_email(user=user, workshops=workshops,
+                #                     presentation=presentation)
                 res = {}
                 res['status'] = 200
                 res['link'] = F'{settings.BASE_URL}?payment_status=true'
@@ -345,8 +364,8 @@ class NewPaymentAPIView(viewsets.ModelViewSet):
                 user_workshops[workshop.id] = workshop.name
             response_data['workshops'] = user_workshops
             response_data['presentation'] = payment.user.registered_for_presentations
-            send_register_email(user=payment.user, workshops=payment.workshops.all(),
-                                presentation=payment.presentation)
+            # send_register_email(user=payment.user, workshops=payment.workshops.all(),
+            #                     presentation=payment.presentation)
             return redirect(F'{settings.BASE_URL}?payment_status=true')
         except Exception as e:
             print('Exception: ', e.__str__())

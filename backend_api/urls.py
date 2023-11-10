@@ -56,7 +56,10 @@ user_route = [
         'put': 'update',
         'patch': 'partial_update',
         'delete': 'destroy'
-    }))
+    })),
+    path(r'user/activate/', views.UserViewSet.as_view({
+        'get': 'activate'
+    }), name='activate')
 ]
 
 urlpatterns = [
