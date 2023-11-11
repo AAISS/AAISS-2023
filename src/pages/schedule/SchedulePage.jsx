@@ -1,5 +1,6 @@
 import useSchedulePage from "./useSchedulePage.js";
 import ObjListTable from "../../Components/table/ObjListTable.jsx";
+import "./SchedulePage.css";
 
 export default function SchedulePage() {
     const {

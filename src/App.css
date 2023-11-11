@@ -1,8 +1,22 @@
+@import "src/css/Theme.css";
+
+html, body {
+  margin: 0;
+  height: 100%;
+}
+
+html {
+  width: 100vw;
+  overflow-x: hidden;
+  padding: 0;
+}
+
 #root {
-  padding: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  background-image: url(/src/assets/background.png);
 }
 
 .main {
@@ -10,30 +24,55 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  margin-top: 120px;
 }
 
 .nav {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: flex-start;
   flex-direction: row;
   position: fixed;
   padding-top: 2rem;
   padding-bottom: 2rem;
   top: 0;
-  background-color: rgba(255, 255, 255, 0.5);
+  left: 0;
+  backdrop-filter: blur(20px);
   width: 100%;
   z-index: 2;
 }
+
+.nav .backdrop-color {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  background-color: var(--background-color-lighter-20);
+  opacity: 0.8;
+}
+
 .nav-item-container {
   width: 90%;
   height: 100%;
+}
+
+.nav-item-container .MuiButton-root {
+  color: var(--primary-color);
+}
+
+.nav-item-container .MuiButton-contained {
+  color: var(--background-color-lighter-20);
+  background-color: var(--primary-color);
 }
 
 .logo-item {
   display: flex;
   align-items: center;
   justify-content: center;
+  /*forces AAISS logo to be white*/
+  filter: brightness(0) saturate(100%) invert(97%) sepia(8%)
+  saturate(67%) hue-rotate(32deg) brightness(116%) contrast(100%);
 }
 
 .logo-container {
@@ -56,7 +95,7 @@
   flex-direction: column;
   display: flex;
   align-items: center;
-  justify-contrgba(255, 255, 255, 0.5)nter;
+  justify-content: center;
   background-color: rgba(255, 255, 255, 0.5);
 
 }

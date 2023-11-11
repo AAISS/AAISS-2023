@@ -1,3 +1,5 @@
+@import "src/css/Theme.css";
+
 :root {
   font-family:"Times New Roman",Georgia,Serif;
   line-height: 1.5;
@@ -5,7 +7,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background : linear-gradient(#2E4374 , #2E4374);
+  background : linear-gradient(#0A0F26 , #0A0F26);
 
 
   font-synthesis: none;
@@ -13,14 +15,4 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-}
-
-
-body {
-  
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh; 
-  background-image: url(assets/background.png);
-
 }

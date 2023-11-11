@@ -14,12 +14,15 @@
 }
 
 .forgot-password{
-    color: rgb(255,255,255);
-
+    color: #F9C148;
     text-decoration: none;
-
 }
 
 .forgot-password:visited {
     text-decoration: none;
+}
+
+.forgot-password h3 {
+    font-weight: 500;
+    font-size: larger;
 }

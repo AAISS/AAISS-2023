@@ -14,7 +14,7 @@ export default function() {
             <FormControlLabel control={<Checkbox/> } label="Keep Me Logged In"/>
 
             <a href="/forgotpassword" className="forgot-password">
-                <h3>Forgotpassword</h3>
+                <h3>Forgot password?</h3>
             </a>
             <Button color='primary' variant="contained">Submit</Button>
             </FormControl>

@@ -1,10 +1,10 @@
 import {Route, Routes} from "react-router-dom";
-import HeaderNew from "../Components/Header.jsx";
 import FooterNew from "../Components/Footer.jsx";
 import Navbar from "../Components/nav/Navbar.jsx";
 import MobileNavbar from "../Components/nav/MobileNavBar.jsx";
 import {useConfig} from "../providers/config-provider/ConfigProvider.jsx";
 import ForgotPassword from "./ForgotPassword/ForgotPassword.jsx";
+
 export default function MainContent() {
     const {
         ROUTES
@@ -14,7 +14,6 @@ export default function MainContent() {
         <div className="main">
             <Navbar/>
             <MobileNavbar/>
-            <HeaderNew/>
             <Routes>
                 {Object.keys(ROUTES).map(name => {
                     return (
@@ -27,7 +26,9 @@ export default function MainContent() {
                 })}
             <Route path="/forgotpassword" element={<ForgotPassword/>} key="forgot"/>
             </Routes>
-            <FooterNew/>
+            <footer>
+                <FooterNew/>
+            </footer>
         </div>
     )
 }

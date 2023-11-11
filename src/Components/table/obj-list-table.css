@@ -1,8 +1,17 @@
+@import "src/css/Theme.css";
+
 .table-container {
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: var(--background-color-lighter-40-glassy);
+    backdrop-filter: blur(2px);
     border-radius: 10px;
     border: 2px solid black;
     padding: 0 1rem 1rem;
+    font-family: Roboto, serif;
+}
+.table-container h3 {
+    color: var(--light-text-color);
+    font-weight: bold;
+    font-size: x-large;
 }
 table {
     color: rgb(0,0,0);

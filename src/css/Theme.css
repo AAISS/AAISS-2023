@@ -1,0 +1,20 @@
+body {
+    /*primary color*/
+    --primary-color: #64A1E8;
+
+    /*secondary color*/
+    --accent-color: #C4C7F2;
+
+    /*warn color*/
+    --warn-color: #ec6803;
+
+    /*background*/
+    --background-color: #0A0F26;
+    --background-color-lighter-20: #0C1940;
+    --background-color-lighter-40: #354fc8;
+    --background-color-lighter-40-glassy: rgba(53, 79, 200, 0.4);
+
+    /*text*/
+    --light-text-color: #fff;
+    --dark-text-color: #000;
+}
