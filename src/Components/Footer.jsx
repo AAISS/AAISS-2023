@@ -1,13 +1,11 @@
-
-import footer from '../assets/footer.png'
-import '../css/Footer.css'
+import footer from "../assets/footer.png";
+import "../css/Footer.css";
 const FooterNew = () => {
   return (
-    <div className="footer-new">
-        <img src={footer}/>
-    </div>
+    <footer className="footer-new">
+      <img src={footer} />
+    </footer>
   );
 };
-
 
 export default FooterNew;
