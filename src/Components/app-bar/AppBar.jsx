@@ -1,7 +1,7 @@
 import * as React from "react";
+import { Link } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
@@ -11,13 +11,11 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Image from "../image/Image.jsx";
 import AAISS from "../../assets/AAISS.png";
 import { useConfig } from "../../providers/config-provider/ConfigProvider.jsx";
 import useNavItem from "../nav/nav-item/useNavItem.js";
-import { Link } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -26,9 +24,9 @@ const NavBarImage = () => (
     src={AAISS}
     alt={"aaiss logo"}
     style={{
-      width: "10%",
+      width: "100px",
       height: "inherit",
-      padding: 10,
+      paddingRight: 24,
     }}
   />
 );
@@ -46,14 +44,19 @@ export default function DrawerAppBar() {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
       <NavBarImage />
-      <Divider />
+      <Divider style={{ backgroundColor: "var(--dark-text-color)" }} />
       <List>
         {Object.keys(ROUTES).map((name, index) => (
-          <ListItem key={index} disablePadding>
-            <ListItemButton sx={{ textAlign: "center" }}>
-              <ListItemText primary={name} />
-            </ListItemButton>
-          </ListItem>
+          <Link
+            to={ROUTES[name].path}
+            style={{ color: "white", textDecoration: "none" }}
+          >
+            <ListItem key={index} disablePadding>
+              <ListItemButton sx={{ textAlign: "center" }}>
+                <ListItemText primary={name} />
+              </ListItemButton>
+            </ListItem>
+          </Link>
         ))}
       </List>
     </Box>
@@ -93,7 +96,6 @@ export default function DrawerAppBar() {
       </AppBar>
       <nav className="nav">
         <Drawer
-          //   container={container}
           variant="temporary"
           open={mobileOpen}
           onClose={handleDrawerToggle}
@@ -105,6 +107,7 @@ export default function DrawerAppBar() {
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
+              background: "var(--background-color-lighter-20)",
             },
           }}
         >
