@@ -61,7 +61,6 @@ export default function DrawerAppBar() {
 
   return (
     <Box sx={{ display: "flex" }} className="nav">
-      <CssBaseline />
       <AppBar component="nav" className="backdrop-color">
         <Toolbar>
           <IconButton
