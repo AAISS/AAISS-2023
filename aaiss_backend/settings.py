@@ -60,7 +60,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
-    ]
+    ],
 }
 
 SIMPLE_JWT = {
@@ -171,28 +171,17 @@ X_API_KEY = env.str('X_API_KEY', '')
 X_SANDBOX = env.str('X_SANDBOX', '')
 
 SERVER_EMAIL = 'smtp-relay.sendinblue.com'
-EMAIL_BACKEND = "anymail.backends.sendinblue.EmailBackend"
-
-EMAIL_HOST = env.str('EMAIL_HOST', '')
-EMAIL_HOST_USER = env.str('EMAIL_HOST_USER', '')
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = env.str('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = env.int('EMAIL_PORT', '587')
+EMAIL_HOST_USER = env.str('EMAIL_HOST_USER', 'aaiss.ce.aut@gmail.com')
 EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD', '')
-EMAIL_PORT = env.int('EMAIL_PORT', '')
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
-ANYMAIL = {
-    "SENDINBLUE_API_KEY": env.str("SENDINBLUE_API_KEY", "")
-}
+DEFAULT_FROM_EMAIL = env.str('DEFAULT_FROM_EMAIL', 'aaiss.ce.aut@gmail.com')
+ENABLE_SENDING_EMAIL = env.bool('ENABLE_SENDING_EMAIL', True)
 
-ALT_EMAIL_HOST = env.str("ALT_EMAIL_HOST", '')
-ALT_EMAIL_HOST_USER = env.str("ALT_EMAIL_HOST_USER", '')
-ALT_EMAIL_HOST_PASSWORD = env.str("ALT_EMAIL_HOST_PASSWORD", '')
-ALT_EMAIL_PORT = env.int("ALT_EMAIL_PORT", '')
-ALT_EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
-DEFAULT_FROM_EMAIL = env.str('DEFAULT_FROM_EMAIL', '')
-DISCORD_BOT_TOKEN = env.str('DISCORD_BOT_TOKEN', '')
-
-BASE_URL = 'https://aaiss.ce.aut.ac.ir/'
+BASE_URL = env.str('BASE_URL', 'https://aaiss.ir/')
 
 # https://docs.djangoproject.com/en/4.2/releases/3.2/#customizing-type-of-auto-created-primary-keys
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

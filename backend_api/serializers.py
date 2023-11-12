@@ -31,7 +31,7 @@ class AccountSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     account = AccountSerializer()
-    registered_workshops = WorkshopSerializer(many=True)
+    registered_workshops = WorkshopSerializer(many=True, required=False)
     participated_presentations = serializers.SerializerMethodField()
 
     class Meta:

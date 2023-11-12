@@ -1,30 +1,26 @@
-import threading
-
 from django import forms
-from django.core.mail import EmailMessage
-from django.utils.html import strip_tags
 from django.contrib import admin
 
 from backend_api import models
-from aaiss_backend import settings
+from backend_api.email import MailerThread
 
 
 @admin.register(models.NewPayment)
 class NewPaymentAdmin(admin.ModelAdmin):
     fields = [
         'total_price'
-        ,'status'
-        ,'payment_id'
-        ,'payment_link'
-        ,'card_number'
-        ,'hashed_card_number'
-        ,'payment_trackID'
-        ,'verify_trackID'
-        ,'created_date'
-        ,'finished_date'
-        ,'verified_date'
-        ,'original_data'
-        ,'user'
+        , 'status'
+        , 'payment_id'
+        , 'payment_link'
+        , 'card_number'
+        , 'hashed_card_number'
+        , 'payment_trackID'
+        , 'verify_trackID'
+        , 'created_date'
+        , 'finished_date'
+        , 'verified_date'
+        , 'original_data'
+        , 'user'
     ]
     actions = None
 
@@ -35,13 +31,15 @@ class NewPaymentAdmin(admin.ModelAdmin):
         return False
 
     def save_model(self, request, obj, form, change):
-        #Return nothing to make sure user can't update any data
+        # Return nothing to make sure user can't update any data
         pass
+
     date_hierarchy = 'created_date'
-    list_display = ['__str__','user' , 'created_date' , 'payment_state','total_price']
+    list_display = ['__str__', 'user', 'created_date', 'payment_state', 'total_price']
     actions_on_top = True
     list_filter = ['status']
     search_fields = ['user__account__email']
+
 
 def desc_creator(selected_model):
     class AdminForm(forms.ModelForm):
@@ -54,10 +52,10 @@ def desc_creator(selected_model):
     class Admin(admin.ModelAdmin):
         form = AdminForm
         if selected_model == models.Workshop:
-            list_display = ('__str__', 'capacity', 'cost', 'has_project', 'level', 'no_of_participants','year')
+            list_display = ('__str__', 'capacity', 'cost', 'has_project', 'level', 'no_of_participants', 'year')
             readonly_fields = ('participants',)
         elif selected_model == models.Presentation:
-            list_display = ('__str__', 'level', 'no_of_participants','year')
+            list_display = ('__str__', 'level', 'no_of_participants', 'year')
             readonly_fields = ('participants',)
 
     return Admin
@@ -66,9 +64,9 @@ def desc_creator(selected_model):
 admin.site.register(models.Account)
 
 
-
 class UserAdmin(admin.ModelAdmin):
     list_display = ('account',)
+
 
 admin.site.register(models.Staff)
 admin.site.register(models.Committee)
@@ -110,30 +108,6 @@ admin.site.register(models.Presenter, PresenterAdmin)
 
 admin.site.register(models.Presentation, desc_creator(models.Presentation))
 admin.site.register(models.Misc, desc_creator(models.Misc))
-
-
-class MailerThread(threading.Thread):
-    def __init__(self, subject, targets, html_body):
-        self.subject = subject
-        self.targets = targets
-        self.HTML_body = html_body
-        threading.Thread.__init__(self)
-
-    def run(self):
-        html_message = self.HTML_body
-        print('STARTING TO SEND MAILS')
-        print(self.targets)
-
-        email = EmailMessage(
-            subject=self.subject,
-            body=html_message,
-            from_email=settings.EMAIL_HOST_USER,
-            bcc=self.targets,
-            reply_to=(settings.EMAIL_HOST_USER,)
-        )
-        email.content_subtype = "html"
-        email.send(fail_silently=False)
-        print("SENDING DONE")
 
 
 class MailerForm(forms.ModelForm):

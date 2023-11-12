@@ -1,13 +1,19 @@
 import datetime
+from urllib.parse import urljoin
 
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
+from django.template.loader import render_to_string
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from aaiss_backend import settings
+from aaiss_backend.settings import BASE_URL
 from backend_api import validators
+from backend_api.email import MailerThread
+from utils.random import create_random_string
 
 SMALL_MAX_LENGTH = 255
 BIG_MAX_LENGTH = 65535
@@ -34,6 +40,7 @@ class AccountManager(BaseUserManager):
     def create_superuser(self, email, password, **extra_fields):
         """Creates default superusers"""
         extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)
 
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
@@ -174,10 +181,12 @@ class Account(AbstractBaseUser, PermissionsMixin):
         (0, 'admin'),
         (1, 'User')
     )
+    _ACTIVATION_CODE_LENGTH = 32
     account_type = models.PositiveSmallIntegerField(choices=ACCOUNT_TYPE_CHOICES, default=1)
     email = models.EmailField(max_length=SMALL_MAX_LENGTH, unique=True)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
+    activation_code = models.CharField(max_length=SMALL_MAX_LENGTH, blank=True)
 
     objects = AccountManager()
 
@@ -185,6 +194,14 @@ class Account(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return f"User with id {self.id}: {self.email}"
+
+    def send_registration_email(self):
+        self.activation_code = create_random_string(self._ACTIVATION_CODE_LENGTH)
+        self.save()
+        registration_url = urljoin(BASE_URL, reverse('activate') + "?" + f"token={self.activation_code}")
+        MailerThread("AAISS registration email", [self.email],
+                     render_to_string('registration_email.html',
+                                      {'registration_url': registration_url})).start()
 
 
 class User(models.Model):

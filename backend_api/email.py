@@ -1,37 +1,35 @@
+import threading
+
 from django.conf import settings
+from django.core.mail import EmailMessage
 
-from django.core.mail import EmailMultiAlternatives
-from django.core.mail import get_connection
+from aaiss_backend import settings
+from aaiss_backend.settings import ENABLE_SENDING_EMAIL
 
 
-def send_simple_email(subject, email, body):
-    message = body
-    if 'gmail' not in email:
-        connection = get_connection(
-            backend=settings.ALT_EMAIL_BACKEND,
-            fail_silently=False,
-            username=settings.ALT_EMAIL_HOST_USER,
-            use_tls=True,
-            password=settings.ALT_EMAIL_HOST_PASSWORD,
-            port=settings.ALT_EMAIL_PORT,
-            host=settings.ALT_EMAIL_HOST
+class MailerThread(threading.Thread):
+    def __init__(self, subject: str, targets: list[str], html_body: str):
+        self.subject = subject
+        self.targets = targets
+        self.HTML_body = html_body
+        threading.Thread.__init__(self)
+
+    def run(self):
+        html_message = self.HTML_body
+        print('STARTING TO SEND MAILS')
+        print(self.targets)
+
+        email = EmailMessage(
+            subject=self.subject,
+            body=html_message,
+            from_email=settings.EMAIL_HOST_USER,
+            bcc=self.targets,
+            reply_to=(settings.EMAIL_HOST_USER,)
         )
-        msg = EmailMultiAlternatives(
-            subject=subject,
-            body=message,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            to=[email, ],
-            connection=connection
-        )
-    else:
-        msg = EmailMultiAlternatives(
-            subject=subject,
-            body=message,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            to=[email, ]
-        )
-    msg.attach_alternative(message, 'text/html')
-    msg.send()
-    return {
-        'message': 'successfully sent to : {}'.format(email)
-    }
+        email.content_subtype = "html"
+        if ENABLE_SENDING_EMAIL:
+            email.send(fail_silently=False)
+        else:
+            print(f"Sent the following email (change ENABLE_SENDING_EMAIL to True to actually send the email):")
+            print(f"To: {email.bcc}\nSubject: {email.subject}\n\nBody: {email.body}\n\n")
+        print("SENDING DONE")
