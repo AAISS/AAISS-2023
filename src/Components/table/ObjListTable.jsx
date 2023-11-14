@@ -1,12 +1,10 @@
 import "./obj-list-table.css"
+import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 
 export default function ObjListTable({
                                          data,
                                          title
                                      }) {
-
-    console.log(data)
-
 
     return (
         <section>
@@ -14,37 +12,40 @@ export default function ObjListTable({
                 <div>
                     <section className={"table-container"}>
                         <h3>{title}</h3>
-                        <table cellSpacing={0}>
-                            <thead>
-                            <tr>
-                                {Object.keys(data[0]).map(name => {
-                                    return (
-                                        <td key={name}>
-                                            {name}
-                                        </td>
-                                    )
-                                })}
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {data.map((item, index) => {
-                                return (
-                                    <tr key={index}>
-                                        {Object.keys(item).map(name => {
+                        <TableContainer>
+                            <Table cellSpacing={0}>
+                                <TableHead>
+                                    <TableRow>
+                                        {Object.keys(data[0]).map(name => {
                                             return (
-                                                <td>
-                                                    {item[name]}
-                                                </td>
+                                                <TableCell key={name}>
+                                                    {name}
+                                                </TableCell>
                                             )
                                         })}
-                                    </tr>
-                                )
-                            })}
-                            </tbody>
-                        </table>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {data.map((item, index) => {
+                                        return (
+                                            <TableRow key={index}>
+                                                {Object.keys(item).map(name => {
+                                                    return (
+                                                        <TableCell>
+                                                            {item[name]}
+                                                        </TableCell>
+                                                    )
+                                                })}
+                                            </TableRow>
+                                        )
+                                    })}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
                     </section>
                 </div>
             }
+            {data && Object.keys(data).length === 0 && "Nothing to display!"}
         </section>
     )
 }
