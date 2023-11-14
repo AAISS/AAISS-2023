@@ -63,6 +63,7 @@ user_route = [
     }), name='activate')
 ]
 
+
 urlpatterns = [
     # routes for obtaining/refreshing jwt token
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
@@ -77,6 +78,6 @@ urlpatterns = [
     path('', include(staff_routes)),
     path('', include(committee_routes)),
     path('', include(user_route)),
-    path('payment/', views.NewPaymentAPIView.as_view({'post': 'payment'})),
-    path('payment/verify/', views.NewPaymentAPIView.as_view({'post': 'verify'})),
+    path('payment/', views.PaymentViewSet.as_view({'post': 'payment'})),
+    path('payment/verify/', views.PaymentViewSet.as_view({'get': 'verify'})),
 ]

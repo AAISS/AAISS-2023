@@ -58,12 +58,6 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-class PaymentInitSerializer(serializers.Serializer):
-    email = serializers.EmailField(required=True)
-    workshops = serializers.ListField(child=serializers.IntegerField(min_value=0), required=False)
-    presentations = serializers.BooleanField(required=False)
-
-
 class AllStaffSectionSerializer(serializers.Serializer):
     section = serializers.CharField()
     people = serializers.ListField(child=serializers.DictField())

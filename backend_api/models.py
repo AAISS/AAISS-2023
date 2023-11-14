@@ -254,20 +254,24 @@ class Mailer(models.Model):
 
 
 class Payment(models.Model):
-    authority = models.CharField(max_length=SMALL_MAX_LENGTH, primary_key=True)
-    total_price = models.PositiveIntegerField()
+    id = models.BigAutoField(primary_key=True)
+    amount = models.PositiveIntegerField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     workshops = models.ManyToManyField(Workshop, blank=True)
-    presentation = models.BooleanField(default=False, blank=True)
     is_done = models.BooleanField(default=False)
-    ref_id = models.CharField(default='', max_length=SMALL_MAX_LENGTH)
     year = models.IntegerField(blank=False, default=2020)
     date = models.DateField(blank=False,
                             default=datetime.datetime(year=2020, month=7, day=1, hour=0, minute=0, second=0,
                                                       microsecond=0))
+    track_id = models.CharField(max_length=20, null=True, default=None)
 
     def __str__(self):
-        return f"Payment for {self.user.account} ({self.total_price})  in {str(self.date)}"
+        return f"Payment for {self.user.account} ({self.amount})  in {str(self.date)}"
+
+    def verify_payment(self):
+        self.is_done = True
+        # FIXME: change workshops' status to paid
+        self.save()
 
 
 class Committee(models.Model):
@@ -281,69 +285,23 @@ class Committee(models.Model):
         return self.first_name + ' ' + self.last_name + ' ' + str(self.description)
 
 
-IDPAY_STATUS = [
-    (1, 'payment_not_made'),
-    (2, 'payment_failed'),
-    (3, 'error'),
-    (4, 'blocked'),
-    (5, 'return_to_payer'),
-    (6, 'system_reversal'),
-    (7, 'cancel_payment'),
-    (8, 'moved_to_payment_gateway'),
-    (10, 'awaiting_payment_verification'),
-    (100, 'payment_is_approved'),
-    (101, 'payment_is_approved'),
-    (200, 'was_deposited'),
-    (201, 'payment_created'),
-    (405, "error")
-
-]
-
-
-class NewPayment(models.Model):
-    total_price = models.PositiveIntegerField()
-    status = models.IntegerField(choices=IDPAY_STATUS, default=201)
-    payment_id = models.CharField(null=True, max_length=42)
-    payment_link = models.TextField(null=True)
-    card_number = models.CharField(null=True, max_length=16)
-    hashed_card_number = models.TextField(null=True)
-    payment_trackID = models.CharField(null=True, max_length=20)
-    verify_trackID = models.CharField(null=True, max_length=20)
-    created_date = models.DateTimeField(null=True)
-    finished_date = models.DateTimeField(null=True)
-    verified_date = models.DateTimeField(null=True)
-    original_data = models.TextField(null=True)
-    workshops = models.ManyToManyField(Workshop, blank=True)
-    presentation = models.BooleanField(default=False, blank=True)
-    user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='payments', )
-
-    def payment_state(self):
-        return self.get_status_display()
-
-    def __str__(self):
-        return f"{self.pk}"
-
-
-
-ROLE = [
-    ("Team Lead", "TL"),
-    ("Member", "MB")
-]
-
-SECTIONS = [
-    ("Executive", "EXC"),
-    ("Scientific", "SCI"),
-    ("Technical", "TCH"),
-    ("Graphic", "GRP"),
-    ("Marketing", "MRK")
-]
-
 class Staff(models.Model):
+    ROLE = [
+        ("Team Lead", "TL"),
+        ("Member", "MB")
+    ]
+
+    SECTIONS = [
+        ("Executive", "EXC"),
+        ("Scientific", "SCI"),
+        ("Technical", "TCH"),
+        ("Graphic", "GRP"),
+        ("Marketing", "MRK")
+    ]
     name = models.CharField(max_length=100, null=False, default="Human")
     role = models.CharField(max_length=100, null=False, default="Executive", choices=ROLE)
-    image = models.ImageField(blank=True)  
+    image = models.ImageField(blank=True)
     section_name = models.CharField(max_length=100, null=False, default="Member", choices=SECTIONS)
-    def __str__(self):
 
+    def __str__(self):
         return self.name

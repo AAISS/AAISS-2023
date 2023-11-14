@@ -5,42 +5,6 @@ from backend_api import models
 from backend_api.email import MailerThread
 
 
-@admin.register(models.NewPayment)
-class NewPaymentAdmin(admin.ModelAdmin):
-    fields = [
-        'total_price'
-        , 'status'
-        , 'payment_id'
-        , 'payment_link'
-        , 'card_number'
-        , 'hashed_card_number'
-        , 'payment_trackID'
-        , 'verify_trackID'
-        , 'created_date'
-        , 'finished_date'
-        , 'verified_date'
-        , 'original_data'
-        , 'user'
-    ]
-    actions = None
-
-    def has_add_permission(self, request):
-        return False
-
-    def has_delete_permission(self, request, obj=None):
-        return False
-
-    def save_model(self, request, obj, form, change):
-        # Return nothing to make sure user can't update any data
-        pass
-
-    date_hierarchy = 'created_date'
-    list_display = ['__str__', 'user', 'created_date', 'payment_state', 'total_price']
-    actions_on_top = True
-    list_filter = ['status']
-    search_fields = ['user__account__email']
-
-
 def desc_creator(selected_model):
     class AdminForm(forms.ModelForm):
         desc = forms.CharField(widget=forms.Textarea)
