@@ -1,4 +1,4 @@
-body {
+:root {
     /*primary color*/
     --primary-color: #64A1E8;
 
@@ -13,6 +13,7 @@ body {
     --background-color-lighter-20: #0C1940;
     --background-color-lighter-40: #354fc8;
     --background-color-lighter-40-glassy: rgba(53, 79, 200, 0.4);
+    --background-color-lighter-60: #7688e0;
 
     /*text*/
     --light-text-color: #fff;

@@ -1,7 +1,5 @@
-@import "src/css/Theme.css";
-
 :root {
-  font-family:"Times New Roman",Georgia,Serif;
+  font-family: Roboto, serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -15,6 +13,3 @@
   -webkit-text-size-adjust: 100%;
 }
 
-:root, body {
-  background : linear-gradient(#0A0F26 , #0A0F26);
-}

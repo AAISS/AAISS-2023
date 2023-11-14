@@ -1,6 +1,7 @@
 import "./App.css";
 import './App-mobile.css'
 import "./css/Nav.css";
+import './css/Theme.css'
 
 import MainContent from "./pages/MainContent.jsx";
 import {ConfigProvider} from "./providers/config-provider/ConfigProvider.jsx";

@@ -9,7 +9,7 @@ export default function SchedulePage() {
     } = useSchedulePage()
 
     return (
-        <main>
+        <div id="table-container">
             <ObjListTable
                 data={tableWorkshopsData}
                 title={"Workshops"}
@@ -18,5 +18,5 @@ export default function SchedulePage() {
                 data={tablePresentationsData}
                 title={"Presentations"}
             />
-        </main>)
+        </div>)
 }

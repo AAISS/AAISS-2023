@@ -1,20 +1,27 @@
 .login-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.login-box {
     padding: 2rem;
-    margin: 1rem;
-    background-color: #4B527E;
+    background-color: var(--background-color-lighter-60);
 
     border-radius: 20px;
     width: 40%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: rgb(255,255,255);
+    color: var(--light-text-color);
     /* z-index: 0; */
 
 }
 
 .forgot-password{
-    color: #F9C148;
+    color: var(--warn-color);
     text-decoration: none;
 }
 
