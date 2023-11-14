@@ -1,14 +1,31 @@
 const URL = {
     baseURL: "https://aaiss.ir/",
     services: {
-        2021: "api/2021/"
+        default: "api/",
+        2021: "api/2021/",
+        2023: "api/2023/",
+        2024: "api/2024/",
     },
     endpoints: {
-        workshop: "workshop",
-        misc: {
-            register: "misc/register/",
-            scheduled: "misc/scheduled/",
-            about: "misc/about/",
+        staff: "staff/",
+        workshop: "workshop/",
+        misc: "misc/",
+        // misc: {
+        //     register: "misc/register/",
+        //     scheduled: "misc/scheduled/",
+        //     about: "misc/about/",
+        // },
+        user: {
+            default: "user/",
+            activate: "activate/"
+        },
+        token: {
+            default: "token/",
+            refresh: "token/refresh/",
+        },
+        payment: {
+            default: "payment/",
+            verify: "payment/verify/"
         },
         committee: "committee/",
         presenter: "presenter/",
