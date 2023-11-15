@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router';
+import { Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import banner from '../../assets/Brain.png';
 import '../../css/Home.css';
@@ -13,7 +14,9 @@ const Home = () => {
     <div className="home">
       <img src={banner} alt="brain-artificial-intelligence" />
       <div id="home-content">
-        <h1 id="home-title">Amirkabir Artificial Intelligence Student Summit</h1>
+        <Typography id="home-title" pb={2}>
+          Amirkabir Artificial Intelligence Student Summit
+        </Typography>
         <Button variant="contained" size="large" id="call-to-action-btn" onClick={routeChange}>
           Register now
         </Button>
