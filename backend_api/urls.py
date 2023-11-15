@@ -15,7 +15,7 @@ router = OptionalSlashRouter()
 router.register('foi', views.FieldOfInterestViewSet, basename='field_of_interest')
 
 staff_routes = [
-    path(r'<int:year>/staff/', views.AllStaffView.as_view()),
+    path(r'<int:year>/staff/', views.StaffView.as_view({"get": "list"})),
 ]
 
 committee_routes = [
@@ -62,7 +62,7 @@ user_route = [
         'get': 'activate'
     }), name='activate')
 ]
-# staff_rou
+
 urlpatterns = [
     # routes for obtaining/refreshing jwt token
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),

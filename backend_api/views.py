@@ -372,14 +372,10 @@ class NewPaymentAPIView(viewsets.ModelViewSet):
             print('Exception: ', e.__str__())
             return redirect(F'{settings.BASE_URL}?payment_status=false')
 
-
-# class StaffSectionViewSet(viewsets.ModelViewSet):
-#     queryset = StaffSection.objects.all()
-#     serializer_class = serializers.StaffSectionSerializer
     
-    
-class AllStaffView(APIView):
-    def get(self, request, *args, **kwargs):
+class StaffView(viewsets.ModelViewSet):
+    queryset = StaffSection.objects.all()
+    def list(self, request, *args, **kwargs):
         staff_sections = StaffSection.objects.all()
         data = []
 
@@ -402,4 +398,5 @@ class AllStaffView(APIView):
 
         serializer = serializers.AllStaffSectionSerializer(data, many=True)
         return Response(serializer.data)
+    
     
