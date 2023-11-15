@@ -400,5 +400,5 @@ class AllStaffView(APIView):
 
             data.append(section_data)
 
-        serializer = serializer.AllStaffSectionSerializer(data, many=True)
+        serializer = serializers.AllStaffSectionSerializer(data, many=True)
         return Response(serializer.data)
