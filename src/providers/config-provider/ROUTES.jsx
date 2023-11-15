@@ -47,10 +47,10 @@ const ROUTES = {
     path: '/staff',
     title: 'Staff',
   },
-  history: {
-    path: '/history',
-    title: 'History',
-  },
+  // history: {
+  //   path: '/history',
+  //   title: 'History',
+  // },
   signup: {
     path: '/signup',
     title: 'Signup',
