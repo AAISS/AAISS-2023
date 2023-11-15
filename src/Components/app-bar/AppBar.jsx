@@ -1,31 +1,31 @@
-import * as React from "react";
-import { Link } from "react-router-dom";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
-import Drawer from "@mui/material/Drawer";
-import IconButton from "@mui/material/IconButton";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
-import MenuIcon from "@mui/icons-material/Menu";
-import Toolbar from "@mui/material/Toolbar";
-import Button from "@mui/material/Button";
-import Image from "../image/Image.jsx";
-import AAISS from "../../assets/AAISS.png";
-import { useConfig } from "../../providers/config-provider/ConfigProvider.jsx";
-import useNavItem from "../nav/nav-item/useNavItem.js";
+import * as React from 'react';
+import { Link } from 'react-router-dom';
+import MenuIcon from '@mui/icons-material/Menu';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import Toolbar from '@mui/material/Toolbar';
+import AAISS from '../../assets/AAISS.png';
+import { useConfig } from '../../providers/config-provider/ConfigProvider.jsx';
+import Image from '../image/Image.jsx';
+import useNavItem from './useNavItem.js';
 
 const drawerWidth = 240;
 
 const NavBarImage = () => (
   <Image
     src={AAISS}
-    alt={"aaiss logo"}
+    alt={'aaiss logo'}
     style={{
-      width: "100px",
-      height: "inherit",
+      width: '100px',
+      height: 'inherit',
       paddingRight: 24,
     }}
   />
@@ -42,23 +42,16 @@ export default function DrawerAppBar() {
   };
 
   const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <Link
-        to={ROUTES.home.path}
-        className="logo-item"
-        onClick={() => setCurrentRoute(ROUTES.home)}
-      >
+    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
+      <Link to={ROUTES.home.path} className="logo-item" onClick={() => setCurrentRoute(ROUTES.home)}>
         <NavBarImage />
       </Link>
-      <Divider style={{ backgroundColor: "var(--dark-text-color)" }} />
+      <Divider style={{ backgroundColor: 'var(--dark-text-color)' }} />
       <List>
         {Object.keys(ROUTES).map((name, index) => (
-          <Link
-            to={ROUTES[name].path}
-            style={{ color: "white", textDecoration: "none" }}
-          >
+          <Link to={ROUTES[name].path} style={{ color: 'white', textDecoration: 'none' }}>
             <ListItem key={index} disablePadding>
-              <ListItemButton sx={{ textAlign: "center" }}>
+              <ListItemButton sx={{ textAlign: 'center' }}>
                 <ListItemText primary={name} />
               </ListItemButton>
             </ListItem>
@@ -69,7 +62,7 @@ export default function DrawerAppBar() {
   );
 
   return (
-    <Box sx={{ display: "flex" }} className="nav">
+    <Box sx={{ display: 'flex' }} className="nav">
       <AppBar component="nav" className="backdrop-color">
         <Toolbar>
           <IconButton
@@ -77,18 +70,14 @@ export default function DrawerAppBar() {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
+            sx={{ mr: 2, display: { sm: 'none' } }}
           >
             <MenuIcon />
           </IconButton>
-          <Link
-            to={ROUTES.home.path}
-            className="logo-item"
-            onClick={() => setCurrentRoute(ROUTES.home)}
-          >
+          <Link to={ROUTES.home.path} className="logo-item" onClick={() => setCurrentRoute(ROUTES.home)}>
             <NavBarImage />
           </Link>
-          <Box sx={{ display: { xs: "none", sm: "block" } }}>
+          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {Object.keys(ROUTES).map((name, index) => (
               <Link to={ROUTES[name].path}>
                 <Button
@@ -96,7 +85,7 @@ export default function DrawerAppBar() {
                   variant={getVariant(ROUTES[name].path, currentRoute.path)}
                   onClick={() => setCurrentRoute(ROUTES[name])}
                   sx={{
-                    color: "#fff",
+                    color: '#fff',
                   }}
                 >
                   {name}
@@ -115,11 +104,11 @@ export default function DrawerAppBar() {
             keepMounted: true, // Better open performance on mobile.
           }}
           sx={{
-            display: { xs: "block", sm: "none" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
+            display: { xs: 'block', sm: 'none' },
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
               width: drawerWidth,
-              background: "var(--background-color-lighter-20)",
+              background: 'var(--background-color-lighter-20)',
             },
           }}
         >
