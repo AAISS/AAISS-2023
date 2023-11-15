@@ -19,9 +19,10 @@ PresenterSerializer = all_serializer_creator(models.Presenter)
 WorkshopSerializer = all_serializer_creator(models.Workshop)
 PresentationSerializer = all_serializer_creator(models.Presentation)
 MiscSerializer = all_serializer_creator(models.Misc)
-StaffSerializer = all_serializer_creator(models.Staff)
+# StaffSerializer = all_serializer_creator(models.Staff)
 CommitteeSerializer = all_serializer_creator(models.Committee)
-
+StaffSerializer = all_serializer_creator(models.Staff)
+StaffSectionSerializer = all_serializer_creator(models.StaffSection)
 
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
@@ -62,3 +63,8 @@ class PaymentInitSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
     workshops = serializers.ListField(child=serializers.IntegerField(min_value=0), required=False)
     presentations = serializers.BooleanField(required=False)
+
+
+class AllStaffSectionSerializer(serializers.Serializer):
+    section = serializers.CharField()
+    people = serializers.ListField(child=serializers.DictField())
