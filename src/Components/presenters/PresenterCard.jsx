@@ -1,22 +1,48 @@
+import { Link, Skeleton, Stack, Typography } from '@mui/material';
 import '../../css/PresenterCard.css';
-import Image from '../image/Image.jsx';
-// import IMG from '../../assets/Brain.png'
 import URL from '../../providers/APIProvider/URL.js';
-export default function PresenterCard({ name, photo, link, desc }) {
+import Image from '../image/Image.jsx';
+
+export default function PresenterCard({ name, photo, link, desc, isLoading }) {
+  if (isLoading) {
+    return (
+      <Stack className="presenter-card" gap={2} style={{ overflowWrap: 'break-word' }}>
+        {/* <Image
+          src={`${URL.baseURL}${photo}`}
+          style={{
+            width: '200px',
+            height: '200px',
+            borderRadius: '50%',
+          }}
+        /> */}
+        <Skeleton variant="circle" width={200} height={200} />
+        <Skeleton variant="rectangular" width={300} height={300} />
+        {/* <Stack style={{ width: 300 }} className="animate-color">
+          <Link href={link} variant="h4" color="inherit" underline="none">
+            {name}
+          </Link>
+          <Typography>{desc}</Typography>
+        </Stack> */}
+      </Stack>
+    );
+  }
+
   return (
-    <div className="presenter-card">
+    <Stack className="presenter-card" gap={2} style={{ overflowWrap: 'break-word' }}>
       <Image
         src={`${URL.baseURL}${photo}`}
         style={{
-          width: '300px',
-          height: '300px',
+          width: '200px',
+          height: '200px',
           borderRadius: '50%',
         }}
       />
-      <a href={link} className="presenter-card-name">
-        <h1>{name}</h1>
-      </a>
-      <p>{desc}</p>
-    </div>
+      <Stack style={{ width: 300 }} className="animate-color">
+        <Link href={link} variant="h4" color="inherit" underline="none">
+          {name}
+        </Link>
+        <Typography>{desc}</Typography>
+      </Stack>
+    </Stack>
   );
 }
