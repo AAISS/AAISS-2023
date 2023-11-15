@@ -1,8 +1,8 @@
 import { Route, Routes, useLocation } from 'react-router-dom';
+import footer from '../assets/footer.png';
+import DrawerAppBar from '../Components/app-bar/AppBar.jsx';
 import { useConfig } from '../providers/config-provider/ConfigProvider.jsx';
 import ForgotPassword from './ForgotPassword/ForgotPassword.jsx';
-import DrawerAppBar from '../Components/app-bar/AppBar.jsx';
-import footer from '../assets/footer.png';
 
 export default function MainContent() {
   const { ROUTES } = useConfig();
