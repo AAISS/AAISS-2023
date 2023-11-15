@@ -72,7 +72,6 @@ admin.site.register(models.Committee)
 admin.site.register(models.User, UserAdmin)
 admin.site.register(models.FieldOfInterest)
 admin.site.register(models.Staff)
-admin.site.register(models.StaffSection)
 
 class TeacherAdminForm(forms.ModelForm):
     bio = forms.CharField(widget=forms.Textarea)

@@ -342,15 +342,7 @@ class Staff(models.Model):
     name = models.CharField(max_length=100, null=False, default="Human")
     role = models.CharField(max_length=100, null=False, default="Executive", choices=ROLE)
     image = models.ImageField(blank=True)  
-
+    section_name = models.CharField(max_length=100, null=False, default="Member", choices=SECTIONS)
     def __str__(self):
 
         return self.name
-
-class StaffSection(models.Model):
-    section_name = models.CharField(max_length=100, null=False, default="Member", choices=SECTIONS)
-    staff = models.ManyToManyField(Staff)
-
-    def __str__(self):
-        return self.section_name
-    
