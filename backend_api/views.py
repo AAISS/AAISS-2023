@@ -393,7 +393,7 @@ class AllStaffView(APIView):
                 person_data = {
                     'name': staff_member.name,
                     'role': staff_member.role,
-                    'img': staff_member.image.url
+                    'img': staff_member.image.name if staff_member.image else None
                 }
 
                 section_data['people'].append(person_data)
@@ -402,3 +402,4 @@ class AllStaffView(APIView):
 
         serializer = serializers.AllStaffSectionSerializer(data, many=True)
         return Response(serializer.data)
+    
