@@ -25,7 +25,7 @@ export function APIProvider({children}) {
 
     const getPresenterData = useCallback(async (id) => {
         if (id != null) id = id + "/"
-        await service.get(`${URL.baseURL}${URL.services[currentYear]}${URL.endpoints.presenter}${id}`)
+        await service.get(`${URL.baseURL}${URL.services[currentYear]}${URL.endpoints.presenter}${id ?? ""}`)
             .then(response => {
                 setPresenterData(response.data)
             })
@@ -95,7 +95,7 @@ export function APIProvider({children}) {
 
     const getUserData = useCallback(async (id) => {
         if (id != null) id = id + "/"
-        await service.get(`${URL.baseURL}${URL.services[currentYear]}${URL.endpoints.user.default}${id}`)
+        await service.get(`${URL.baseURL}${URL.services[currentYear]}${URL.endpoints.user.default}${id ?? ""}`)
             .then(response => {
                 setUserData(response.data)
             })
@@ -103,7 +103,7 @@ export function APIProvider({children}) {
 
     const getMiscData = useCallback(async (id) => {
         if (id != null) id = id + "/"
-        await service.get(`${URL.baseURL}${URL.services[currentYear]}${URL.endpoints.misc}${id}`)
+        await service.get(`${URL.baseURL}${URL.services[currentYear]}${URL.endpoints.misc}${id ?? ""}`)
             .then(response => {
                 setMiscData(response.data)
             })
@@ -118,7 +118,7 @@ export function APIProvider({children}) {
 
     const getWorkshopsData = useCallback(async (id) => {
         if (id != null) id = id + "/"
-        await service.get(`${URL.baseURL}${URL.services[currentYear]}${URL.endpoints.workshop}${id}`)
+        await service.get(`${URL.baseURL}${URL.services[currentYear]}${URL.endpoints.workshop}${id ?? ""}`)
             .then(response => {
                 setWorkshopsData(response.data)
             })

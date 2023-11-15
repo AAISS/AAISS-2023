@@ -4,6 +4,7 @@ import MyAccount from '../../pages/my-account/MyAccount.jsx';
 import PresenterPage from '../../pages/presenters/PresentersPage.jsx';
 import SchedulePage from '../../pages/schedule/SchedulePage.jsx';
 import Signup from '../../pages/Signup/Signup.jsx';
+import WorkshopsPage from "../../pages/workshops/WorkshopsPage.jsx";
 
 const ROUTES = {
   home: {
@@ -23,6 +24,7 @@ const ROUTES = {
   workshops: {
     path: '/workshops',
     title: 'Workshops',
+    component: <WorkshopsPage />
   },
   // committee: {
   //     path: "/committee",
