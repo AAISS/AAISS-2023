@@ -8,7 +8,7 @@ export default function ObjListTable({
 
     return (
         <section>
-            {!data || Object.keys(data).length === 0 ? <h1 style={{height: "500px"}}>loading...</h1> :
+            {!data || Object.keys(data).length === 0 ? <h1 id="loading">loading...</h1> :
                 <div>
                     <section className={"table-container"}>
                         <h3>{title}</h3>

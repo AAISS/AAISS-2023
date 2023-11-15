@@ -4,6 +4,8 @@
 
     /*secondary color*/
     --accent-color: #C4C7F2;
+    --accent-color-light-10: #eeeffb;
+    --accent-color-dark-30: #4750d6;
 
     /*warn color*/
     --warn-color: #ec6803;
@@ -14,8 +16,11 @@
     --background-color-lighter-40: #354fc8;
     --background-color-lighter-40-glassy: rgba(53, 79, 200, 0.4);
     --background-color-lighter-60: #7688e0;
+    --background-color-lighter-80: #d4daf4;
+    --background-color-lighter-90: #fdfdfe;
 
     /*text*/
     --light-text-color: #fff;
     --dark-text-color: #000;
+    --dark-text-color-lighter-20: #333;
 }

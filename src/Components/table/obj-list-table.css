@@ -1,9 +1,14 @@
+#loading {
+    text-align: center;
+}
+
 .table-container {
     background-color: var(--background-color-lighter-40-glassy);
     backdrop-filter: blur(2px);
     border-radius: 10px;
-    border: 2px solid black;
+    border: 2px solid var(--background-color-lighter-40-glassy);
     padding: 0 1rem 1rem;
+    box-sizing: border-box;
 }
 
 .table-container h3 {
@@ -12,21 +17,52 @@
     font-size: x-large;
 }
 
-table {
-    color: rgb(0,0,0);
-
-    background-color: rgba(255, 255, 255, 0.5);
+.MuiTableContainer-root {
     border-radius: 10px;
+}
+
+section, table {
     width: 100%;
 }
 
+table {
+    border-radius: 10px;
+}
+
+table td, table th {
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+table th {
+    font-size: medium !important;
+    font-weight: bolder !important;
+}
+
 tr {
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: var(--background-color-lighter-80);
+}
+
+table tbody tr:nth-child(even), table thead tr {
+    background-color: var(--background-color-lighter-60);
+}
+
+tbody tr.MuiTableRow-root:hover {
+    cursor: pointer;
+    color: white !important;
+    background-color: var(--dark-text-color-lighter-20);
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table, th, td {
+    outline: 1px var(--background-color-lighter-40) solid !important;
 }
 
 td {
     padding: 0.3rem;
-    border: 1px solid black;
     max-width: 50vw;
 }
 
@@ -34,18 +70,6 @@ h3 {
     text-align: center;
     margin: 0;
     padding: 1rem 0;
-}
-
-thead tr td {
-    background-color: rgba(255, 255, 255, 0.5);
-}
-
-thead td:first-child {
-    border-top-left-radius: 10px;
-}
-
-thead td:last-child {
-    border-top-right-radius: 10px;
 }
 
 @media (width < 850px) {
