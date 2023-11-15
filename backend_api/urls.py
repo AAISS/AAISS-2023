@@ -15,8 +15,9 @@ router = OptionalSlashRouter()
 router.register('foi', views.FieldOfInterestViewSet, basename='field_of_interest')
 
 staff_routes = [
-    path(r'<int:year>/staff/', views.StaffViewSet.as_view({'get': 'list'})),
+    path(r'<int:year>/staff/', views.StaffView.as_view({"get": "list"})),
 ]
+
 committee_routes = [
     path(r'<int:year>/committee/', views.CommitteeViewSet.as_view({'get': 'list'})),
 ]

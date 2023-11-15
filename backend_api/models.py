@@ -269,17 +269,6 @@ class Payment(models.Model):
         return f"Payment for {self.user.account} ({self.total_price})  in {str(self.date)}"
 
 
-class Staff(models.Model):
-    profile = models.ImageField(verbose_name='profile', null=True, blank=True)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    year = models.IntegerField(blank=False, default=2020)
-    entrance = models.IntegerField(blank=True)
-
-    def __str__(self):
-        return self.first_name + ' ' + self.last_name + ' ' + str(self.entrance)
-
-
 class Committee(models.Model):
     profile = models.ImageField(verbose_name='profile', null=True, blank=True)
     first_name = models.CharField(max_length=50)
@@ -333,3 +322,35 @@ class NewPayment(models.Model):
 
     def __str__(self):
         return f"{self.pk}"
+
+
+
+ROLE = [
+    ("Team Lead", "TL"),
+    ("Member", "MB")
+]
+
+SECTIONS = [
+    ("Executive", "EXC"),
+    ("Scientific", "SCI"),
+    ("Technical", "TCH"),
+    ("Graphic", "GRP"),
+    ("Marketing", "MRK")
+]
+
+class Staff(models.Model):
+    name = models.CharField(max_length=100, null=False, default="Human")
+    role = models.CharField(max_length=100, null=False, default="Executive", choices=ROLE)
+    image = models.ImageField(blank=True)  
+
+    def __str__(self):
+
+        return self.name
+
+class StaffSection(models.Model):
+    section_name = models.CharField(max_length=100, null=False, default="Member", choices=SECTIONS)
+    staff = models.ManyToManyField(Staff)
+
+    def __str__(self):
+        return self.section_name
+    

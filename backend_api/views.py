@@ -14,6 +14,7 @@ from rest_framework.permissions import (
     AllowAny
 )
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from aaiss_backend import settings
 from backend_api import models
@@ -22,7 +23,7 @@ from backend_api.email import MailerThread
 from backend_api.idpay import IdPayRequest, IDPAY_PAYMENT_DESCRIPTION, \
     IDPAY_CALL_BACK, IDPAY_STATUS_201, IDPAY_STATUS_100, IDPAY_STATUS_101, \
     IDPAY_STATUS_200
-from backend_api.models import User, Account
+from backend_api.models import StaffSection, User, Account
 from utils.renderers import new_detailed_response
 
 
@@ -35,13 +36,13 @@ class FieldOfInterestViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
 
-class StaffViewSet(viewsets.ViewSet):
-    serializer_class = serializers.StaffSerializer
+# class StaffViewSet(viewsets.ViewSet):
+#     serializer_class = serializers.StaffSerializer
 
-    def list(self, request, **kwargs):
-        queryset = models.Staff.objects.all()
-        serializer = self.serializer_class(queryset, many=True)
-        return Response(serializer.data)
+#     def list(self, request, **kwargs):
+#         queryset = models.Staff.objects.all()
+#         serializer = self.serializer_class(queryset, many=True)
+#         return Response(serializer.data)
 
 
 class CommitteeViewSet(viewsets.ViewSet):
@@ -370,3 +371,32 @@ class NewPaymentAPIView(viewsets.ModelViewSet):
         except Exception as e:
             print('Exception: ', e.__str__())
             return redirect(F'{settings.BASE_URL}?payment_status=false')
+
+    
+class StaffView(viewsets.ModelViewSet):
+    queryset = StaffSection.objects.all()
+    def list(self, request, *args, **kwargs):
+        staff_sections = StaffSection.objects.all()
+        data = []
+
+        for section in staff_sections:
+            section_data = {
+                'section': section.section_name,
+                'people': []
+            }
+
+            for staff_member in section.staff.all():
+                person_data = {
+                    'name': staff_member.name,
+                    'role': staff_member.role,
+                    'img': staff_member.image.name if staff_member.image else None
+                }
+
+                section_data['people'].append(person_data)
+
+            data.append(section_data)
+
+        serializer = serializers.AllStaffSectionSerializer(data, many=True)
+        return Response(serializer.data)
+    
+    
