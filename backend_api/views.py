@@ -394,8 +394,8 @@ class StaffView(viewsets.ModelViewSet):
                     }
 
                     section_data['people'].append(person_data)
-
-            data.append(section_data)
+            if len(section_data['people']) != 0:
+                data.append(section_data)
 
         serializer = serializers.AllStaffSectionSerializer(data, many=True)
         return Response(serializer.data)
