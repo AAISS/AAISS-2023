@@ -86,6 +86,7 @@ export default function DrawerAppBar() {
                   onClick={() => setCurrentRoute(ROUTES[name])}
                   sx={{
                     color: '#fff',
+                    paddingRight: 2,
                   }}
                 >
                   {name}
