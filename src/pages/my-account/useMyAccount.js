@@ -127,10 +127,6 @@ export default function useMyAccount() {
         ])
     }, [])
 
-    useEffect(() => {
-        console.log("data:", basketItems)
-    }, [basketItems])
-
     const sidebarItems = {
         workshops: {
             id: "workshops",
@@ -151,6 +147,10 @@ export default function useMyAccount() {
 
     const [currentlySelectedSidebarItem, setCurrentlySelectedSidebarItem] = useState(sidebarItems["workshops"])
 
+    const tabsClickHandler = useCallback((event, newValue) => {
+        console.log(newValue)
+        setCurrentlySelectedSidebarItem(newValue)
+    }, [setCurrentlySelectedSidebarItem])
 
     useEffect(() => {
         currentlySelectedSidebarItem.command()
@@ -162,6 +162,7 @@ export default function useMyAccount() {
         currentlySelectedSidebarItem,
         talks,
         workshops,
+        tabsClickHandler,
         basketItems,
     }
 }
