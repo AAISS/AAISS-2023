@@ -141,3 +141,4 @@ class PaymentAdmin(admin.ModelAdmin):
 
 
 admin.site.register(models.Payment, PaymentAdmin)
+admin.site.register(models.WorkshopRecord)

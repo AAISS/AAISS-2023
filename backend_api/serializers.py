@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from backend_api import models
-from backend_api.models import User, Account, Presentation
+from backend_api.models import User, Account, Presentation, WorkshopRecord
 
 
 def all_serializer_creator(selected_model):
@@ -61,3 +61,34 @@ class UserSerializer(serializers.ModelSerializer):
 class AllStaffSectionSerializer(serializers.Serializer):
     section = serializers.CharField()
     people = serializers.ListField(child=serializers.DictField())
+
+
+class WritableSerializerMethodField(serializers.SerializerMethodField):
+    def __init__(self, method_name=None, **kwargs):
+        super().__init__(**kwargs)
+        self.read_only = False
+
+    def get_default(self):
+        default = super().get_default()
+        return {
+            self.field_name: default
+        }
+
+    def to_internal_value(self, data):
+        return {self.field_name: data}
+
+
+class WorkshopRecordSerializer(serializers.ModelSerializer):
+    workshop = WritableSerializerMethodField()
+    status = serializers.CharField(source='get_status_display', read_only=True)
+
+    def get_workshop(self, obj):
+        return WorkshopSerializer(obj.workshop).data
+
+    def create(self, validated_data):
+        print('\n\n', validated_data)
+        return super().create(validated_data)
+
+    class Meta:
+        model = WorkshopRecord
+        fields = '__all__'

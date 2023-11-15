@@ -305,3 +305,16 @@ class Staff(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class WorkshopRecord(models.Model):
+    class StatusChoices(models.IntegerChoices):
+        AWAITING_PAYMENT = 1, _('در انتظار پرداخت')
+        PURCHASED = 2, _('خریداری شده')
+
+    workshop = models.ForeignKey(Workshop, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    status = models.IntegerField(choices=StatusChoices.choices, default=StatusChoices.AWAITING_PAYMENT)
+
+    class Meta:
+        unique_together = ('workshop', 'user',)
