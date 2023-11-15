@@ -1,5 +1,5 @@
 import { FormControl, Button } from '@mui/material';
-import FormTextField from '../../Components/Form/FormTextField';
+import FormTextField from '../../components/Form/FormTextField';
 import '../../css/Signup.css';
 
 const SignUp = () => {

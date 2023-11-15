@@ -1,5 +1,5 @@
 import { Button, Checkbox, FormControl, FormControlLabel } from '@mui/material';
-import FormTextField from '../../Components/Form/FormTextField';
+import FormTextField from '../../components/Form/FormTextField';
 import '../../css/Login.css';
 
 // TODO: do we need this? It's unused.
