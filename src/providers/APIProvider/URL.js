@@ -10,27 +10,22 @@ const URL = {
         staff: "staff/",
         workshop: "workshop/",
         misc: "misc/",
-        // misc: {
-        //     register: "misc/register/",
-        //     scheduled: "misc/scheduled/",
-        //     about: "misc/about/",
-        // },
         user: {
             default: "user/",
-            activate: "activate/"
+            activate: "activate/",
         },
         token: {
-            default: "token/",
-            refresh: "token/refresh/",
+            default: "token/", //TODO
+            refresh: "token/refresh/", //TODO
         },
         payment: {
             default: "payment/",
-            verify: "payment/verify/"
+            verify: "payment/verify/",
         },
         committee: "committee/",
-        presenter: "presenter/",
-        teacher: "teacher/",
-        presentation: "presentation/"
+        presenter: "presenter/",//here
+        teacher: "teacher/", //YES
+        presentation: "presentation/", //YES
     }
 }
 
