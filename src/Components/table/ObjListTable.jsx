@@ -13,7 +13,11 @@ export default function ObjListTable({
                     <section className={"table-container"}>
                         <h3>{title}</h3>
                         <TableContainer>
-                            <Table cellSpacing={0}>
+                            <Table sx={{
+                                "& .MuiTableRow-root:hover:not(.MuiTableRow-head)": {
+                                    backgroundColor: "#ec6803"
+                                }
+                            }} cellSpacing={0}>
                                 <TableHead>
                                     <TableRow>
                                         {Object.keys(data[0]).map(name => {
@@ -28,10 +32,24 @@ export default function ObjListTable({
                                 <TableBody>
                                     {data.map((item, index) => {
                                         return (
-                                            <TableRow key={index}>
-                                                {Object.keys(item).map(name => {
+                                            <TableRow
+                                                sx={{
+                                                    "& .MuiTableRow-root:hover": {
+                                                        backgroundColor: "#ff0000"
+                                                    }
+                                                }}
+                                                key={index}>
+                                                {Object.keys(item).map((name, secondIndex) => {
                                                     return (
-                                                        <TableCell>
+                                                        <TableCell
+
+                                                            key={secondIndex}
+                                                            sx={{
+                                                                "& .MuiTableRow-root:hover": {
+                                                                    backgroundColor: "#ff0000"
+                                                                }
+                                                            }}
+                                                        >
                                                             {item[name]}
                                                         </TableCell>
                                                     )

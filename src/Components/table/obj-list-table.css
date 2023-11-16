@@ -40,6 +40,7 @@ table th {
 }
 
 tr {
+    transition: background-color .07s;
     background-color: var(--background-color-lighter-80);
 }
 
