@@ -72,9 +72,8 @@ h3 {
     padding: 1rem 0;
 }
 
-@media (width < 850px) {
+@media only screen and (max-width: 850px) {
     .table-container {
         font-size: 3vw;
-        width: 80vw;
     }
 }
