@@ -23,7 +23,7 @@ from backend_api.email import MailerThread
 from backend_api.idpay import IdPayRequest, IDPAY_PAYMENT_DESCRIPTION, \
     IDPAY_CALL_BACK, IDPAY_STATUS_201, IDPAY_STATUS_100, IDPAY_STATUS_101, \
     IDPAY_STATUS_200
-from backend_api.models import StaffSection, User, Account
+from backend_api.models import Staff, User, Account, SECTIONS
 from utils.renderers import new_detailed_response
 
 
@@ -36,13 +36,6 @@ class FieldOfInterestViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
 
-# class StaffViewSet(viewsets.ViewSet):
-#     serializer_class = serializers.StaffSerializer
-
-#     def list(self, request, **kwargs):
-#         queryset = models.Staff.objects.all()
-#         serializer = self.serializer_class(queryset, many=True)
-#         return Response(serializer.data)
 
 
 class CommitteeViewSet(viewsets.ViewSet):
@@ -374,27 +367,28 @@ class NewPaymentAPIView(viewsets.ModelViewSet):
 
     
 class StaffView(viewsets.ModelViewSet):
-    queryset = StaffSection.objects.all()
+    queryset = Staff.objects.all()
     def list(self, request, *args, **kwargs):
-        staff_sections = StaffSection.objects.all()
+        
         data = []
-
-        for section in staff_sections:
+        
+        for section in SECTIONS:
             section_data = {
-                'section': section.section_name,
+                'section': section[0],
                 'people': []
             }
 
-            for staff_member in section.staff.all():
-                person_data = {
-                    'name': staff_member.name,
-                    'role': staff_member.role,
-                    'img': staff_member.image.name if staff_member.image else None
-                }
+            for staff_member in self.queryset:
+                if staff_member.section_name == section[0]:
+                    person_data = {
+                        'name': staff_member.name,
+                        'role': staff_member.role,
+                        'img': staff_member.image.url if staff_member.image.name != "" else ""
+                    }
 
-                section_data['people'].append(person_data)
-
-            data.append(section_data)
+                    section_data['people'].append(person_data)
+            if len(section_data['people']) != 0:
+                data.append(section_data)
 
         serializer = serializers.AllStaffSectionSerializer(data, many=True)
         return Response(serializer.data)
