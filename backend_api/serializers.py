@@ -21,7 +21,7 @@ PresentationSerializer = all_serializer_creator(models.Presentation)
 MiscSerializer = all_serializer_creator(models.Misc)
 CommitteeSerializer = all_serializer_creator(models.Committee)
 StaffSerializer = all_serializer_creator(models.Staff)
-# StaffSectionSerializer = all_serializer_creator(models.StaffSection)
+
 
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
