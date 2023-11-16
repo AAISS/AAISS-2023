@@ -1,10 +1,9 @@
 import Home from '../../pages/Home/Home.jsx';
-import Login from '../../pages/Login/Login.jsx';
 import MyAccount from '../../pages/my-account/MyAccount.jsx';
 import PresenterPage from '../../pages/presenters/PresentersPage.jsx';
 import SchedulePage from '../../pages/schedule/SchedulePage.jsx';
 import Signup from '../../pages/Signup/Signup.jsx';
-import WorkshopsPage from "../../pages/workshops/WorkshopsPage.jsx";
+import WorkshopsPage from '../../pages/workshops/WorkshopsPage.jsx';
 
 const ROUTES = {
   home: {
@@ -24,7 +23,7 @@ const ROUTES = {
   workshops: {
     path: '/workshops',
     title: 'Workshops',
-    component: <WorkshopsPage />
+    component: <WorkshopsPage />,
   },
   // committee: {
   //     path: "/committee",
@@ -55,11 +54,6 @@ const ROUTES = {
     path: '/signup',
     title: 'Signup',
     component: <Signup />,
-  },
-  login: {
-    path: '/login',
-    title: 'Login',
-    component: <Login />,
   },
   myAccount: {
     path: '/my-account',
