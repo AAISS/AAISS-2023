@@ -1,5 +1,5 @@
 import { Route, Routes, useLocation } from 'react-router-dom';
-import footer from '../../assets/footer.png';
+import PageFooter from '../footer/PageFooter';
 import ForgotPassword from '../../pages/ForgotPassword/ForgotPassword.jsx';
 import { useConfig } from '../../providers/config-provider/ConfigProvider.jsx';
 import DrawerAppBar from '../app-bar/AppBar.jsx';
@@ -22,9 +22,7 @@ export default function MainContent() {
         </Routes>
       </main>
       {pathname !== '/' && (
-        <footer className="footer-new">
-          <img src={footer} alt="footer" />
-        </footer>
+        <PageFooter/>
       )}
     </div>
   );
