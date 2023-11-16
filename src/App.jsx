@@ -5,19 +5,31 @@ import './css/Theme.css';
 
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
+import { ThemeProvider, useTheme } from '@mui/material';
 import MainContent from './components/main-content/MainContent.jsx';
 import { APIProvider } from './providers/APIProvider/APIProvider.jsx';
 import { ConfigProvider } from './providers/config-provider/ConfigProvider.jsx';
 import { DictionaryProvider } from './providers/dictionary-provider/DictionaryProvider.jsx';
-import { ThemeProvider } from './providers/theme-provider/ThemeProvider.jsx';
 
 function App() {
+  const theme = useTheme();
+  const { palette } = theme;
+
+  const myTheme = {
+    ...theme,
+    palette: {
+      ...palette,
+      mode: 'dark',
+    },
+  };
+
+  console.log({ myTheme });
   return (
     <BrowserRouter>
       <ConfigProvider>
         <APIProvider>
           <DictionaryProvider>
-            <ThemeProvider>
+            <ThemeProvider theme={myTheme}>
               <MainContent />
             </ThemeProvider>
           </DictionaryProvider>

@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
   margin: 0;
   height: 100%;
 }
@@ -71,8 +72,8 @@ html {
   align-items: center;
   justify-content: center;
   /*forces AAISS logo to be white*/
-  filter: brightness(0) saturate(100%) invert(97%) sepia(8%)
-  saturate(67%) hue-rotate(32deg) brightness(116%) contrast(100%);
+  filter: brightness(0) saturate(100%) invert(97%) sepia(8%) saturate(67%) hue-rotate(32deg) brightness(116%)
+    contrast(100%);
 }
 
 .logo-container {
@@ -97,12 +98,10 @@ html {
   align-items: center;
   justify-content: center;
   background-color: rgba(255, 255, 255, 0.5);
-
 }
 
 .nav-mobile-list {
   list-style: none;
-  
 }
 @media screen and (max-width: 1135px) {
   .nav {
