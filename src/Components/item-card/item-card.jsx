@@ -44,9 +44,9 @@ const Level = ({ name, color }) => (
 );
 
 const levelComponentMapping = {
-  elementary: <Level name="elementary" color="success.light" />,
-  intermediate: <Level name="intermediate" color="secondary.main" />,
-  advanced: <Level name="advanced" color="warning.light" />,
+  Elementary: <Level name="elementary" color="success.light" />,
+  Intermediate: <Level name="intermediate" color="secondary.main" />,
+  Advanced: <Level name="advanced" color="warning.light" />,
 };
 
 const ItemCard = ({
