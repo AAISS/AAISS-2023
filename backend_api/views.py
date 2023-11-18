@@ -14,8 +14,8 @@ from rest_framework.response import Response
 
 from backend_api import models
 from backend_api import serializers
-from backend_api.models import User, Account, Payment, Workshop, Staff, WorkshopRecord
-from backend_api.serializers import WorkshopRecordSerializer
+from backend_api.models import User, Account, Payment, Workshop, Staff, WorkshopRegistration
+from backend_api.serializers import WorkshopRegistrationSerializer
 from payment_backends.zify import ZIFYRequest, ZIFY_STATUS_OK
 from utils.renderers import new_detailed_response
 
@@ -302,13 +302,15 @@ class StaffView(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class UserWorkshopRecords(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin,
-                          mixins.DestroyModelMixin):
+class WorkshopRegistrationViewSet(viewsets.GenericViewSet,
+                                  mixins.ListModelMixin,
+                                  mixins.CreateModelMixin,
+                                  mixins.DestroyModelMixin):
     permission_classes = [IsAuthenticated]
-    serializer_class = WorkshopRecordSerializer
+    serializer_class = WorkshopRegistrationSerializer
 
     def get_queryset(self):
-        return WorkshopRecord.objects.filter(user=User.objects.get(account=self.request.user))
+        return WorkshopRegistration.objects.filter(user=User.objects.get(account=self.request.user))
 
     def create(self, request, *args, **kwargs):
         if hasattr(request.data, '_mutable'):
@@ -320,6 +322,4 @@ class UserWorkshopRecords(viewsets.GenericViewSet, mixins.ListModelMixin, mixins
         else:
             request.data['user'] = request.user
             request.data['workshop'] = Workshop.objects.get(id=request.data['workshop'])
-
-        print(request.data)
         return super().create(request, *args, **kwargs)

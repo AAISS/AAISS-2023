@@ -210,12 +210,25 @@ class User(models.Model):
     account = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
     name = models.CharField(max_length=SMALL_MAX_LENGTH)
     fields_of_interest = models.ManyToManyField(FieldOfInterest, blank=True)
-    registered_workshops = models.ManyToManyField(Workshop, blank=True)
+    registered_workshops = models.ManyToManyField(Workshop, blank=True, through='WorkshopRegistration')
     registered_for_presentations = models.BooleanField(default=False)
     phone_number = models.CharField(max_length=12, validators=[validators.validate_all_number])
 
     def __str__(self):
         return f"{self.account}"
+
+
+class WorkshopRegistration(models.Model):
+    class StatusChoices(models.IntegerChoices):
+        AWAITING_PAYMENT = 1, _('در انتظار پرداخت')
+        PURCHASED = 2, _('خریداری شده')
+
+    workshop = models.ForeignKey(Workshop, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    status = models.IntegerField(choices=StatusChoices.choices, default=StatusChoices.AWAITING_PAYMENT)
+
+    class Meta:
+        unique_together = ('workshop', 'user',)
 
 
 class Misc(models.Model):
@@ -305,16 +318,3 @@ class Staff(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class WorkshopRecord(models.Model):
-    class StatusChoices(models.IntegerChoices):
-        AWAITING_PAYMENT = 1, _('در انتظار پرداخت')
-        PURCHASED = 2, _('خریداری شده')
-
-    workshop = models.ForeignKey(Workshop, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    status = models.IntegerField(choices=StatusChoices.choices, default=StatusChoices.AWAITING_PAYMENT)
-
-    class Meta:
-        unique_together = ('workshop', 'user',)

@@ -58,11 +58,16 @@ user_route = [
         'patch': 'partial_update',
         'delete': 'destroy'
     })),
-    path(r'user/activate/', views.UserViewSet.as_view({
+    path('user/activate/', views.UserViewSet.as_view({
         'get': 'activate'
     }), name='activate'),
+    path('user/workshop/records/', views.WorkshopRegistrationViewSet.as_view({
+        'get': 'list',
+        'post': 'create',
+        'delete': 'destroy',
+    }))
 ]
-router.register('user/workshop/records',views.UserWorkshopRecords,basename='user_workshop_records')
+router.register('user/workshop/records', views.WorkshopRegistrationViewSet, basename='user_workshop_records')
 
 
 urlpatterns = [
