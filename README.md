@@ -107,6 +107,10 @@ frameworks/libraries/languages:
 
     X_API_KEY=
     X_SANDBOX=0
+    
+    PAYWALL=
+
+    ZIFY_AUTH=
    ```
 
   

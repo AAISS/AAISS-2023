@@ -185,3 +185,10 @@ BASE_URL = env.str('BASE_URL', 'https://aaiss.ir/')
 
 # https://docs.djangoproject.com/en/4.2/releases/3.2/#customizing-type-of-auto-created-primary-keys
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+#PAYWALL SETTING
+PAYWALL = env.str("PAYWALL", "ZIFY")
+
+#ZIFY
+ZIFY_AUTH = env.str("ZIFY_AUTH")
