@@ -5,7 +5,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('backend_api', '0034_account_activation_code_alter_account_is_active'),
+        ('backend_api', '0040_staff_section_name_delete_staffsection'),
     ]
 
     operations = [
