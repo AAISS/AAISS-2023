@@ -41,8 +41,15 @@ function convertDateTimeToTime(date) {
     return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
 }
 
+function omitLongString(str, len) {
+    if (str.length > len)
+        return str.substring(0, len - 3) + "..."
+    return str
+}
+
 export const Helper = {
     convertStringToDateWithoutTimezone,
     convertDateTimeToDate,
     convertDateTimeToTime,
+    omitLongString,
 }
