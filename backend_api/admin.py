@@ -37,6 +37,7 @@ admin.site.register(models.User, UserAdmin)
 admin.site.register(models.FieldOfInterest)
 admin.site.register(models.Staff)
 
+
 class TeacherAdminForm(forms.ModelForm):
     bio = forms.CharField(widget=forms.Textarea)
 
@@ -141,3 +142,4 @@ class PaymentAdmin(admin.ModelAdmin):
 
 
 admin.site.register(models.Payment, PaymentAdmin)
+admin.site.register(models.WorkshopRegistration)

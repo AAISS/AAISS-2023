@@ -2,7 +2,7 @@ import datetime
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
-from rest_framework import status
+from rest_framework import status, mixins
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import (
@@ -14,7 +14,8 @@ from rest_framework.response import Response
 
 from backend_api import models
 from backend_api import serializers
-from backend_api.models import User, Account, Payment, Workshop, Staff
+from backend_api.models import User, Account, Payment, Workshop, Staff, WorkshopRegistration
+from backend_api.serializers import WorkshopRegistrationSerializer
 from payment_backends.zify import ZIFYRequest, ZIFY_STATUS_OK
 from utils.renderers import new_detailed_response
 
@@ -160,16 +161,19 @@ class MiscViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
 
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(viewsets.GenericViewSet,
+                  mixins.ListModelMixin,
+                  mixins.CreateModelMixin,
+                  mixins.RetrieveModelMixin,
+                  mixins.DestroyModelMixin,
+                  mixins.UpdateModelMixin):
     serializer_class = serializers.UserSerializer
     permission_classes_by_action = {
-        # TODO: assert that the owner of the target object is the same as the user requesting
         'list': [IsAdminUser],
         'create': [AllowAny],
         'retrieve': [IsAuthenticated],
         'destroy': [IsAdminUser],
         'update': [IsAuthenticated],
-        'partial_update': [IsAuthenticated],
         'activate': [AllowAny]
     }
 
@@ -216,9 +220,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 class PaymentViewSet(viewsets.GenericViewSet):
-    permission_classes = [IsAuthenticated]
-
-    @action(methods=['POST'], detail=False)
+    @action(methods=['POST'], detail=False, permission_classes=[IsAuthenticated])
     def payment(self, request):
         account = request.user
         try:
@@ -227,20 +229,15 @@ class PaymentViewSet(viewsets.GenericViewSet):
             return Response(new_detailed_response(
                 status.HTTP_400_BAD_REQUEST, "User not found"))
 
-        # TODO: check whether user has any unpaid payment
-        total_cost = 0
-        workshops: list[Workshop] = []
-        for workshop in user.registered_workshops.all():
-            # FIXME: check if workshop status is unpaid
-            total_cost += workshop.cost
-            workshops.append(workshop)
-        if len(workshops) == 0:
-            return Response(new_detailed_response(
-                status.HTTP_400_BAD_REQUEST, "User has no unpaid workshops"))
-        payment = Payment.objects.create(user=user, amount=total_cost, year=datetime.date.today().year,
-                                         date=datetime.datetime.now())
-        payment.workshops.set(workshops)
-        response = ZIFYRequest().create_payment(payment.pk, total_cost, user.name, user.phone_number,
+        try:
+            payment = Payment.objects.get(user=user, is_done=False)
+            payment.delete()
+        except ObjectDoesNotExist:
+            pass
+        finally:
+            payment = Payment.create_payment_for_user(user)
+
+        response = ZIFYRequest().create_payment(payment.pk, payment.amount, user.name, user.phone_number,
                                                 user.account.email)
         if response['status'] == ZIFY_STATUS_OK:
             payment.track_id = response['data']['order']
@@ -299,3 +296,35 @@ class StaffView(viewsets.ModelViewSet):
 
         serializer = serializers.AllStaffSectionSerializer(data, many=True)
         return Response(serializer.data)
+
+
+class WorkshopRegistrationViewSet(viewsets.GenericViewSet,
+                                  mixins.ListModelMixin,
+                                  mixins.CreateModelMixin,
+                                  mixins.DestroyModelMixin):
+    permission_classes = [IsAuthenticated]
+    serializer_class = WorkshopRegistrationSerializer
+
+    def get_queryset(self):
+        return WorkshopRegistration.objects.filter(user=User.objects.get(account=self.request.user))
+
+    def create(self, request, *args, **kwargs):
+        data = super().create(request, *args, **kwargs)
+        return Response(new_detailed_response(status.HTTP_201_CREATED, "Registration successful", data.data))
+
+    def destroy(self, request, *args, **kwargs):
+        # TODO: handle this method using serializers properly
+        account = request.user
+        try:
+            user = User.objects.get(account=account)
+        except ObjectDoesNotExist:
+            return Response(new_detailed_response(
+                status.HTTP_400_BAD_REQUEST, "User not found"))
+        workshop_pk = kwargs.get('pk')
+        try:
+            workshop = user.registered_workshops.get(pk=workshop_pk)
+            user.registered_workshops.remove(workshop)
+            return Response(new_detailed_response(status.HTTP_200_OK, "Registration cancelled successfully"))
+        except ObjectDoesNotExist:
+            return Response(new_detailed_response(status.HTTP_400_BAD_REQUEST, "Workshop not found"))
+

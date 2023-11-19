@@ -1,7 +1,10 @@
-from rest_framework import serializers
+from django.core.exceptions import ObjectDoesNotExist
+from rest_framework import serializers, status
+from rest_framework.response import Response
 
 from backend_api import models
-from backend_api.models import User, Account, Presentation
+from backend_api.models import User, Account, Presentation, WorkshopRegistration
+from utils.renderers import new_detailed_response
 
 
 def all_serializer_creator(selected_model):
@@ -31,19 +34,14 @@ class AccountSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     account = AccountSerializer()
-    registered_workshops = WorkshopSerializer(many=True, required=False)
-    participated_presentations = serializers.SerializerMethodField()
+    registered_workshops = serializers.PrimaryKeyRelatedField(many=True, required=False, read_only=True)
+    participated_presentations = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
         model = User
         fields = (
             'account', 'name', 'fields_of_interest', 'phone_number', 'registered_workshops',
             'participated_presentations')
-
-    def get_participated_presentations(self, obj):
-        if obj.registered_for_presentations:
-            return PresentationSerializer(Presentation.objects.all(), many=True).data
-        return None
 
     def create(self, validated_data):
         account_data = validated_data.pop('account')
@@ -61,3 +59,32 @@ class UserSerializer(serializers.ModelSerializer):
 class AllStaffSectionSerializer(serializers.Serializer):
     section = serializers.CharField()
     people = serializers.ListField(child=serializers.DictField())
+
+
+class WorkshopRegistrationSerializer(serializers.ModelSerializer):
+    workshop = serializers.PrimaryKeyRelatedField(queryset=WorkshopSerializer.Meta.model.objects.all())
+
+    class Meta:
+        model = WorkshopRegistration
+        fields = ('workshop',)
+
+    def create(self, validated_data):
+        user = self.context['request'].user.user
+        workshop = validated_data.pop('workshop')
+        try:
+            user.registered_workshops.get(pk=workshop.pk)
+            self.is_valid(raise_exception=True)
+            raise serializers.ValidationError(
+                new_detailed_response(status.HTTP_400_BAD_REQUEST,
+                                      'User has already registered for this workshop.'))
+        except ObjectDoesNotExist:
+            user.registered_workshops.add(workshop)
+        return user.workshopregistration_set.get(workshop=workshop)
+
+    def to_representation(self, instance):
+        # TODO: refactor this representation and handle it by DRF
+        super_response = super().to_representation(instance)
+        response = {}
+        for key, val in super_response.items():
+            response["id"] = val
+        return response
