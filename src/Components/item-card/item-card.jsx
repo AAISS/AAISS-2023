@@ -116,13 +116,14 @@ const ItemCard = ({
         onClickRemoveFromCart={onClickRemoveFromCart}
       />
       <Card
+        raised
         sx={{
           minWidth: 275,
           maxWidth: 300,
           maxHeight: 400,
           minHeight: 300,
           bgcolor: 'var(--background-color-lighter-20)',
-          borderRadius: '30px',
+          borderRadius: '10px',
           display: 'flex',
           flexDirection: 'column',
         }}
