@@ -37,6 +37,7 @@ admin.site.register(models.User, UserAdmin)
 admin.site.register(models.FieldOfInterest)
 admin.site.register(models.Staff)
 
+
 class TeacherAdminForm(forms.ModelForm):
     bio = forms.CharField(widget=forms.Textarea)
 

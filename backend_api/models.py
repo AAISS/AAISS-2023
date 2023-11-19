@@ -4,16 +4,20 @@ from urllib.parse import urljoin
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from rest_framework import status
+from rest_framework.response import Response
 
 from aaiss_backend import settings
 from aaiss_backend.settings import BASE_URL
 from backend_api import validators
 from backend_api.email import MailerThread
 from utils.random import create_random_string
+from utils.renderers import new_detailed_response
 
 SMALL_MAX_LENGTH = 255
 BIG_MAX_LENGTH = 65535
@@ -220,8 +224,8 @@ class User(models.Model):
 
 class WorkshopRegistration(models.Model):
     class StatusChoices(models.IntegerChoices):
-        AWAITING_PAYMENT = 1, _('در انتظار پرداخت')
-        PURCHASED = 2, _('خریداری شده')
+        AWAITING_PAYMENT = 1, _('Waiting for payment')
+        PURCHASED = 2, _('Purchase confirmed')
 
     workshop = models.ForeignKey(Workshop, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -284,7 +288,32 @@ class Payment(models.Model):
     def verify_payment(self):
         self.is_done = True
         # FIXME: change workshops' status to paid
+        for workshop in self.workshops.all():
+            workshop.status = WorkshopRegistration.StatusChoices.PURCHASED
+            workshop.save()
         self.save()
+
+    @staticmethod
+    def create_payment_for_user(user: User):
+        total_cost = 0
+        workshops: list[Workshop] = []
+        for workshop in user.registered_workshops.all():
+            try:
+                workshop_registration = workshop.workshopregistration_set.get(workshop_id=workshop.id)
+                if workshop_registration.status != WorkshopRegistration.StatusChoices.AWAITING_PAYMENT:
+                    continue
+                total_cost += workshop.cost
+                workshops.append(workshop)
+            except ObjectDoesNotExist:
+                raise ValueError(f"User {user} is registered for workshop {workshop} but has no registration")
+        if len(workshops) == 0:
+            return Response(new_detailed_response(
+                status.HTTP_400_BAD_REQUEST, "User has no unpaid workshops"))
+        payment = Payment.objects.create(user=user, amount=total_cost, year=datetime.date.today().year,
+                                         date=datetime.datetime.now())
+        payment.workshops.set(workshops)
+        payment.save()
+        return payment
 
 
 class Committee(models.Model):

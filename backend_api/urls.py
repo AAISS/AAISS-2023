@@ -52,23 +52,22 @@ user_route = [
         'get': 'list',
         'post': 'create'
     })),
-    path(r'user/<pk>/', views.UserViewSet.as_view({
+    path(r'user/<int:pk>/', views.UserViewSet.as_view({
         'get': 'retrieve',
         'put': 'update',
-        'patch': 'partial_update',
         'delete': 'destroy'
     })),
     path('user/activate/', views.UserViewSet.as_view({
         'get': 'activate'
     }), name='activate'),
-    path('user/workshop/records/', views.WorkshopRegistrationViewSet.as_view({
+    path('user/workshop/', views.WorkshopRegistrationViewSet.as_view({
         'get': 'list',
         'post': 'create',
+    })),
+    path('user/workshop/<int:pk>/', views.WorkshopRegistrationViewSet.as_view({
         'delete': 'destroy',
     }))
 ]
-router.register('user/workshop/records', views.WorkshopRegistrationViewSet, basename='user_workshop_records')
-
 
 urlpatterns = [
     # routes for obtaining/refreshing jwt token
