@@ -37,6 +37,8 @@ export default function DrawerAppBar() {
 
   const { getVariant } = useNavItem();
 
+  const appBarPaths = Object.keys(ROUTES).filter((route) => !ROUTES[route]?.hideFromAppBar);
+
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
@@ -48,9 +50,9 @@ export default function DrawerAppBar() {
       </Link>
       <Divider style={{ backgroundColor: 'var(--dark-text-color)' }} />
       <List>
-        {Object.keys(ROUTES).map((name, index) => (
-          <Link to={ROUTES[name].path} style={{ color: 'white', textDecoration: 'none' }}>
-            <ListItem key={index} disablePadding>
+        {appBarPaths.map((name, index) => (
+          <Link to={ROUTES[name].path} style={{ color: 'white', textDecoration: 'none' }} key={index}>
+            <ListItem disablePadding>
               <ListItemButton sx={{ textAlign: 'center' }}>
                 <ListItemText primary={name} />
               </ListItemButton>
@@ -78,10 +80,9 @@ export default function DrawerAppBar() {
             <NavBarImage />
           </Link>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-            {Object.keys(ROUTES).map((name, index) => (
-              <Link to={ROUTES[name].path}>
+            {appBarPaths.map((name, index) => (
+              <Link to={ROUTES[name].path} key={index}>
                 <Button
-                  key={index}
                   variant={getVariant(ROUTES[name].path, currentRoute.path)}
                   onClick={() => setCurrentRoute(ROUTES[name])}
                   sx={{

@@ -1,29 +1,7 @@
-@keyframes colorAnimation {
-  to {
-    color: var(--primary-color);
-  }
-}
-
 .presenter-card {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  border-radius: 30px;
-  background-color: rgba(0, 0, 0, 0.5);
-  text-align: center;
-  padding: 1rem;
-  margin: 0.5rem;
-  font-size: 15px;
-  /* width: 30%; */
-  /* animation: anim 1s ease-in-out; */
+  transition: all 0.2s;
 }
 
-.presenter-card-name {
-  text-align: center;
-}
-
-.animate-color:hover {
-  animation: colorAnimation 1s ease-in-out;
-  color: var(--primary-color);
+.presenter-card:hover {
+  transform: scale(1.03);
 }

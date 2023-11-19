@@ -1,5 +1,6 @@
 import Home from '../../pages/Home/Home.jsx';
 import MyAccount from '../../pages/my-account/MyAccount.jsx';
+import PresenterDetailPage from '../../pages/presenters/PresenterDetailPage.jsx';
 import PresenterPage from '../../pages/presenters/PresentersPage.jsx';
 import SchedulePage from '../../pages/schedule/SchedulePage.jsx';
 import Signup from '../../pages/Signup/Signup.jsx';
@@ -19,6 +20,12 @@ const ROUTES = {
     path: '/presenters',
     title: 'Presenters',
     component: <PresenterPage />,
+  },
+  speaker: {
+    path: '/presenters/:id',
+    title: 'Presenter',
+    component: <PresenterDetailPage />,
+    hideFromAppBar: true,
   },
   workshops: {
     path: '/workshops',
