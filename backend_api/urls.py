@@ -66,6 +66,13 @@ user_route = [
     })),
     path('user/workshop/<int:pk>/', views.WorkshopRegistrationViewSet.as_view({
         'delete': 'destroy',
+    })),
+    path('user/presentation/', views.PresentationRegistrationViewSet.as_view({
+        'get': 'list',
+        'post': 'create',
+    })),
+    path('user/presentation/<int:pk>/', views.PresentationRegistrationViewSet.as_view({
+        'delete': 'destroy',
     }))
 ]
 

@@ -3,7 +3,7 @@ from rest_framework import serializers, status
 from rest_framework.response import Response
 
 from backend_api import models
-from backend_api.models import User, Account, Presentation, WorkshopRegistration
+from backend_api.models import User, Account, Presentation, WorkshopRegistration, PresentationParticipation
 from utils.renderers import new_detailed_response
 
 
@@ -83,6 +83,34 @@ class WorkshopRegistrationSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         # TODO: refactor this representation and handle it by DRF
+        super_response = super().to_representation(instance)
+        response = {}
+        for key, val in super_response.items():
+            response["id"] = val
+        return response
+
+
+class PresentationParticipationSerializer(serializers.ModelSerializer):
+    presentation = serializers.PrimaryKeyRelatedField(queryset=PresentationSerializer.Meta.model.objects.all())
+
+    class Meta:
+        model = PresentationParticipation
+        fields = ('presentation',)
+
+    def create(self, validated_data):
+        user = self.context['request'].user.user
+        presentation = validated_data.pop('presentation')
+        try:
+            user.participated_presentations.get(pk=presentation.pk)
+            self.is_valid(raise_exception=True)
+            raise serializers.ValidationError(
+                new_detailed_response(status.HTTP_400_BAD_REQUEST,
+                                      'User has already registered for this presentation.'))
+        except ObjectDoesNotExist:
+            user.participated_presentations.add(presentation)
+        return user.presentationparticipation_set.get(presentation=presentation)
+
+    def to_representation(self, instance):
         super_response = super().to_representation(instance)
         response = {}
         for key, val in super_response.items():

@@ -141,6 +141,7 @@ class Presentation(models.Model):
     presenters = models.ManyToManyField(Presenter)
     desc = models.CharField(max_length=BIG_MAX_LENGTH)
     year = models.IntegerField(blank=False, default=2020)
+    cost = models.PositiveIntegerField(default=0)
 
     NOT_ASSIGNED = 'NOT_ASSIGNED'
     ELEMENTARY = 'Elementary'
@@ -215,6 +216,7 @@ class User(models.Model):
     name = models.CharField(max_length=SMALL_MAX_LENGTH)
     fields_of_interest = models.ManyToManyField(FieldOfInterest, blank=True)
     registered_workshops = models.ManyToManyField(Workshop, blank=True, through='WorkshopRegistration')
+    participated_presentations = models.ManyToManyField(Presentation, blank=True, through='PresentationParticipation')
     registered_for_presentations = models.BooleanField(default=False)
     phone_number = models.CharField(max_length=12, validators=[validators.validate_all_number])
 
@@ -233,6 +235,19 @@ class WorkshopRegistration(models.Model):
 
     class Meta:
         unique_together = ('workshop', 'user',)
+
+
+class PresentationParticipation(models.Model):
+    class StatusChoices(models.IntegerChoices):
+        AWAITING_PAYMENT = 1, _('Waiting for payment')
+        PURCHASED = 2, _('Purchase confirmed')
+
+    presentation = models.ForeignKey(Presentation, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    status = models.IntegerField(choices=StatusChoices.choices, default=StatusChoices.AWAITING_PAYMENT)
+
+    class Meta:
+        unique_together = ('presentation', 'user',)
 
 
 class Misc(models.Model):
@@ -275,6 +290,7 @@ class Payment(models.Model):
     amount = models.PositiveIntegerField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     workshops = models.ManyToManyField(Workshop, blank=True)
+    presentations = models.ManyToManyField(Presentation, blank=True)
     is_done = models.BooleanField(default=False)
     year = models.IntegerField(blank=False, default=2020)
     date = models.DateField(blank=False,
@@ -287,16 +303,19 @@ class Payment(models.Model):
 
     def verify_payment(self):
         self.is_done = True
-        # FIXME: change workshops' status to paid
         for workshop in self.workshops.all():
             workshop.status = WorkshopRegistration.StatusChoices.PURCHASED
             workshop.save()
+        for presentation in self.presentations.all():
+            presentation.status = PresentationParticipation.StatusChoices.PURCHASED
+            presentation.save()
         self.save()
 
     @staticmethod
     def create_payment_for_user(user: User):
         total_cost = 0
         workshops: list[Workshop] = []
+        presentations: list[Presentation] = []
         for workshop in user.registered_workshops.all():
             try:
                 workshop_registration = workshop.workshopregistration_set.get(workshop_id=workshop.id)
@@ -306,12 +325,22 @@ class Payment(models.Model):
                 workshops.append(workshop)
             except ObjectDoesNotExist:
                 raise ValueError(f"User {user} is registered for workshop {workshop} but has no registration")
-        if len(workshops) == 0:
+        for presentation in user.participated_presentations.all():
+            try:
+                presentation_participation = presentation.presentationparticipation_set.get(presentation_id=presentation.id)
+                if presentation_participation.status != PresentationParticipation.StatusChoices.AWAITING_PAYMENT:
+                    continue
+                total_cost += presentation.cost
+                presentations.append(presentation)
+            except ObjectDoesNotExist:
+                raise ValueError(f"User {user} is registered for presentation {presentation} but has no registration")
+        if len(workshops) == 0 and len(presentations) == 0:
             return Response(new_detailed_response(
-                status.HTTP_400_BAD_REQUEST, "User has no unpaid workshops"))
+                status.HTTP_400_BAD_REQUEST, "User has no unpaid item"))
         payment = Payment.objects.create(user=user, amount=total_cost, year=datetime.date.today().year,
                                          date=datetime.datetime.now())
         payment.workshops.set(workshops)
+        payment.presentations.set(presentations)
         payment.save()
         return payment
 

@@ -14,8 +14,8 @@ from rest_framework.response import Response
 
 from backend_api import models
 from backend_api import serializers
-from backend_api.models import User, Account, Payment, Workshop, Staff, WorkshopRegistration
-from backend_api.serializers import WorkshopRegistrationSerializer
+from backend_api.models import User, Account, Payment, Workshop, Staff, WorkshopRegistration, PresentationParticipation
+from backend_api.serializers import WorkshopRegistrationSerializer, PresentationParticipationSerializer
 from payment_backends.zify import ZIFYRequest, ZIFY_STATUS_OK
 from utils.renderers import new_detailed_response
 
@@ -328,3 +328,33 @@ class WorkshopRegistrationViewSet(viewsets.GenericViewSet,
         except ObjectDoesNotExist:
             return Response(new_detailed_response(status.HTTP_400_BAD_REQUEST, "Workshop not found"))
 
+
+class PresentationRegistrationViewSet(viewsets.GenericViewSet,
+                                      mixins.ListModelMixin,
+                                      mixins.CreateModelMixin,
+                                      mixins.DestroyModelMixin):
+    permission_classes = [IsAuthenticated]
+    serializer_class = PresentationParticipationSerializer
+
+    def get_queryset(self):
+        return PresentationParticipation.objects.filter(user=User.objects.get(account=self.request.user))
+
+    def create(self, request, *args, **kwargs):
+        data = super().create(request, *args, **kwargs)
+        return Response(new_detailed_response(status.HTTP_201_CREATED, "Participation added successfully", data.data))
+
+    def destroy(self, request, *args, **kwargs):
+        # TODO: handle this method using serializers properly
+        account = request.user
+        try:
+            user = User.objects.get(account=account)
+        except ObjectDoesNotExist:
+            return Response(new_detailed_response(
+                status.HTTP_400_BAD_REQUEST, "User not found"))
+        presentation_pk = kwargs.get('pk')
+        try:
+            presentation = user.participated_presentations.get(pk=presentation_pk)
+            user.participated_presentations.remove(presentation)
+            return Response(new_detailed_response(status.HTTP_200_OK, "Participation cancelled successfully"))
+        except ObjectDoesNotExist:
+            return Response(new_detailed_response(status.HTTP_400_BAD_REQUEST, "Presentation not found"))
