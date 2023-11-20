@@ -34,14 +34,11 @@ class AccountSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     account = AccountSerializer()
-    registered_workshops = serializers.PrimaryKeyRelatedField(many=True, required=False, read_only=True)
-    participated_presentations = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
         model = User
         fields = (
-            'account', 'name', 'fields_of_interest', 'phone_number', 'registered_workshops',
-            'participated_presentations')
+            'account', 'name', 'fields_of_interest', 'phone_number',)
 
     def create(self, validated_data):
         account_data = validated_data.pop('account')
@@ -85,8 +82,14 @@ class WorkshopRegistrationSerializer(serializers.ModelSerializer):
         # TODO: refactor this representation and handle it by DRF
         super_response = super().to_representation(instance)
         response = {}
+        user = self.context['request'].user.user
         for key, val in super_response.items():
             response["id"] = val
+            try:
+                workshop_status = WorkshopRegistration.objects.get(user=user, workshop_id=val).status
+                response["status"] = WorkshopRegistration.StatusChoices(workshop_status).name
+            except ObjectDoesNotExist:
+                pass
         return response
 
 
@@ -113,6 +116,12 @@ class PresentationParticipationSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         super_response = super().to_representation(instance)
         response = {}
+        user = self.context['request'].user.user
         for key, val in super_response.items():
             response["id"] = val
+            try:
+                presentation_status = PresentationParticipation.objects.get(user=user, presentation_id=val).status
+                response["status"] = PresentationParticipation.StatusChoices(presentation_status).name
+            except ObjectDoesNotExist:
+                pass
         return response
