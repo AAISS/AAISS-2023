@@ -269,13 +269,12 @@ class PaymentViewSet(viewsets.GenericViewSet):
                 new_detailed_response(response['status'], response["message"]))
 
 
-class StaffView(viewsets.ModelViewSet):
+class StaffViewSet(viewsets.GenericViewSet,
+                   mixins.ListModelMixin):
     queryset = Staff.objects.all()
 
     def list(self, request, *args, **kwargs):
-
         data = []
-
         for section in Staff.SECTIONS:
             section_data = {
                 'section': section[0],

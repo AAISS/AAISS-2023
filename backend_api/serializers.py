@@ -1,9 +1,8 @@
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers, status
-from rest_framework.response import Response
 
 from backend_api import models
-from backend_api.models import User, Account, Presentation, WorkshopRegistration, PresentationParticipation
+from backend_api.models import User, Account, WorkshopRegistration, PresentationParticipation
 from utils.renderers import new_detailed_response
 
 
