@@ -304,11 +304,19 @@ class Payment(models.Model):
     def verify_payment(self):
         self.is_done = True
         for workshop in self.workshops.all():
-            workshop.status = WorkshopRegistration.StatusChoices.PURCHASED
-            workshop.save()
+            try:
+                workshop = WorkshopRegistration.objects.get(user=self.user, workshop=workshop)
+                workshop.status = WorkshopRegistration.StatusChoices.PURCHASED
+                workshop.save()
+            except ObjectDoesNotExist:
+                pass
         for presentation in self.presentations.all():
-            presentation.status = PresentationParticipation.StatusChoices.PURCHASED
-            presentation.save()
+            try:
+                presentation = PresentationParticipation.objects.get(user=self.user, presentation=presentation)
+                presentation.status = PresentationParticipation.StatusChoices.PURCHASED
+                presentation.save()
+            except ObjectDoesNotExist:
+                pass
         self.save()
 
     @staticmethod
