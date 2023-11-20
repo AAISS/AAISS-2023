@@ -7,22 +7,9 @@ export default function WorkshopsPage() {
 
     const {
         parsedItemsList,
-        addItemToCart
+        addItemToCart,
+        gridTemplateColumnsValue,
     } = useWorkshopsPage()
-
-    const [gridTemplateColumnsValue, setGridTemplateColumnsValue] = useState("")
-
-    const getGridTemplateColumns = useCallback(() => {
-
-    }, [])
-
-    useEffect(() => {
-        const func = () => {
-            setGridTemplateColumnsValue("1fr ".repeat(Math.floor(window.innerWidth / 400)))
-        }
-
-        window.addEventListener("resize", func);
-    })
 
     return (
         <section style={{

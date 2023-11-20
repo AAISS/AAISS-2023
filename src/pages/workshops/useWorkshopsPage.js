@@ -10,6 +10,15 @@ export default function useWorkshopsPage() {
     } = useAPI()
 
     const [parsedItemsList, setParsedItemsList] = useState()
+    const [gridTemplateColumnsValue, setGridTemplateColumnsValue] = useState("")
+
+    useEffect(() => {
+        const func = () => {
+            setGridTemplateColumnsValue("1fr ".repeat(Math.floor(window.innerWidth / 400)))
+        }
+        func()
+        window.addEventListener("resize", func);
+    }, [])
 
     useEffect(() => {
         getWorkshopsData()
@@ -45,6 +54,7 @@ export default function useWorkshopsPage() {
 
     return {
         parsedItemsList,
-        addItemToCart
+        addItemToCart,
+        gridTemplateColumnsValue,
     }
 }
