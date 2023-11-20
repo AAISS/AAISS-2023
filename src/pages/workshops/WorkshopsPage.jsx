@@ -7,7 +7,7 @@ export default function WorkshopsPage() {
 
     const {
         parsedItemsList,
-        addItemToCart,
+        addToCart,
         gridTemplateColumnsValue,
     } = useWorkshopsPage()
 
@@ -31,7 +31,10 @@ export default function WorkshopsPage() {
                         startDate={e.start_date}
                         endDate={e.end_date}
                         level={e.level}
-                        onClickAddToCart={() => addItemToCart(e.id)}
+                        onClickAddToCart={() => addToCart({
+                            id: e.id,
+                            type: e.isWorkshop ? "workshop" : "presentation"
+                        })}
                     />
                 )
             })}

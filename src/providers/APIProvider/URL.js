@@ -13,6 +13,8 @@ const URL = {
         user: {
             default: "user/",
             activate: "activate/",
+            presentation: "user/presentation/",
+            workshop: "user/workshop/"
         },
         token: {
             default: "token/", //TODO
