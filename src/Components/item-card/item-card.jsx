@@ -120,7 +120,7 @@ const ItemCard = ({
         sx={{
           minWidth: 275,
           maxWidth: 300,
-          maxHeight: 400,
+          maxHeight: 500,
           minHeight: 300,
           bgcolor: 'var(--background-color-lighter-20)',
           borderRadius: '10px',

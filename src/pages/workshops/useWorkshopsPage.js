@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {useAPI} from "../../providers/APIProvider/APIProvider.jsx";
 
 export default function useWorkshopsPage() {
@@ -39,7 +39,12 @@ export default function useWorkshopsPage() {
         setParsedItemsList(parsedData)
     }, [workshopsData, presentationsData])
 
+    const addItemToCart = useCallback(item => {
+
+    }, [])
+
     return {
-        parsedItemsList
+        parsedItemsList,
+        addItemToCart
     }
 }
