@@ -330,9 +330,9 @@ class WorkshopRegistrationViewSet(viewsets.GenericViewSet,
 
 
 class PresentationRegistrationViewSet(viewsets.GenericViewSet,
-                                  mixins.ListModelMixin,
-                                  mixins.CreateModelMixin,
-                                  mixins.DestroyModelMixin):
+                                      mixins.ListModelMixin,
+                                      mixins.CreateModelMixin,
+                                      mixins.DestroyModelMixin):
     permission_classes = [IsAuthenticated]
     serializer_class = PresentationParticipationSerializer
 
@@ -341,7 +341,7 @@ class PresentationRegistrationViewSet(viewsets.GenericViewSet,
 
     def create(self, request, *args, **kwargs):
         data = super().create(request, *args, **kwargs)
-        return Response(new_detailed_response(status.HTTP_201_CREATED, "Particiopation successful", data.data))
+        return Response(new_detailed_response(status.HTTP_201_CREATED, "Participation added successfully", data.data))
 
     def destroy(self, request, *args, **kwargs):
         # TODO: handle this method using serializers properly
@@ -354,8 +354,7 @@ class PresentationRegistrationViewSet(viewsets.GenericViewSet,
         presentation_pk = kwargs.get('pk')
         try:
             presentation = user.participated_presentations.get(pk=presentation_pk)
-            user.participated_presentations.remove(presentation_pk)
-            return Response(new_detailed_response(status.HTTP_200_OK, "Particiopation cancelled successfully"))
+            user.participated_presentations.remove(presentation)
+            return Response(new_detailed_response(status.HTTP_200_OK, "Participation cancelled successfully"))
         except ObjectDoesNotExist:
             return Response(new_detailed_response(status.HTTP_400_BAD_REQUEST, "Presentation not found"))
-

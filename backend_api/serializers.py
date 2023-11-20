@@ -90,13 +90,12 @@ class WorkshopRegistrationSerializer(serializers.ModelSerializer):
         return response
 
 
-
 class PresentationParticipationSerializer(serializers.ModelSerializer):
     presentation = serializers.PrimaryKeyRelatedField(queryset=PresentationSerializer.Meta.model.objects.all())
 
     class Meta:
         model = PresentationParticipation
-        fields = ('presntation',)
+        fields = ('presentation',)
 
     def create(self, validated_data):
         user = self.context['request'].user.user
@@ -108,12 +107,11 @@ class PresentationParticipationSerializer(serializers.ModelSerializer):
                 new_detailed_response(status.HTTP_400_BAD_REQUEST,
                                       'User has already registered for this presentation.'))
         except ObjectDoesNotExist:
-            user.registeredparticipated_presentations_presentations.add(presentation)
-        return user.PresentationParticipation_set.get(presentation=presentation)
+            user.participated_presentations.add(presentation)
+        return user.presentationparticipation_set.get(presentation=presentation)
 
-    def to_presentation(self, instance):
-        
-        super_response = super().to_presentation(instance)
+    def to_representation(self, instance):
+        super_response = super().to_representation(instance)
         response = {}
         for key, val in super_response.items():
             response["id"] = val

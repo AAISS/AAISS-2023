@@ -71,7 +71,7 @@ user_route = [
         'get': 'list',
         'post': 'create',
     })),
-    path('user/presentaion/<int:pk>/', views.PresentationRegistrationViewSet.as_view({
+    path('user/presentation/<int:pk>/', views.PresentationRegistrationViewSet.as_view({
         'delete': 'destroy',
     }))
 ]

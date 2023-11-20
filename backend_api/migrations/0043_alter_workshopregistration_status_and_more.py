@@ -66,4 +66,14 @@ class Migration(migrations.Migration):
                 to="backend_api.presentation",
             ),
         ),
+        migrations.AddField(
+            model_name='payment',
+            name='presentations',
+            field=models.ManyToManyField(blank=True, to='backend_api.presentation'),
+        ),
+        migrations.AddField(
+            model_name='presentation',
+            name='cost',
+            field=models.PositiveIntegerField(default=0),
+        ),
     ]
