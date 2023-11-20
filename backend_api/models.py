@@ -215,6 +215,7 @@ class User(models.Model):
     name = models.CharField(max_length=SMALL_MAX_LENGTH)
     fields_of_interest = models.ManyToManyField(FieldOfInterest, blank=True)
     registered_workshops = models.ManyToManyField(Workshop, blank=True, through='WorkshopRegistration')
+    participated_presentations = models.ManyToManyField(Presentation, blank=True, through='PresentationParticipation')
     registered_for_presentations = models.BooleanField(default=False)
     phone_number = models.CharField(max_length=12, validators=[validators.validate_all_number])
 
@@ -233,6 +234,18 @@ class WorkshopRegistration(models.Model):
 
     class Meta:
         unique_together = ('workshop', 'user',)
+
+class PresentationParticipation(models.Model):
+    class StatusChoices(models.IntegerChoices):
+        AWAITING_PAYMENT = 1, _('Waiting for payment')
+        PURCHASED = 2, _('Purchase confirmed')
+
+    presentation = models.ForeignKey(Presentation, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    status = models.IntegerField(choices=StatusChoices.choices, default=StatusChoices.AWAITING_PAYMENT)
+
+    class Meta:
+        unique_together = ('presentation', 'user',)
 
 
 class Misc(models.Model):
