@@ -25,34 +25,17 @@ def desc_creator(selected_model):
     return Admin
 
 
-admin.site.register(models.Account)
-
-
-class UserAdmin(admin.ModelAdmin):
-    list_display = ('account',)
-
-
-admin.site.register(models.Committee)
-admin.site.register(models.User, UserAdmin)
-admin.site.register(models.FieldOfInterest)
-admin.site.register(models.Staff)
-
-
 class TeacherAdminForm(forms.ModelForm):
     bio = forms.CharField(widget=forms.Textarea)
 
     class Meta:
-        model = models.Presenter
+        model = models.Teacher
         fields = '__all__'
 
 
 class TeacherAdmin(admin.ModelAdmin):
     form = TeacherAdminForm
     list_display = ('__str__', 'order',)
-
-
-admin.site.register(models.Teacher, TeacherAdmin)
-admin.site.register(models.Workshop, desc_creator(models.Workshop))
 
 
 class PresenterAdminForm(forms.ModelForm):
@@ -68,10 +51,8 @@ class PresenterAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'order',)
 
 
-admin.site.register(models.Presenter, PresenterAdmin)
-
-admin.site.register(models.Presentation, desc_creator(models.Presentation))
-admin.site.register(models.Misc, desc_creator(models.Misc))
+class UserAdmin(admin.ModelAdmin):
+    list_display = ('account',)
 
 
 class MailerForm(forms.ModelForm):
@@ -120,9 +101,6 @@ class MailerAdmin(admin.ModelAdmin):
     actions = ['execute_mailer']
 
 
-admin.site.register(models.Mailer, MailerAdmin)
-
-
 class PaymentAdmin(admin.ModelAdmin):
     rdfields = []
     for field in models.Payment._meta.get_fields():
@@ -141,6 +119,17 @@ class PaymentAdmin(admin.ModelAdmin):
         fields = '__all__'
 
 
+admin.site.register(models.Teacher, TeacherAdmin)
+admin.site.register(models.Presenter, PresenterAdmin)
+admin.site.register(models.User, UserAdmin)
+admin.site.register(models.Mailer, MailerAdmin)
 admin.site.register(models.Payment, PaymentAdmin)
 admin.site.register(models.WorkshopRegistration)
 admin.site.register(models.PresentationParticipation)
+admin.site.register(models.Account)
+admin.site.register(models.Committee)
+admin.site.register(models.FieldOfInterest)
+admin.site.register(models.Staff)
+admin.site.register(models.Workshop, desc_creator(models.Workshop))
+admin.site.register(models.Presentation, desc_creator(models.Presentation))
+admin.site.register(models.Misc, desc_creator(models.Misc))

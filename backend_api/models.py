@@ -77,6 +77,7 @@ class Presenter(models.Model):
     """Presentation presenter database model"""
     name = models.CharField(max_length=SMALL_MAX_LENGTH)
     pic = models.ImageField(blank=True)
+    workplace_logo = models.ImageField(blank=True)
     workplace = models.CharField(max_length=SMALL_MAX_LENGTH, blank=True)
     paper = models.CharField(max_length=SMALL_MAX_LENGTH, blank=True)
     cv_path = models.CharField(max_length=511, blank=True, default="")
