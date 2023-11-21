@@ -1,9 +1,7 @@
-from urllib.parse import urljoin
-
 import requests
 import json
 
-from aaiss_backend.settings import ZIFY_AUTH, BASE_URL
+from aaiss_backend.settings import ZIFY_AUTH
 
 ZIFY_STATUS_OK = 200
 ZIFY_STATUS_201 = 201
