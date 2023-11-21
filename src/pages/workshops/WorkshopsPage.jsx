@@ -1,7 +1,7 @@
 import ItemCard from "../../Components/item-card/item-card.jsx";
+import Toast from "../../Components/toast/Toast.jsx";
 import {Helper} from "../../utils/Helper.js";
 import useWorkshopsPage from "./useWorkshopsPage.js";
-import {useCallback, useEffect, useState} from "react";
 
 export default function WorkshopsPage() {
 
@@ -9,6 +9,9 @@ export default function WorkshopsPage() {
         parsedItemsList,
         addToCart,
         gridTemplateColumnsValue,
+        toastData,
+        setOpenToast,
+        openToast,
     } = useWorkshopsPage()
 
     return (
@@ -19,6 +22,12 @@ export default function WorkshopsPage() {
             width: "80vw",
             gap: "30px",
         }}>
+            {toastData && <Toast
+                open={openToast}
+                setOpen={setOpenToast}
+                alertType={toastData.type}
+                message={toastData.message}
+            />}
             {parsedItemsList && parsedItemsList.map((e, index) => {
                 return (
                     <ItemCard

@@ -22,13 +22,12 @@ export function APIProvider({children}) {
     const [verifyPaymentData, setVerifyPaymentData] = useState()
     const [committeeData, setCommitteeData] = useState()
     const [presenterData, setPresenterData] = useState()
-    const [addToCartResultData, setAddToCartResultData] = useState()
+    const [addToCartResponse, setAddToCartResponse] = useState()
 
     const addItemToCart = useCallback(async ({
-        type,
-        id,
+                                                 type,
+                                                 id,
                                              }) => {
-        console.log(type, id)
         const body = {}
         let endpoint = ""
         switch (type) {
@@ -45,10 +44,13 @@ export function APIProvider({children}) {
         }
 
         await service.post(`${URL.baseURL}${URL.services.default}${endpoint}`, {
-                data: body
-            })
+            data: body
+        })
             .then(response => {
-                setAddToCartResultData(response.data)
+                setAddToCartResponse(response)
+            })
+            .catch(response => {
+                setAddToCartResponse(response)
             })
     }, [service])
 
@@ -198,7 +200,7 @@ export function APIProvider({children}) {
         getMiscData,
         getStaffData,
         addItemToCart,
-        addToCartResultData,
+        addToCartResponse,
     }
 
     return (
