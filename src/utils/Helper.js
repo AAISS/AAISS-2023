@@ -47,9 +47,26 @@ function omitLongString(str, len) {
     return str
 }
 
+function getToastDataFromResponse(response) {
+    const toastDataTemp = {}
+    switch (response?.status) {
+        case 201:
+        case 200:
+            toastDataTemp.message = "Success!";
+            toastDataTemp.alertType = "success";
+            break;
+        default:
+            toastDataTemp.message = "Error!"
+            toastDataTemp.alertType = "error"
+            break;
+    }
+    return toastDataTemp
+}
+
 export const Helper = {
     convertStringToDateWithoutTimezone,
     convertDateTimeToDate,
     convertDateTimeToTime,
     omitLongString,
+    getToastDataFromResponse,
 }

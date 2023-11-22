@@ -23,6 +23,19 @@ export function APIProvider({children}) {
     const [committeeData, setCommitteeData] = useState()
     const [presenterData, setPresenterData] = useState()
     const [addToCartResponse, setAddToCartResponse] = useState()
+    const [issueTokenResponse, setIssueTokenResponse] = useState()
+
+    const issueToken = useCallback(async (data) => {
+        await service.post(`${URL.baseURL}${URL.services.default}${URL.endpoints.token.default}`,
+            data)
+            .then(response => {
+                setIssueTokenResponse(response)
+            })
+            .catch(error => {
+                setIssueTokenResponse(error?.response)
+            })
+    }, [service])
+
 
     const addItemToCart = useCallback(async ({
                                                  type,
@@ -112,15 +125,18 @@ export function APIProvider({children}) {
         await service.put(`${URL.baseURL}${URL.services[currentYear]}${URL.endpoints.user.default}`,
             data)
             .then(response => {
-                setUpdateUserData(response.data)
+                setUpdateUserData(response)
             })
     }, [service])
 
     const createUser = useCallback(async (data) => {
-        await service.post(`${URL.baseURL}${URL.services[currentYear]}${URL.endpoints.user.default}`,
+        await service.post(`${URL.baseURL}${URL.services.default}${URL.endpoints.user.default}`,
             data)
             .then(response => {
-                setCreateUserData(response.data)
+                setCreateUserData(response)
+            })
+            .catch(error => {
+                setCreateUserData(error?.response)
             })
     }, [service])
 
@@ -170,6 +186,8 @@ export function APIProvider({children}) {
 
     const context = {
         workshopsData,
+        issueToken,
+        issueTokenResponse,
         getWorkshopsData,
         presentationsData,
         getPresentationsData,

@@ -17,7 +17,7 @@ const URL = {
             workshop: "user/workshop/"
         },
         token: {
-            default: "token/", //TODO
+            default: "token/",
             refresh: "token/refresh/", //TODO
         },
         payment: {
