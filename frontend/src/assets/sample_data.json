@@ -1,0 +1,56 @@
+[
+    {
+        "section": "Technical",
+        "people": [
+            {
+                "name": "Farhad Aman",
+                "role": "Team Leader"
+            },
+            {
+                "name": "Alireza Zare",
+                "role": "Front-end"
+            },
+            {
+                "name": "Alireza Yousefour",
+                "role": "Front-end"
+            },
+            {
+                "name": "Amirhesam Adibinia",
+                "role": "Back-end"
+            },
+            {
+                "name": "Amirhesam Adibinia",
+                "role": "Back-end"
+            }
+            
+        ]
+    },
+    {
+        "people": [
+            {
+                "name": "andrew ng",
+                "about": "im good at programing btw"
+            },
+            {
+                "name": "andrew ng",
+                "about": "im good at programing btw"
+            },
+            {
+                "name": "andrew ng",
+                "about": "im good at programing btw"
+            },
+            {
+                "name": "andrew ng",
+                "about": "im good at programing btw"
+            },
+            {
+                "name": "andrew ng",
+                "about": "im good at programing btw"
+            },
+            {
+                "name": "andrew ng",
+                "about": "im good at programing btw"
+            }
+        ]
+    }
+]

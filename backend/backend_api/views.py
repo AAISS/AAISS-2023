@@ -14,7 +14,7 @@ from rest_framework.response import Response
 
 from backend_api import models
 from backend_api import serializers
-from backend_api.models import User, Account, Payment, Workshop, Staff, WorkshopRegistration, PresentationParticipation
+from backend_api.models import User, Account, Payment, Staff, WorkshopRegistration, PresentationParticipation
 from backend_api.serializers import WorkshopRegistrationSerializer, PresentationParticipationSerializer
 from payment_backends.zify import ZIFYRequest, ZIFY_STATUS_OK
 from utils.renderers import new_detailed_response

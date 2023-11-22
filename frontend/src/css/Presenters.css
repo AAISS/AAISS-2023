@@ -1,0 +1,8 @@
+.presenters-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px; 
+    justify-items: center;
+    border-radius: 10px;
+    background-color: rgba(255,255,255,0.5);
+}

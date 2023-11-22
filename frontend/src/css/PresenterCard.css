@@ -1,0 +1,17 @@
+.presenter-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border-radius: 30px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: rgb(255,255,255);
+  text-align: center;
+  padding: 1rem;
+  margin: 0.5rem;
+  font-size: 15px;
+}
+
+.presenter-card-name {
+  text-align: center;
+}
