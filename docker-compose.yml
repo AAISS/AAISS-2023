@@ -30,7 +30,7 @@ services:
         condition: service_healthy
     image: caddy:2.7.3
     volumes:
-      - ./caddy:/etc/caddy
+      - ./deployment/caddy:/etc/caddy
       - ./backend/static:/static
       - ./backend/media:/media
       - ./dist:/dist
