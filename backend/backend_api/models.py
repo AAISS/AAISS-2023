@@ -69,7 +69,8 @@ class Teacher(models.Model):
     bio = models.CharField(max_length=BIG_MAX_LENGTH)
     order = models.SmallIntegerField(default=0)
     year = models.IntegerField(blank=False, default=2020)
-
+    workplace = models.CharField(max_length=SMALL_MAX_LENGTH, blank=True)
+    
     def __str__(self):
         return f"Teacher with id {self.id}: {self.name}"
 
