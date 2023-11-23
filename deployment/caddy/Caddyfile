@@ -14,7 +14,7 @@ aaiss.ir {
 	}
 
 	reverse_proxy @backend {
-		to web:6446
+		to backend:6446
 	}
 
     handle @frontend {

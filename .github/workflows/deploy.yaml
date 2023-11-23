@@ -54,5 +54,4 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           # TODO: handle envs
           script: |
-            docker compose -f AAISS-2023/docker-compose.yml pull
-            docker compose -f AAISS-2023/docker-compose.yml up -d
+            docker compose -f AAISS-2023/docker-compose.yml up -d --pull always
