@@ -289,12 +289,17 @@ class Mailer(models.Model):
 
 
 class Payment(models.Model):
+    class PaymentStatus(models.IntegerChoices):
+        AWAITING_PAYMENT = 0, _('Awaiting payment')
+        PAYMENT_CONFIRMED = 1, _('Payment confirmed')
+        PAYMENT_REJECTED = 2, _('Payment rejected')
+
     id = models.BigAutoField(primary_key=True)
     amount = models.PositiveIntegerField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     workshops = models.ManyToManyField(Workshop, blank=True)
     presentations = models.ManyToManyField(Presentation, blank=True)
-    is_done = models.BooleanField(default=False)
+    status = models.IntegerField(default=PaymentStatus.AWAITING_PAYMENT, choices=PaymentStatus.choices)
     year = models.IntegerField(blank=False, default=2020)
     date = models.DateField(blank=False,
                             default=datetime.datetime(year=2020, month=7, day=1, hour=0, minute=0, second=0,
@@ -304,22 +309,23 @@ class Payment(models.Model):
     def __str__(self):
         return f"Payment for {self.user.account} ({self.amount})  in {str(self.date)}"
 
-    def verify_payment(self):
-        self.is_done = True
-        for workshop in self.workshops.all():
-            try:
-                workshop = WorkshopRegistration.objects.get(user=self.user, workshop=workshop)
-                workshop.status = WorkshopRegistration.StatusChoices.PURCHASED
-                workshop.save()
-            except ObjectDoesNotExist:
-                pass
-        for presentation in self.presentations.all():
-            try:
-                presentation = PresentationParticipation.objects.get(user=self.user, presentation=presentation)
-                presentation.status = PresentationParticipation.StatusChoices.PURCHASED
-                presentation.save()
-            except ObjectDoesNotExist:
-                pass
+    def update_payment_status(self, payment_status: PaymentStatus):
+        self.status = payment_status
+        if payment_status == self.PaymentStatus.PAYMENT_CONFIRMED:
+            for workshop in self.workshops.all():
+                try:
+                    workshop = WorkshopRegistration.objects.get(user=self.user, workshop=workshop)
+                    workshop.status = WorkshopRegistration.StatusChoices.PURCHASED
+                    workshop.save()
+                except ObjectDoesNotExist:
+                    pass
+            for presentation in self.presentations.all():
+                try:
+                    presentation = PresentationParticipation.objects.get(user=self.user, presentation=presentation)
+                    presentation.status = PresentationParticipation.StatusChoices.PURCHASED
+                    presentation.save()
+                except ObjectDoesNotExist:
+                    pass
         self.save()
 
     @staticmethod
@@ -346,8 +352,7 @@ class Payment(models.Model):
             except ObjectDoesNotExist:
                 raise ValueError(f"User {user} is registered for presentation {presentation} but has no registration")
         if len(workshops) == 0 and len(presentations) == 0:
-            return Response(new_detailed_response(
-                status.HTTP_400_BAD_REQUEST, "User has no unpaid item"))
+            return None
         payment = Payment.objects.create(user=user, amount=total_cost, year=datetime.date.today().year,
                                          date=datetime.datetime.now())
         payment.workshops.set(workshops)

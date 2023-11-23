@@ -229,13 +229,10 @@ class PaymentViewSet(viewsets.GenericViewSet):
             return Response(new_detailed_response(
                 status.HTTP_400_BAD_REQUEST, "User not found"))
 
-        try:
-            payment = Payment.objects.get(user=user, is_done=False)
-            payment.delete()
-        except ObjectDoesNotExist:
-            pass
-        finally:
-            payment = Payment.create_payment_for_user(user)
+        payment = Payment.create_payment_for_user(user)
+        if payment is None:
+            return Response(new_detailed_response(
+                status.HTTP_400_BAD_REQUEST, "User has no unpaid item"))
 
         response = ZIFYRequest().create_payment(payment.pk, payment.amount, user.name, user.phone_number,
                                                 user.account.email)
@@ -261,10 +258,11 @@ class PaymentViewSet(viewsets.GenericViewSet):
                 status.HTTP_400_BAD_REQUEST, "Payment not found"))
         response = ZIFYRequest().verify_payment(payment.track_id)
         if response['status'] == ZIFY_STATUS_OK:
-            payment.verify_payment()
+            payment.update_payment_status(Payment.PaymentStatus.PAYMENT_CONFIRMED)
             # FIXME: redirect to payment success page
             return Response(new_detailed_response(status.HTTP_200_OK, "Payment verified successfully"))
         else:
+            payment.update_payment_status(Payment.PaymentStatus.PAYMENT_REJECTED)
             return Response(
                 new_detailed_response(response['status'], response["message"]))
 
