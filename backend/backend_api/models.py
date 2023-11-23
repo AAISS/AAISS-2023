@@ -65,11 +65,12 @@ class Teacher(models.Model):
     name = models.CharField(max_length=SMALL_MAX_LENGTH)
     pic = models.ImageField(blank=True)
     workplace_logo = models.ImageField(blank=True)
+    workplace = models.CharField(max_length=SMALL_MAX_LENGTH, blank=True)
     cv_path = models.CharField(max_length=511, blank=True, default="")
     bio = models.CharField(max_length=BIG_MAX_LENGTH)
     order = models.SmallIntegerField(default=0)
     year = models.IntegerField(blank=False, default=2020)
-
+    
     def __str__(self):
         return f"Teacher with id {self.id}: {self.name}"
 
