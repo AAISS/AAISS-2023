@@ -19,8 +19,7 @@ export default function WorkshopsPage() {
             display: "grid",
             gridTemplateColumns: gridTemplateColumnsValue,
             justifyItems: "center",
-            width: "80vw",
-            gap: "30px",
+            gap: "15px",
         }}>
             {toastData && <Toast
                 open={openToast}
