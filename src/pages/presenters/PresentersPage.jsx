@@ -36,6 +36,7 @@ export default function PresenterPage() {
               name={item.name}
               desc={item.workplace}
               photo={item.pic}
+              logo={item.workplace_logo}
               onClick={navToPresenterDetailPage(item.id)}
             />
           ))}

@@ -5,3 +5,8 @@
 .presenter-card:hover {
   transform: scale(1.03);
 }
+
+.MuiCard-root {
+  max-width: 260px !important;
+  min-width: 260px !important;
+}

@@ -6,14 +6,14 @@ export default function PresenterDetailPage() {
   const { id } = useParams();
   const location = useLocation();
   const { teachersArray: teachers } = location.state;
-  const currentTeacher = teachers?.find((item) => (item.id = id));
+  const currentTeacher = teachers?.find((item) => (item.id === +id));
 
   if (currentTeacher) {
     return (
       <PresenterProfile
         name={currentTeacher.name}
+        workplace={currentTeacher.workplace}
         photo={currentTeacher.pic}
-        description={currentTeacher.workplace}
         cvPath={currentTeacher.cv_path}
         bio={currentTeacher.bio}
       />
