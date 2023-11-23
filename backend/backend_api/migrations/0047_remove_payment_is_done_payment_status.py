@@ -19,4 +19,9 @@ class Migration(migrations.Migration):
             name='status',
             field=models.IntegerField(choices=[(0, 'Awaiting payment'), (1, 'Payment confirmed'), (2, 'Payment rejected')], default=0),
         ),
+        migrations.AlterField(
+            model_name='payment',
+            name='id',
+            field=models.UUIDField(primary_key=True, serialize=False),
+        ),
     ]

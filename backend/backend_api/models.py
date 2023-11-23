@@ -294,7 +294,7 @@ class Payment(models.Model):
         PAYMENT_CONFIRMED = 1, _('Payment confirmed')
         PAYMENT_REJECTED = 2, _('Payment rejected')
 
-    id = models.BigAutoField(primary_key=True)
+    id = models.UUIDField(primary_key=True)
     amount = models.PositiveIntegerField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     workshops = models.ManyToManyField(Workshop, blank=True)
