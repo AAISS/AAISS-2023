@@ -2,15 +2,17 @@ version: '3.8'
 
 services:
   migrate_db:
+    image: aaissaut/aaiss:backend
     build: ./backend
     command: ./manage.py migrate
     volumes:
       - ./backend/data:/backend-aaiss/data
 
-  web:
+  backend:
     depends_on:
       migrate_db:
         condition: service_completed_successfully
+    image: aaissaut/aaiss:backend
     build: ./backend
     command: gunicorn aaiss_backend.wsgi:application --bind 0.0.0.0:6446
     volumes:
@@ -26,7 +28,7 @@ services:
 
   caddy:
     depends_on:
-      web:
+      backend:
         condition: service_healthy
     image: caddy:2.7.3
     volumes:

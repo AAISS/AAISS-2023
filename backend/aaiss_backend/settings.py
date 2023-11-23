@@ -191,4 +191,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 PAYWALL = env.str("PAYWALL", "ZIFY")
 
 #ZIFY
-ZIFY_AUTH = env.str("ZIFY_AUTH")
+ZIFY_AUTH = env.str("ZIFY_AUTH", "")
