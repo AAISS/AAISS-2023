@@ -3,7 +3,10 @@ version: '3.8'
 services:
   migrate_db:
     image: aaissaut/aaiss:backend
-    build: ./backend
+    build:
+      context: ./backend
+      cache_from:
+        - aaissaut/aaiss:backend
     command: ./manage.py migrate
     volumes:
       - ./backend/data:/backend-aaiss/data
@@ -13,7 +16,10 @@ services:
       migrate_db:
         condition: service_completed_successfully
     image: aaissaut/aaiss:backend
-    build: ./backend
+    build:
+      context: ./backend
+      cache_from:
+        - aaissaut/aaiss:backend
     command: gunicorn aaiss_backend.wsgi:application --bind 0.0.0.0:6446
     volumes:
       - ./backend/data:/backend-aaiss/data
