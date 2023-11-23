@@ -1,3 +1,4 @@
+[![Deploy](https://github.com/AAISS/AAISS-2023/actions/workflows/deploy.yaml/badge.svg)](https://github.com/AAISS/AAISS-2023/actions/workflows/deploy.yaml)
 # AAISS
 Amirkabir Artificial Intelligence Student Summit (AAISS) is an event held by the Students' Scientific Chapter (SSC) of the computer engineering department. This event consists of advanced talks on various topics in deep learning, machine learning, natural language processing, computer vision and bioinformatics, plus workshops with levels ranging from elementary to advanced that will be enlightening for all kinds of students. This event focuses on the latest state of the art researches, and it works to exchange ideas and spread the knowledge of artificial intelligence for Persian-speaking enthusiasts from all around the globe. 
 
