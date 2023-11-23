@@ -12,10 +12,6 @@ const ROUTES = {
     title: 'Home',
     component: <Home />,
   },
-  about: {
-    path: '/about',
-    title: 'About',
-  },
   speakers: {
     path: '/presenters',
     title: 'Presenters',
