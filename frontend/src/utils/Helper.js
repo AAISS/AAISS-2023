@@ -41,8 +41,32 @@ function convertDateTimeToTime(date) {
     return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
 }
 
+function omitLongString(str, len) {
+    if (str.length > len)
+        return str.substring(0, len - 3) + "..."
+    return str
+}
+
+function getToastDataFromResponse(response) {
+    const toastDataTemp = {}
+    switch (response?.status) {
+        case 201:
+        case 200:
+            toastDataTemp.message = "Success!";
+            toastDataTemp.alertType = "success";
+            break;
+        default:
+            toastDataTemp.message = "Error!"
+            toastDataTemp.alertType = "error"
+            break;
+    }
+    return toastDataTemp
+}
+
 export const Helper = {
     convertStringToDateWithoutTimezone,
     convertDateTimeToDate,
     convertDateTimeToTime,
+    omitLongString,
+    getToastDataFromResponse,
 }

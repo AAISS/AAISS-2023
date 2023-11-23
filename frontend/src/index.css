@@ -1,12 +1,10 @@
 :root {
-  font-family:"Times New Roman",Georgia,Serif;
+  font-family: Roboto, serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background : linear-gradient(#2E4374 , #2E4374);
-
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -15,12 +13,3 @@
   -webkit-text-size-adjust: 100%;
 }
 
-
-body {
-  
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh; 
-  background-image: url(assets/background.png);
-
-}

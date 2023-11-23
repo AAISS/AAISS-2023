@@ -1,17 +1,12 @@
 .presenter-card {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  border-radius: 30px;
-  background-color: rgba(0, 0, 0, 0.5);
-  color: rgb(255,255,255);
-  text-align: center;
-  padding: 1rem;
-  margin: 0.5rem;
-  font-size: 15px;
+  transition: all 0.2s;
 }
 
-.presenter-card-name {
-  text-align: center;
+.presenter-card:hover {
+  transform: scale(1.03);
+}
+
+.MuiCard-root {
+  max-width: 260px !important;
+  min-width: 260px !important;
 }

@@ -15,7 +15,7 @@ export default function Presenters({ presenters }) {
                         name={item.name}
                         desc={item.workplace}
                         photo={item.pic}
-                        
+                        logo={item.workplace_logo}
                         />
                     )
                 })

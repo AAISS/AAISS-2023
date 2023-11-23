@@ -5,6 +5,8 @@ import ROUTES from "./ROUTES.jsx";
 export function ConfigProvider({children}) {
     const [lang, setLang] = useState(CONFIG.defaultLanguage)
     const [currentRoute, setCurrentRoute] = useState(ROUTES.home)
+    const [accessToken, setAccessToken] = useState()
+    const [refreshToken, setRefreshToken] = useState()
 
     useEffect(() => {
         const currentURL = window.location.href
@@ -13,6 +15,12 @@ export function ConfigProvider({children}) {
             return ROUTES[name].path === '/' + path.join("/")
         })]
         setCurrentRoute(currentlySelectedRoute ?? ROUTES.home)
+
+        const tokens = JSON.parse(localStorage["user"] ?? "{}")
+        if (tokens.access != null) {
+            setAccessToken(tokens.access)
+            setRefreshToken(tokens.refresh)
+        }
     }, [])
 
     const context = {
