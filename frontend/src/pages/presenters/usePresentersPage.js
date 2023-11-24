@@ -11,7 +11,6 @@ export default function usePresenterPage() {
   useEffect(() => {
     if (teachersData == null) return;
     setTeachers(teachersData);
-    console.log(teachersData);
   }, [teachersData]);
 
   return {

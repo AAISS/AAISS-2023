@@ -9,6 +9,7 @@ export default function useWorkshopsPage() {
         presentationsData,
         addToCartResponse,
         addItemToCart,
+        setAddToCartResponse,
     } = useAPI()
 
     const [parsedItemsList, setParsedItemsList] = useState()
@@ -28,17 +29,22 @@ export default function useWorkshopsPage() {
         if (addToCartResponse == null) return
 
         const toastDataTemp = {}
-        switch (addToCartResponse.response.status) {
+        switch (addToCartResponse.status) {
             case 200:
                 toastDataTemp.type = "success"
                 toastDataTemp.message = "Item Successfully Added to Cart!"
                 break;
-            default:
+            case 400:
                 toastDataTemp.type = "error"
-                toastDataTemp.message = "Failed to Add Item to Cart!"
+                toastDataTemp.message = "Failed to Add Item to Cart: Item Is Already In Your Cart!"
+                break;
+            case 401:
+                toastDataTemp.type = "error"
+                toastDataTemp.message = "Failed to Add Item to Cart: You Should Login First!"
         }
         setToastData(toastDataTemp)
         setOpenToast(true)
+        setAddToCartResponse(null)
     }, [addToCartResponse])
 
     useEffect(() => {
