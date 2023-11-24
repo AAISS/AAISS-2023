@@ -7,6 +7,7 @@ import '../../css/Signup.css';
 import {useAPI} from "../../providers/APIProvider/APIProvider.jsx";
 import Toast from "../../Components/toast/Toast.jsx";
 import {Helper} from "../../utils/Helper.js";
+import {useConfig} from "../../providers/config-provider/ConfigProvider.jsx";
 
 const validatePhone = (phone) => {
     const PHONE_LENGTH = 11;
@@ -39,6 +40,10 @@ const SignUpForm = ({onLoginClick}) => {
         createUser,
         createUserData,
     } = useAPI()
+
+    const {
+        setAccessTokenFromLocalStorage
+    } = useConfig()
 
     const handleSignUp = useCallback(() => {
         const data = {}
@@ -77,13 +82,30 @@ const SignUpForm = ({onLoginClick}) => {
         }
         // TODO: add API call for sign up
         // TODO: route to my-account page
-        console.log('submit');
     };
 
     useEffect(() => {
         if (createUserData == null) return
 
-        setToastData(Helper.getToastDataFromResponse())
+        const toastDataTemp = {}
+        switch (createUserData.status) {
+            case 200:
+            case 201:
+                toastDataTemp.message = "Account Created Successfully! Please Check Your Email."
+                toastDataTemp.alertType = "success"
+                break;
+            case 400:
+                toastDataTemp.message = "User with This Email Already Exists!"
+                toastDataTemp.alertType = "error"
+                break;
+            default:
+                toastDataTemp.message = "Unexpected Error! Please Try Again Later."
+                toastDataTemp.alertType = "error"
+                break
+        }
+
+        setAccessTokenFromLocalStorage()
+        setToastData(toastDataTemp)
         setOpenToast(true)
     }, [createUserData])
 

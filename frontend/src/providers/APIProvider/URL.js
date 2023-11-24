@@ -18,7 +18,7 @@ const URL = {
         },
         token: {
             default: "token/",
-            refresh: "token/refresh/", //TODO
+            refresh: "token/refresh/",
         },
         payment: {
             default: "payment/",
