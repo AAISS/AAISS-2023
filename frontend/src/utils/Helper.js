@@ -1,3 +1,5 @@
+import {jwtDecode} from "jwt-decode";
+
 function convertStringToDateWithoutTimezone(dateInString) {
     const date = new Date(dateInString)
     const computedDate = 60000 * date.getTimezoneOffset()
@@ -63,10 +65,27 @@ function getToastDataFromResponse(response) {
     return toastDataTemp
 }
 
+function checkTokenValidity(token) {
+    if (typeof token === "string") {
+        token = parseJWT(token)
+    }
+    return token.exp > Math.floor(new Date().getTime() / 1000)
+}
+
+function parseJWT(token) {
+    try {
+        return jwtDecode(token)
+    } catch (exception) {
+        throw new Error("Failed to parse token: Invalid token")
+    }
+}
+
 export const Helper = {
     convertStringToDateWithoutTimezone,
     convertDateTimeToDate,
     convertDateTimeToTime,
     omitLongString,
     getToastDataFromResponse,
+    checkTokenValidity,
+    parseJWT,
 }
