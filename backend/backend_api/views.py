@@ -219,11 +219,7 @@ class PaymentViewSet(viewsets.GenericViewSet):
                 status.HTTP_400_BAD_REQUEST, "User not found"))
 
         payment = Payment.create_payment_for_user(user)
-        if payment is None:
-            return Response(new_detailed_response(
-                status.HTTP_400_BAD_REQUEST, "User has no unpaid item"))
-
-        response = ZIFYRequest().create_payment(payment.pk, payment.amount, user.name, user.phone_number,
+        response = ZIFYRequest().create_payment(str(payment.pk), payment.amount, user.name, user.phone_number,
                                                 user.account.email)
         if response['status'] == ZIFY_STATUS_OK:
             payment.track_id = response['data']['order']

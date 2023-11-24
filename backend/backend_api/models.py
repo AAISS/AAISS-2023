@@ -1,4 +1,5 @@
 import datetime
+import uuid
 from urllib.parse import urljoin
 
 from django.contrib.auth.models import AbstractBaseUser
@@ -9,12 +10,15 @@ from django.db import models
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from rest_framework.exceptions import ValidationError
+from rest_framework import status
 
 from aaiss_backend import settings
 from aaiss_backend.settings import BASE_URL
 from backend_api import validators
 from backend_api.email import MailerThread
 from utils.random import create_random_string
+from utils.renderers import new_detailed_response
 
 SMALL_MAX_LENGTH = 255
 BIG_MAX_LENGTH = 65535
@@ -132,7 +136,7 @@ class Workshop(models.Model):
     @property
     def participants(self):
         participants = []
-        for participant in WorkshopRegistration.objects.filter(presentation=self,
+        for participant in WorkshopRegistration.objects.filter(workshop=self,
                                                                status=
                                                                WorkshopRegistration.StatusChoices.PURCHASED):
             participants += participant.user
@@ -310,7 +314,7 @@ class Payment(models.Model):
         PAYMENT_CONFIRMED = 1, _('Payment confirmed')
         PAYMENT_REJECTED = 2, _('Payment rejected')
 
-    id = models.UUIDField(primary_key=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     amount = models.PositiveIntegerField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     workshops = models.ManyToManyField(Workshop, blank=True)
@@ -354,6 +358,10 @@ class Payment(models.Model):
                 workshop_registration = workshop.workshopregistration_set.get(workshop_id=workshop.id)
                 if workshop_registration.status != WorkshopRegistration.StatusChoices.AWAITING_PAYMENT:
                     continue
+                if workshop.remaining_capacity <= 0:
+                    raise ValidationError(
+                        new_detailed_response(status.HTTP_400_BAD_REQUEST,
+                                              f"Workshop {workshop.id} is full"))
                 total_cost += workshop.cost
                 workshops.append(workshop)
             except ObjectDoesNotExist:
@@ -364,12 +372,17 @@ class Payment(models.Model):
                     presentation_id=presentation.id)
                 if presentation_participation.status != PresentationParticipation.StatusChoices.AWAITING_PAYMENT:
                     continue
+                if presentation.remaining_capacity <= 0:
+                    raise ValidationError(
+                        new_detailed_response(status.HTTP_400_BAD_REQUEST,
+                                              f"Presentation {presentation.id} is full"))
                 total_cost += presentation.cost
                 presentations.append(presentation)
             except ObjectDoesNotExist:
                 raise ValueError(f"User {user} is registered for presentation {presentation} but has no registration")
         if len(workshops) == 0 and len(presentations) == 0:
-            return None
+            raise ValidationError(
+                new_detailed_response(status.HTTP_400_BAD_REQUEST, f"User {user} has no unpaid registrations"))
         payment = Payment.objects.create(user=user, amount=total_cost, year=datetime.date.today().year,
                                          date=datetime.datetime.now())
         payment.workshops.set(workshops)
