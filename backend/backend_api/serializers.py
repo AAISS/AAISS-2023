@@ -18,8 +18,6 @@ def all_serializer_creator(selected_model):
 FieldOfInterestSerializer = all_serializer_creator(models.FieldOfInterest)
 TeacherSerializer = all_serializer_creator(models.Teacher)
 PresenterSerializer = all_serializer_creator(models.Presenter)
-WorkshopSerializer = all_serializer_creator(models.Workshop)
-PresentationSerializer = all_serializer_creator(models.Presentation)
 MiscSerializer = all_serializer_creator(models.Misc)
 CommitteeSerializer = all_serializer_creator(models.Committee)
 StaffSerializer = all_serializer_creator(models.Staff)
@@ -55,6 +53,22 @@ class UserSerializer(serializers.ModelSerializer):
 class AllStaffSectionSerializer(serializers.Serializer):
     section = serializers.CharField()
     people = serializers.ListField(child=serializers.DictField())
+
+
+class WorkshopSerializer(serializers.ModelSerializer):
+    remaining_capacity = serializers.IntegerField()
+
+    class Meta:
+        model = models.Workshop
+        fields = '__all__'
+
+
+class PresentationSerializer(serializers.ModelSerializer):
+    remaining_capacity = serializers.IntegerField()
+
+    class Meta:
+        model = models.Presentation
+        fields = '__all__'
 
 
 class WorkshopRegistrationSerializer(serializers.ModelSerializer):
