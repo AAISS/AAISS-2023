@@ -2,11 +2,19 @@ import React, { useState } from 'react';
 import { Box, Button, Divider, Stack, Tab, Tabs, Typography } from '@mui/material';
 import ItemCard from '../../components/item-card/item-card.jsx';
 import useMyAccount from './useMyAccount.js';
+import {Helper} from "../../utils/Helper.js";
+import Toast from "../../Components/toast/Toast.jsx";
 
 const TAB_ITEMS = ['Workshops', 'Talks', 'Cart'];
 
 const MyAccount = () => {
-  const { talks, workshops, cart } = useMyAccount();
+  const { talks,
+    workshops,
+    cart,
+    removeFromCartHandler,
+    toastData,
+    openToast,
+    setOpenToast } = useMyAccount();
   const [tabValue, setTabValue] = useState(TAB_ITEMS[0]);
 
   const handleChangeTab = (event, newValue) => {
@@ -27,17 +35,19 @@ const MyAccount = () => {
   };
 
   const List = ({ type, items }) => {
+    if (items == null)
+      return
     return items.map((item, index) => (
       <ItemCard
         key={index}
         isWorkshop={type === 'Workshops'}
         purchaseState={type === 'Cart' ? 1 : 2}
         title={item.name}
-        description={item.desc}
+        description={Helper.omitLongString(item.desc, 100)}
         level={item.level}
         startDate={item.start_date}
         endDate={item.end_date}
-        presenterName={item.presenters[0]}
+        presenterName={item.presenters?.[0]}
         cost={item.cost}
         hasProject={item.hasProject}
         prerequisites={item.prerequisites}
@@ -46,15 +56,16 @@ const MyAccount = () => {
         isFull={item.isFull}
         addToCalendarLink={item.addToCalendarLink}
         onClickAddToCart={() => {}}
-        onClickRemoveFromCart={() => {}}
+        onClickRemoveFromCart={() => removeFromCartHandler({id: item.id, type: item.type})}
       />
     ));
   };
 
   const calculateTotalCost = () => {
+    if (!cart)
+      return 0
     let total = 0;
     cart.forEach(({ cost }) => {
-      console.log(cost);
       total += cost;
     });
     return total;
@@ -62,6 +73,12 @@ const MyAccount = () => {
 
   return (
     <Stack alignItems="center">
+      <Toast
+          open={openToast}
+          setOpen={setOpenToast}
+          alertType={toastData?.alertType}
+          message={toastData?.message}
+      />
       <Box sx={{ bgcolor: 'var(--background-color)', px: 4, pb: 8, borderRadius: '30px', width: '80%' }}>
         <Box sx={{ width: '100%' }}>
           <Tabs value={tabValue} onChange={handleChangeTab} centered>
