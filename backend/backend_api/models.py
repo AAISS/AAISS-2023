@@ -9,15 +9,12 @@ from django.db import models
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from rest_framework import status
-from rest_framework.response import Response
 
 from aaiss_backend import settings
 from aaiss_backend.settings import BASE_URL
 from backend_api import validators
 from backend_api.email import MailerThread
 from utils.random import create_random_string
-from utils.renderers import new_detailed_response
 
 SMALL_MAX_LENGTH = 255
 BIG_MAX_LENGTH = 65535
@@ -70,7 +67,7 @@ class Teacher(models.Model):
     bio = models.CharField(max_length=BIG_MAX_LENGTH)
     order = models.SmallIntegerField(default=0)
     year = models.IntegerField(blank=False, default=2020)
-    
+
     def __str__(self):
         return f"Teacher with id {self.id}: {self.name}"
 
@@ -122,15 +119,24 @@ class Workshop(models.Model):
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
 
-    def no_of_participants(self):
-        return len(User.objects.filter(registered_workshops=self).all())
+    @property
+    def no_of_participants(self) -> int:
+        return len(
+            WorkshopRegistration.objects.filter(workshop=self,
+                                                status=WorkshopRegistration.StatusChoices.PURCHASED))
+
+    @property
+    def remaining_capacity(self) -> int:
+        return max(self.capacity - self.no_of_participants, 0)
 
     @property
     def participants(self):
-        users = []
-        for user in User.objects.filter(registered_workshops=self).all():
-            users.append(user)
-        return users
+        participants = []
+        for participant in WorkshopRegistration.objects.filter(presentation=self,
+                                                               status=
+                                                               WorkshopRegistration.StatusChoices.PURCHASED):
+            participants += participant.user
+        return participants
 
     def __str__(self):
         name = ""
@@ -145,6 +151,7 @@ class Presentation(models.Model):
     desc = models.CharField(max_length=BIG_MAX_LENGTH)
     year = models.IntegerField(blank=False, default=2020)
     cost = models.PositiveIntegerField(default=0)
+    capacity = models.PositiveIntegerField(default=50)
 
     NOT_ASSIGNED = 'NOT_ASSIGNED'
     ELEMENTARY = 'Elementary'
@@ -166,15 +173,24 @@ class Presentation(models.Model):
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
 
-    def no_of_participants(self):
-        return len(User.objects.filter(registered_for_presentations=True).all())
+    @property
+    def no_of_participants(self) -> int:
+        return len(
+            PresentationParticipation.objects.filter(presentation=self,
+                                                     status=PresentationParticipation.StatusChoices.PURCHASED))
+
+    @property
+    def remaining_capacity(self) -> int:
+        return max(self.capacity - self.no_of_participants, 0)
 
     @property
     def participants(self):
-        users = []
-        for user in User.objects.filter(registered_for_presentations=True).all():
-            users.append(user)
-        return users
+        participants = []
+        for participant in PresentationParticipation.objects.filter(presentation=self,
+                                                                    status=
+                                                                    PresentationParticipation.StatusChoices.PURCHASED):
+            participants += participant.user
+        return participants
 
     def __str__(self):
         name = ""
@@ -344,7 +360,8 @@ class Payment(models.Model):
                 raise ValueError(f"User {user} is registered for workshop {workshop} but has no registration")
         for presentation in user.participated_presentations.all():
             try:
-                presentation_participation = presentation.presentationparticipation_set.get(presentation_id=presentation.id)
+                presentation_participation = presentation.presentationparticipation_set.get(
+                    presentation_id=presentation.id)
                 if presentation_participation.status != PresentationParticipation.StatusChoices.AWAITING_PAYMENT:
                     continue
                 total_cost += presentation.cost
