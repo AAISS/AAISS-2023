@@ -1,4 +1,4 @@
-import {createContext, useContext, useEffect, useState} from "react";
+import {createContext, useCallback, useContext, useEffect, useState} from "react";
 import CONFIG from "./CONFIG.js";
 import ROUTES from "./ROUTES.jsx";
 
@@ -8,20 +8,34 @@ export function ConfigProvider({children}) {
     const [accessToken, setAccessToken] = useState()
     const [refreshToken, setRefreshToken] = useState()
 
-    useEffect(() => {
+    const setAccessTokenFromLocalStorage = useCallback(() => {
+        const tokens = JSON.parse(localStorage["user"] ?? "{}")
+        if (tokens.access != null) {
+            setAccessToken(tokens.access)
+            if (tokens.refresh) {
+                setRefreshToken(tokens.refresh)
+            } else {
+                tokens.refresh = refreshToken
+                localStorage["user"] = JSON.stringify(tokens)
+            }
+        }
+    }, [refreshToken])
+
+    const updateCurrentRoute = useCallback(() => {
         const currentURL = window.location.href
-        const [temp0, temp2, temp3, ...path] = currentURL.split("/")
+        const [, , , ...path] = currentURL.split("/")
         const currentlySelectedRoute = ROUTES[Object.keys(ROUTES).find(name => {
             return ROUTES[name].path === '/' + path.join("/")
         })]
         setCurrentRoute(currentlySelectedRoute ?? ROUTES.home)
+    }, [setCurrentRoute])
 
-        const tokens = JSON.parse(localStorage["user"] ?? "{}")
-        if (tokens.access != null) {
-            setAccessToken(tokens.access)
-            setRefreshToken(tokens.refresh)
-        }
-    }, [])
+
+    useEffect(() => {
+        updateCurrentRoute()
+        setAccessTokenFromLocalStorage()
+    }, [setAccessTokenFromLocalStorage, updateCurrentRoute])
+
 
     const context = {
         lang,
@@ -30,6 +44,9 @@ export function ConfigProvider({children}) {
         setCurrentRoute,
         CONFIG,
         ROUTES,
+        refreshToken,
+        accessToken,
+        setAccessTokenFromLocalStorage,
     }
     return (
         <ConfigContext.Provider value={context}>
