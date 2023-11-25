@@ -32,7 +32,7 @@ const PresenterProfile = ({ name, workplace, photo, cvPath, bio }) => (
   <Stack alignItems="center" style={{ width: '100%' }}>
     <Box sx={{ bgcolor: 'var(--background-color)', px: 4, pb: 8, borderRadius: '30px', width: '80%' }}>
       <Header name={name} photo={photo} workplace={workplace} />
-      <Divider sx={{ py: 3 }}>
+      <Divider>
         <Typography variant="h3" fontSize="24px">
           Biography
         </Typography>
