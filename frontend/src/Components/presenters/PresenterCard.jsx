@@ -48,7 +48,7 @@ const PresenterCard = ({ name, photo, desc, logo, onClick, showButton = true, sh
             </Stack>
             {role && <Chip label={role}/>}
             {logo && (
-              <Stack flexDirection="column" alignItems="center" gap={1}
+              <Stack flexDirection="column" alignItems="center" justifyContent="center" gap={1}
                      sx={{
                        bgcolor: '#3f579a',
                        padding: '10px',
