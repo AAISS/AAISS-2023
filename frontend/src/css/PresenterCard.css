@@ -10,3 +10,15 @@
   max-width: 260px !important;
   min-width: 260px !important;
 }
+
+.presenter-card > div {
+  height: 100% !important;
+}
+
+.presenter-card .MuiCardContent-root {
+  height: 100% !important;
+}
+
+.presenter-card .MuiCardActions-root {
+  margin-top: 0 !important;
+}

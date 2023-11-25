@@ -24,30 +24,40 @@ const PresenterCard = ({ name, photo, desc, logo, onClick, showButton = true, sh
         onClick={onClick}
       >
         <CardContent>
-          <Stack alignItems="center" justifyContent="center" gap={1}>
-            <Image
-              src={`${URL.baseURL}${photo}`}
-              style={{
-                width: '190px',
-                height: '190px',
-                borderRadius: '10px',
-                objectFit: 'cover',
-                objectPosition: 'center',
-              }}
-            />
-            <Typography
-              sx={{
-                textAlign: 'center',
-                borderBottom: showDivider && '1px solid var(--light-text-color-lighter)',
-                width: '100%',
-              }}
-              variant="h5"
-            >
-              {name}
-            </Typography>
-            {role && <Chip label={role} />}
+          <Stack alignItems="center" justifyContent="space-between" gap={1} sx={{ height: '100%' }}>
+            <Stack flexDirection="column" alignItems="center">
+              <Image
+                src={`${URL.baseURL}${photo}`}
+                style={{
+                  width: '190px',
+                  height: '190px',
+                  borderRadius: '10px',
+                  objectFit: 'cover',
+                  objectPosition: 'center',
+                }}
+              />
+              <Typography
+                sx={{
+                  textAlign: 'center',
+                  borderBottom: showDivider && '1px solid var(--light-text-color-lighter)',
+                  width: '100%',
+                }}
+                variant="h5">
+                {name}
+              </Typography>
+            </Stack>
+            {role && <Chip label={role}/>}
             {logo && (
-              <Stack flexDirection="column" alignItems="center" gap={1}>
+              <Stack flexDirection="column" alignItems="center" gap={1}
+                     sx={{
+                       bgcolor: '#3f579a',
+                       padding: '10px',
+                       boxSizing: 'border-box',
+                       borderRadius: '10px',
+                       width: '100%',
+                       minHeight: '115px',
+                       position: 'relative',
+                     }}>
                 <Image
                   src={`${URL.baseURL}${logo}`}
                   style={{
@@ -58,7 +68,11 @@ const PresenterCard = ({ name, photo, desc, logo, onClick, showButton = true, sh
                     objectPosition: 'center',
                   }}
                 />
-                <Typography fontSize="15px" style={{ fontWeight: 'lighter' }}>
+                <Typography fontSize="15px" sx={{
+                  fontWeight: 'lighter',
+                  textWrap: 'balance',
+                  textAlign: 'center',
+                }}>
                   {desc}
                 </Typography>
               </Stack>
