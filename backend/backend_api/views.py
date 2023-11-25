@@ -93,53 +93,42 @@ class PresenterViewSet(viewsets.ViewSet):
         return Response(response)
 
 
-class WorkshopViewSet(viewsets.ViewSet):
+class WorkshopViewSet(viewsets.GenericViewSet,
+                      mixins.ListModelMixin,
+                      mixins.RetrieveModelMixin):
     serializer_class = serializers.WorkshopSerializer
+    queryset = models.Workshop.objects.all()
 
     def list(self, request, year=None, **kwargs):
         if year is None:
             year = datetime.datetime.now().year
         queryset = models.Workshop.objects.filter(year=year)
-        serializer = self.serializer_class(queryset, many=True)
-        for workshop_data in serializer.data:
-            workshop = get_object_or_404(queryset, pk=workshop_data['id'])
-            workshop_data['is_full'] = (
-                    len(models.User.objects.filter(registered_workshops=workshop).all()) >= workshop.capacity)
-        return Response(serializer.data)
+        return super().list(request, queryset=queryset, **kwargs)
 
     def retrieve(self, request, year=None, pk=None):
         if year is None:
             year = datetime.datetime.now().year
         queryset = models.Workshop.objects.filter(year=year)
-        workshop = get_object_or_404(queryset, pk=pk)
-        serializer = self.serializer_class(workshop)
-        response = dict(serializer.data)
-        response['is_full'] = (
-                len(models.User.objects.filter(registered_workshops=workshop).all()) >= workshop.capacity)
-        return Response(response)
+        return super().retrieve(request, pk=pk, queryset=queryset)
 
 
-class PresentationViewSet(viewsets.ViewSet):
+class PresentationViewSet(viewsets.GenericViewSet,
+                          mixins.ListModelMixin,
+                          mixins.RetrieveModelMixin):
     serializer_class = serializers.PresentationSerializer
+    queryset = models.Presentation.objects.all()
 
     def list(self, request, year=None, **kwargs):
         if year is None:
             year = datetime.datetime.now().year
-        queryset = models.Presentation.objects.filter(year=year)
-        serializer = self.serializer_class(queryset, many=True)
-        total_registered_for_presentation = len(models.User.objects.filter(registered_for_presentations=True).all())
-        response = list(serializer.data)
-        response.append(
-            {'is_full': total_registered_for_presentation >= int(models.Misc.objects.get(pk='presentation_cap').desc)})
-        return Response(response)
+        queryset = self.queryset.filter(year=year)
+        return super().list(request, queryset=queryset, **kwargs)
 
     def retrieve(self, request, year=None, pk=None):
         if year is None:
             year = datetime.datetime.now().year
         queryset = models.Presentation.objects.filter(year=year)
-        presentation = get_object_or_404(queryset, pk=pk)
-        serializer = self.serializer_class(presentation)
-        return Response(serializer.data)
+        return super().retrieve(request, pk=pk, queryset=queryset)
 
 
 class MiscViewSet(viewsets.ViewSet):
@@ -230,11 +219,7 @@ class PaymentViewSet(viewsets.GenericViewSet):
                 status.HTTP_400_BAD_REQUEST, "User not found"))
 
         payment = Payment.create_payment_for_user(user)
-        if payment is None:
-            return Response(new_detailed_response(
-                status.HTTP_400_BAD_REQUEST, "User has no unpaid item"))
-
-        response = ZIFYRequest().create_payment(payment.pk, payment.amount, user.name, user.phone_number,
+        response = ZIFYRequest().create_payment(str(payment.pk), payment.amount, user.name, user.phone_number,
                                                 user.account.email)
         if response['status'] == ZIFY_STATUS_OK:
             payment.track_id = response['data']['order']
