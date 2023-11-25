@@ -99,7 +99,7 @@ const MyAccount = () => {
             <Divider sx={{ my: 2 }} />
             <Stack alignItems="center" gap={1}>
               <Typography>Total: {calculateTotalCost()} T</Typography>
-              <Button variant="contained" sx={{ px: 4 }}>
+              <Button variant="contained" sx={{ px: 4 }} disabled={calculateTotalCost() === 0}>
                 Buy
               </Button>
             </Stack>
