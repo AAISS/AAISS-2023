@@ -5,18 +5,18 @@ import usePresenterPage from './usePresentersPage.js';
 import '../../css/Presenters.css';
 
 export default function PresenterPage() {
-  const { teachers } = usePresenterPage();
+  const { renderedData } = usePresenterPage();
   const navigate = useNavigate();
 
   const navToPresenterDetailPage = (id) => () => {
     navigate(`${id}`, {
       state: {
-        teachersArray: teachers,
+        teachersArray: renderedData,
       },
     });
   };
 
-  if (teachers) {
+  if (renderedData) {
     return (
       <Stack>
         <Typography variant="h1" fontSize="60px" sx={{ textAlign: 'center', pb: 5 }}>
@@ -30,7 +30,7 @@ export default function PresenterPage() {
           className="presenters-container"
           gap={5}
         >
-          {teachers.map((item, index) => (
+          {renderedData.map((item, index) => (
             <PresenterCard
               key={index}
               name={item.name}

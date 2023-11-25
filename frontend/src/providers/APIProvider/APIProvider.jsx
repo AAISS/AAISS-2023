@@ -247,7 +247,7 @@ export function APIProvider({children}) {
     }, [currentYear, service])
 
     const getTeachersData = useCallback(async () => {
-        await service.get(`${URL.baseURL}${URL.services[currentYear]}${URL.endpoints.presenter}`)
+        await service.get(`${URL.baseURL}${URL.services[currentYear]}${URL.endpoints.teacher}`)
             .then(response => setTeachersData(response.data))
     }, [currentYear, service])
 
@@ -278,7 +278,6 @@ export function APIProvider({children}) {
         if (!Helper.checkTokenValidity(accessToken)) {
             updateAccessTokenWithRefreshToken()
         }
-        service.defaults.headers.common['Authorization'] = getAccessTokenHeader();
     }, [accessToken, refreshToken, service.defaults.headers.common, updateAccessTokenWithRefreshToken])
 
 
