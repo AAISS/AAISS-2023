@@ -16,10 +16,10 @@ export default function WorkshopsPage() {
 
     return (
         <section style={{
-            display: "grid",
-            gridTemplateColumns: gridTemplateColumnsValue,
-            justifyItems: "center",
-            gap: "15px",
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          gap: '20px',
         }}>
             {toastData && <Toast
                 open={openToast}
