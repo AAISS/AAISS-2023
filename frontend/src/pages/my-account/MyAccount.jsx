@@ -5,7 +5,7 @@ import useMyAccount from './useMyAccount.js';
 import {Helper} from "../../utils/Helper.js";
 import Toast from "../../Components/toast/Toast.jsx";
 
-const TAB_ITEMS = ['Workshops', 'Talks', 'Cart'];
+const TAB_ITEMS = ['Workshops', 'Presentations', 'Cart'];
 
 const MyAccount = () => {
   const { talks,
@@ -25,8 +25,8 @@ const MyAccount = () => {
     switch (tabValue) {
       case 'Workshops':
         return <List type="Workshops" items={workshops} />;
-      case 'Talks':
-        return <List type="Talks" items={talks} />;
+      case 'Presentations':
+        return <List type="Presentations" items={talks} />;
       case 'Cart':
         return <List type="Cart" items={cart} />;
       default:

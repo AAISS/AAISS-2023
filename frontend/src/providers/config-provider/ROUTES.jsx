@@ -23,9 +23,9 @@ const ROUTES = {
     component: <PresenterDetailPage />,
     hideFromAppBar: true,
   },
-  workshops: {
-    path: '/workshops',
-    title: 'Workshops',
+  talks: {
+    path: '/talks',
+    title: 'talks',
     component: <WorkshopsPage />,
   },
   // committee: {

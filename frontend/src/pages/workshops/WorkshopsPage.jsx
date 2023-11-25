@@ -36,8 +36,8 @@ export default function WorkshopsPage() {
                         description={e.desc && Helper.omitLongString(e.desc, 50)}
                         purchaseState={0}
                         presenterName={e.presenters.join(", ")}
-                        startDate={e.start_date}
-                        endDate={e.end_date}
+                        startDate={new Date(e.start_date).toLocaleString()}
+                        endDate={new Date(e.end_date).toLocaleString()}
                         level={e.level}
                         onClickAddToCart={() => addToCart({
                             id: e.id,

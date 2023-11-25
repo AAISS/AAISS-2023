@@ -130,7 +130,7 @@ const ItemCard = ({
       >
         <CardHeader
           title={title}
-          subheader={isWorkshop ? 'workshop' : 'talk'}
+          subheader={isWorkshop ? 'workshop' : 'presentation'}
           titleTypographyProps={{ variant: 'subtitle1' }}
           subheaderTypographyProps={{ variant: 'overline' }}
           sx={{ bgcolor: isFull && !hasBought ? 'action.disabledBackground' : 'var(--background-color-lighter-60)' }}
