@@ -1,20 +1,14 @@
 import React, { useState } from 'react';
-import { Box, Button, Divider, Stack, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Divider, Stack, Tab, Tabs, Typography } from '@mui/material';
 import ItemCard from '../../components/item-card/item-card.jsx';
+import Toast from '../../Components/toast/Toast.jsx';
+import { Helper } from '../../utils/Helper.js';
 import useMyAccount from './useMyAccount.js';
-import {Helper} from "../../utils/Helper.js";
-import Toast from "../../Components/toast/Toast.jsx";
 
 const TAB_ITEMS = ['Workshops', 'Presentations', 'Cart'];
 
 const MyAccount = () => {
-  const { talks,
-    workshops,
-    cart,
-    removeFromCartHandler,
-    toastData,
-    openToast,
-    setOpenToast } = useMyAccount();
+  const { talks, workshops, cart, removeFromCartHandler, toastData, openToast, setOpenToast } = useMyAccount();
   const [tabValue, setTabValue] = useState(TAB_ITEMS[0]);
 
   const handleChangeTab = (event, newValue) => {
@@ -24,19 +18,28 @@ const MyAccount = () => {
   const getList = () => {
     switch (tabValue) {
       case 'Workshops':
-        return <List type="Workshops" items={workshops} />;
+        if (workshops) {
+          return <List type="Workshops" items={workshops} />;
+        }
+        break;
       case 'Presentations':
-        return <List type="Presentations" items={talks} />;
+        if (talks) {
+          return <List type="Talks" items={talks} />;
+        }
+        break;
       case 'Cart':
-        return <List type="Cart" items={cart} />;
+        if (cart) {
+          return <List type="Cart" items={cart} />;
+        }
+        break;
       default:
         return null;
     }
+    return <CircularProgress />;
   };
 
   const List = ({ type, items }) => {
-    if (items == null)
-      return
+    if (items == null) return;
     return items.map((item, index) => (
       <ItemCard
         key={index}
@@ -56,14 +59,13 @@ const MyAccount = () => {
         isFull={item.isFull}
         addToCalendarLink={item.addToCalendarLink}
         onClickAddToCart={() => {}}
-        onClickRemoveFromCart={() => removeFromCartHandler({id: item.id, type: item.type})}
+        onClickRemoveFromCart={() => removeFromCartHandler({ id: item.id, type: item.type })}
       />
     ));
   };
 
   const calculateTotalCost = () => {
-    if (!cart)
-      return 0
+    if (!cart) return 0;
     let total = 0;
     cart.forEach(({ cost }) => {
       total += cost;
@@ -73,12 +75,7 @@ const MyAccount = () => {
 
   return (
     <Stack alignItems="center">
-      <Toast
-          open={openToast}
-          setOpen={setOpenToast}
-          alertType={toastData?.alertType}
-          message={toastData?.message}
-      />
+      <Toast open={openToast} setOpen={setOpenToast} alertType={toastData?.alertType} message={toastData?.message} />
       <Box sx={{ bgcolor: 'var(--background-color)', px: 4, pb: 8, borderRadius: '30px', width: '80%' }}>
         <Box sx={{ width: '100%' }}>
           <Tabs value={tabValue} onChange={handleChangeTab} centered>
