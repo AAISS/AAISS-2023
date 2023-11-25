@@ -11,8 +11,8 @@ const Home = () => {
         <Typography id="home-title" pb={2}>
           Amirkabir Artificial Intelligence Student Summit
         </Typography>
-        <Button variant="contained" size="large" id="call-to-action-btn" href="/workshops">
-          Register now
+        <Button variant="contained" size="large" id="call-to-action-btn" href="/talks">
+          Participate now
         </Button>
       </div>
     </div>
