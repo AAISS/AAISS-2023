@@ -4,6 +4,7 @@ import PresenterDetailPage from '../../pages/presenters/PresenterDetailPage.jsx'
 import PresenterPage from '../../pages/presenters/PresentersPage.jsx';
 import SchedulePage from '../../pages/schedule/SchedulePage.jsx';
 import Signup from '../../pages/Signup/Signup.jsx';
+import Staff from '../../pages/Staff/Staff.jsx';
 import WorkshopsPage from '../../pages/workshops/WorkshopsPage.jsx';
 
 const ROUTES = {
@@ -28,31 +29,16 @@ const ROUTES = {
     title: 'talks',
     component: <WorkshopsPage />,
   },
-  // committee: {
-  //     path: "/committee",
-  //     title: "Committee",
-  // },
   schedule: {
     path: '/schedule',
     title: 'Schedule',
     component: <SchedulePage />,
   },
-  // organizer: {
-  //     path: "/organizer",
-  //     title: "Organizer",
-  // },
-  // wnp: {
-  //     path: "/wnp",
-  //     title: "Workshops and Presentations",
-  // },
   staff: {
     path: '/staff',
     title: 'Staff',
+    component: <Staff />,
   },
-  // history: {
-  //   path: '/history',
-  //   title: 'History',
-  // },
   signup: {
     path: '/signup',
     title: 'Signup',

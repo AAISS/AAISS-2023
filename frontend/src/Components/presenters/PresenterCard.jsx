@@ -1,17 +1,16 @@
 import React from 'react';
-import { Box, Button, Card, CardActions, CardContent, Chip, Stack, Typography } from '@mui/material';
+import { Box, Button, Card, CardActions, CardContent, Chip, Divider, Stack, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import '../../css/PresenterCard.css';
 import URL from '../../providers/APIProvider/URL.js';
 import Image from '../image/Image.jsx';
 
-const PresenterCard = ({ name, photo, desc, logo, onClick, showButton = true, showDivider = true, role }) => {
+const PresenterCard = ({ name, photo, desc, logo, onClick, showButton = true, role, containerHeight }) => {
   return (
     <Box className="presenter-card">
       <Card
         sx={{
-          //   height: 430,
-          height: 'max-content',
+          height: containerHeight || 430,
           minWidth: 275,
           maxWidth: 300,
           bgcolor: 'var(--background-color-lighter-20)',
@@ -39,25 +38,31 @@ const PresenterCard = ({ name, photo, desc, logo, onClick, showButton = true, sh
               <Typography
                 sx={{
                   textAlign: 'center',
-                  borderBottom: showDivider && '1px solid var(--light-text-color-lighter)',
                   width: '100%',
+                  pt: 1,
                 }}
-                variant="h5">
+                variant="h5"
+              >
                 {name}
               </Typography>
             </Stack>
-            {role && <Chip label={role}/>}
+            {role && <Chip label={role} />}
             {logo && (
-              <Stack flexDirection="column" alignItems="center" justifyContent="center" gap={1}
-                     sx={{
-                       bgcolor: '#3f579a',
-                       padding: '10px',
-                       boxSizing: 'border-box',
-                       borderRadius: '10px',
-                       width: '100%',
-                       minHeight: '115px',
-                       position: 'relative',
-                     }}>
+              <Stack
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                gap={1}
+                sx={{
+                  bgcolor: '#3f579a',
+                  padding: '10px',
+                  boxSizing: 'border-box',
+                  borderRadius: '10px',
+                  width: '100%',
+                  minHeight: '115px',
+                  position: 'relative',
+                }}
+              >
                 <Image
                   src={`${URL.baseURL}${logo}`}
                   style={{
@@ -68,11 +73,14 @@ const PresenterCard = ({ name, photo, desc, logo, onClick, showButton = true, sh
                     objectPosition: 'center',
                   }}
                 />
-                <Typography fontSize="15px" sx={{
-                  fontWeight: 'lighter',
-                  textWrap: 'balance',
-                  textAlign: 'center',
-                }}>
+                <Typography
+                  fontSize="15px"
+                  sx={{
+                    fontWeight: 'lighter',
+                    textWrap: 'balance',
+                    textAlign: 'center',
+                  }}
+                >
                   {desc}
                 </Typography>
               </Stack>
@@ -95,8 +103,8 @@ PresenterCard.propTypes = {
   desc: PropTypes.string,
   onClick: PropTypes.func,
   showButton: PropTypes.bool,
-  showDivider: PropTypes.bool,
   role: PropTypes.string,
+  containerHeight: PropTypes.number,
 };
 
 export default PresenterCard;
