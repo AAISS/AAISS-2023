@@ -56,7 +56,7 @@ export function APIProvider({children}) {
                     return
 
                 if (error.response.status === 401) {
-                    localStorage['user'] = null
+                    localStorage.removeItem('user')
                     setAccessTokenFromLocalStorage()
                 }
             })
