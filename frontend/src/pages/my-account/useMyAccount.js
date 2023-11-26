@@ -43,11 +43,11 @@ export default function useMyAccount() {
 
         const toastDataTemp = {}
         switch (removeFromCartResponse.status) {
-            case "200":
+            case 200:
                 toastDataTemp.message = "Item Removed Successfully"
                 toastDataTemp.alertType = "success"
                 break;
-            case "400":
+            case 400:
                 toastDataTemp.message = "Failed to Remove Item"
                 toastDataTemp.alertType = "error"
                 break;
@@ -57,14 +57,11 @@ export default function useMyAccount() {
                 break;
         }
 
-        setRemoveFromCartResponse(null)
         setToastData(toastDataTemp)
         setOpenToast(true)
-        setWorkshopsData(null)
-        setPresentationsData(null)
         getUserWorkshops()
         getUserPresentations()
-    }, [removeFromCartResponse])
+    }, [getUserPresentations, getUserWorkshops, removeFromCartResponse, setPresentationsData, setRemoveFromCartResponse, setWorkshopsData])
 
     useEffect(() => {
         if (!accessToken)
@@ -74,7 +71,7 @@ export default function useMyAccount() {
         getPresentationsData()
         getUserWorkshops()
         getUserPresentations()
-    }, [accessToken, getUserPresentations, getUserWorkshops])
+    }, [accessToken, getPresentationsData, getUserPresentations, getUserWorkshops, getWorkshopsData])
 
     useEffect(() => {
         if (!userPresentationsData
@@ -82,8 +79,6 @@ export default function useMyAccount() {
             || !workshopsData
             || !presentationsData)
             return
-
-        console.log("thing")
 
         const userTempPresentations = []
         const userTempWorkshops = []

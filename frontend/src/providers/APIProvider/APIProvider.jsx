@@ -168,7 +168,6 @@ export function APIProvider({children}) {
                 break;
         }
 
-        console.log(body)
         const tokenStr = JSON.parse(localStorage.getItem('user'))['access']
         await service.post(`${URL.baseURL}${URL.services.default}${endpoint}`,
             body, {headers: {"Authorization": `Bearer ${tokenStr}`}})
@@ -304,7 +303,6 @@ export function APIProvider({children}) {
 
 
     useEffect(() => {
-        console.log(refreshToken)
         if (accessToken == null || refreshToken == null) {
             return
         }

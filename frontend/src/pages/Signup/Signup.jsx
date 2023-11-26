@@ -224,6 +224,7 @@ const LoginForm = ({ onSignUpClick }) => {
     // TODO: route to my-account page if it's successful
   };
 
+  const {navigate} = useNavigate()
   const { issueToken, issueTokenResponse } = useAPI();
   const {
     setAccessTokenFromLocalStorage
@@ -237,6 +238,7 @@ const LoginForm = ({ onSignUpClick }) => {
 
     localStorage['user'] = JSON.stringify(issueTokenResponse.data);
     setAccessTokenFromLocalStorage()
+
   }, [issueTokenResponse]);
 
   const handleClickOnForgotPass = () => {

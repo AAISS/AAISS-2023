@@ -103,7 +103,6 @@ export default function DrawerAppBar() {
           </Link>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {appBarPaths.map((name, index) => {
-              console.log(shouldShowRoute(name) === false);
               return (
                 shouldShowRoute(ROUTES[name]) && (
                   <Button
