@@ -225,6 +225,9 @@ const LoginForm = ({ onSignUpClick }) => {
   };
 
   const { issueToken, issueTokenResponse } = useAPI();
+  const {
+    setAccessTokenFromLocalStorage
+  } = useConfig()
 
   useEffect(() => {
     if (issueTokenResponse == null) return;
@@ -233,6 +236,7 @@ const LoginForm = ({ onSignUpClick }) => {
     setOpenToast(true);
 
     localStorage['user'] = JSON.stringify(issueTokenResponse.data);
+    setAccessTokenFromLocalStorage()
   }, [issueTokenResponse]);
 
   const handleClickOnForgotPass = () => {

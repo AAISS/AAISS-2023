@@ -40,6 +40,32 @@ export function APIProvider({children}) {
         return `Bearer ${accessToken}`
     }, [accessToken])
 
+    const refreshAccessToken = useCallback(() => {
+        const data = {
+            refresh: refreshToken
+        }
+        service.post(`${URL.baseURL}${URL.services.default}${URL.endpoints.token.refresh}`,
+            data)
+            .then(response => {
+                localStorage["user"] = JSON.stringify(response.data)
+                setAccessTokenFromLocalStorage()
+                window.location.reload();
+            })
+            .catch(error => {
+                if (error == null)
+                    return
+
+                if (error.response.status === 401) {
+                    localStorage['user'] = null
+                    setAccessTokenFromLocalStorage()
+                }
+            })
+    }, [refreshToken, service, setAccessTokenFromLocalStorage])
+
+    const updateAccessTokenWithRefreshToken = useCallback(() => {
+        refreshAccessToken()
+    }, [refreshAccessToken])
+
     const removeFromUserCart = useCallback(async ({id, type}) => {
         let endpoint
         switch (type) {
@@ -63,8 +89,14 @@ export function APIProvider({children}) {
             })
             .catch(error => {
                 setRemoveFromCartResponse(error?.response)
+                if (!error)
+                    return
+
+                if (error.response.status === 401) {
+                    updateAccessTokenWithRefreshToken()
+                }
             })
-    }, [getAccessTokenHeader, service])
+    }, [getAccessTokenHeader, service, updateAccessTokenWithRefreshToken])
 
     const getUserPresentations = useCallback(async (data) => {
         await service.get(`${URL.baseURL}${URL.services.default}${URL.endpoints.user.presentation}`,
@@ -78,6 +110,12 @@ export function APIProvider({children}) {
             })
             .catch(error => {
                 setUserPresentationsData(error?.response)
+                if (!error)
+                    return
+
+                if (error.response.status === 401) {
+                    updateAccessTokenWithRefreshToken()
+                }
             })
     }, [getAccessTokenHeader, service])
 
@@ -93,6 +131,12 @@ export function APIProvider({children}) {
             })
             .catch(error => {
                 setUserWorkshopsData(error?.response)
+                if (!error)
+                    return
+
+                if (error.response.status === 401) {
+                    updateAccessTokenWithRefreshToken()
+                }
             })
     }, [getAccessTokenHeader, service])
 
@@ -127,12 +171,18 @@ export function APIProvider({children}) {
         console.log(body)
         const tokenStr = JSON.parse(localStorage.getItem('user'))['access']
         await service.post(`${URL.baseURL}${URL.services.default}${endpoint}`,
-            body, {headers: {"Authorization" : `Bearer ${tokenStr}`}})
+            body, {headers: {"Authorization": `Bearer ${tokenStr}`}})
             .then(response => {
                 setAddToCartResponse(response)
             })
             .catch(error => {
                 setAddToCartResponse(error.response)
+                if (!error)
+                    return
+
+                if (error.response.status === 401) {
+                    updateAccessTokenWithRefreshToken()
+                }
             })
     }, [service])
 
@@ -251,23 +301,6 @@ export function APIProvider({children}) {
         await service.get(`${URL.baseURL}${URL.services[currentYear]}${URL.endpoints.teacher}`)
             .then(response => setTeachersData(response.data))
     }, [currentYear, service])
-
-    const refreshAccessToken = useCallback(() => {
-        const data = {
-            refresh: refreshToken
-        }
-        service.post(`${URL.baseURL}${URL.services.default}${URL.endpoints.token.refresh}`,
-            data)
-            .then(response => {
-                localStorage["user"] = JSON.stringify(response.data)
-                setAccessTokenFromLocalStorage()
-                window.location.reload();
-            })
-    }, [refreshToken, service, setAccessTokenFromLocalStorage])
-
-    const updateAccessTokenWithRefreshToken = useCallback(() => {
-        refreshAccessToken()
-    }, [refreshAccessToken])
 
 
     useEffect(() => {

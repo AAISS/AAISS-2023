@@ -9,7 +9,8 @@ export function ConfigProvider({children}) {
     const [refreshToken, setRefreshToken] = useState()
 
     const setAccessTokenFromLocalStorage = useCallback(() => {
-        const tokens = JSON.parse(localStorage["user"] ?? "{}")
+        const lsItem = localStorage["user"]
+        const tokens = JSON.parse(lsItem !== 'null' ? lsItem : "{}")
         if (tokens.access != null) {
             setAccessToken(tokens.access)
             if (tokens.refresh) {
@@ -18,6 +19,9 @@ export function ConfigProvider({children}) {
                 tokens.refresh = refreshToken
                 localStorage["user"] = JSON.stringify(tokens)
             }
+        } else {
+            setAccessToken(null)
+            setRefreshToken(null)
         }
     }, [refreshToken])
 
