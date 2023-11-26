@@ -140,10 +140,10 @@ const ItemCard = ({
             {description}
           </Typography>
           <Typography variant="body1" sx={{ fontSize: 14 }} color="text.secondary">
-            From: {startDate}
+            From: {new Date(startDate).toLocaleString('fa-IR-u-nu-latn')}
           </Typography>
           <Typography variant="body1" sx={{ fontSize: 14 }} color="text.secondary">
-            To: {endDate}
+            To: {new Date(endDate).toLocaleString('fa-IR-u-nu-latn')}
           </Typography>
           <Divider sx={{ my: 1 }} />
           <Presenter presenterName={presenterName} />
