@@ -1,7 +1,9 @@
 import datetime
+import os
+import urllib.parse
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from rest_framework import status, mixins
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -12,6 +14,7 @@ from rest_framework.permissions import (
 )
 from rest_framework.response import Response
 
+from aaiss_backend.settings import BASE_URL
 from backend_api import models
 from backend_api import serializers
 from backend_api.models import User, Account, Payment, Staff, WorkshopRegistration, PresentationParticipation
@@ -205,7 +208,7 @@ class UserViewSet(viewsets.GenericViewSet,
                 status.HTTP_400_BAD_REQUEST, "Token didn't match with any user"))
         account.is_active = True
         account.save()
-        return Response(new_detailed_response(status.HTTP_200_OK, "User activated successfully"))
+        return redirect(urllib.parse.urljoin(BASE_URL, 'signup'))
 
 
 class PaymentViewSet(viewsets.GenericViewSet):
