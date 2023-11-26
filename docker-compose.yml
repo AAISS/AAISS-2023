@@ -38,8 +38,8 @@ services:
       context: ./frontend
       cache_from:
         - aaissaut/aaiss:frontend
-#    volumes:
-#      - static_files:/run/dist
+    volumes:
+      - static_files:/run/dist
     ports:
       - "8080:8080"
 
