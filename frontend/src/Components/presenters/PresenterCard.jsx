@@ -68,7 +68,6 @@ const PresenterCard = ({ name, photo, desc, logo, onClick, showButton = true, ro
                   style={{
                     width: 'fit-content',
                     height: '40px',
-                    borderRadius: '10px',
                     objectFit: 'fit',
                     objectPosition: 'center',
                   }}
