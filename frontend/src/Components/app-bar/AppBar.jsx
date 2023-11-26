@@ -48,7 +48,6 @@ export default function DrawerAppBar() {
       if (accessToken || refreshToken) {
         return true;
       }
-      console.log('not signed in');
       return false;
     }
 
