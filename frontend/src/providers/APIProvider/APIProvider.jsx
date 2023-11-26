@@ -125,8 +125,9 @@ export function APIProvider({children}) {
         }
 
         console.log(body)
+        const tokenStr = JSON.parse(localStorage.getItem('user'))['access']
         await service.post(`${URL.baseURL}${URL.services.default}${endpoint}`,
-            body)
+            body, {headers: {"Authorization" : `Bearer ${tokenStr}`}})
             .then(response => {
                 setAddToCartResponse(response)
             })
