@@ -234,9 +234,9 @@ class PaymentViewSet(viewsets.GenericViewSet):
             return Response(
                 new_detailed_response(response['status'], response["message"]))
 
-    @action(methods=['GET'], detail=False)
+    @action(methods=['POST'], detail=False)
     def verify(self, request):
-        pid = request.GET.get('clientrefid')
+        pid = request.data['clientrefid']
         if pid is None:
             return Response(new_detailed_response(
                 status.HTTP_400_BAD_REQUEST, "clientrefid is required"))
@@ -249,11 +249,11 @@ class PaymentViewSet(viewsets.GenericViewSet):
         if response['status'] == ZIFY_STATUS_OK:
             payment.update_payment_status(Payment.PaymentStatus.PAYMENT_CONFIRMED)
             # FIXME: redirect to payment success page
-            return Response(new_detailed_response(status.HTTP_200_OK, "Payment verified successfully"))
+            return Response(new_detailed_response(status.HTTP_200_OK, "Payment verified successfully",  payment.pk))
         else:
             payment.update_payment_status(Payment.PaymentStatus.PAYMENT_REJECTED)
             return Response(
-                new_detailed_response(response['status'], response["message"]))
+                new_detailed_response(response['status'], response["message"], payment.pk))
 
 
 class StaffViewSet(viewsets.GenericViewSet,
