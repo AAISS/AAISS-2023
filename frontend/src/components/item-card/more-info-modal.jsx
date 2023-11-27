@@ -13,7 +13,7 @@ import {
   Chip,
 } from '@mui/material';
 import PropTypes from 'prop-types';
-import { Cost, Presenter } from './item-card';
+import { Cost, levelComponentMapping, Presenter } from './item-card';
 
 const Prerequisites = ({ prerequisites }) => (
   <>
@@ -45,6 +45,7 @@ const MoreInfoModal = ({
   title,
   presenterName,
   cost,
+  level,
   purchaseState,
   hasProject,
   prerequisites,
@@ -72,6 +73,7 @@ const MoreInfoModal = ({
       <DialogTitle variant="h5">{title}</DialogTitle>
       <DialogContent>
         <Presenter presenterName={presenterName} />
+        {levelComponentMapping[level]}
         <Cost cost={cost} />
         <Divider sx={{ my: 2 }} />
         <Prerequisites prerequisites={prerequisites} />
@@ -104,6 +106,7 @@ MoreInfoModal.propTypes = {
   title: PropTypes.string,
   presenterName: PropTypes.string,
   cost: PropTypes.number,
+  level: PropTypes.string,
   isBought: PropTypes.bool,
   purchaseState: PropTypes.number,
   prerequisites: PropTypes.string,

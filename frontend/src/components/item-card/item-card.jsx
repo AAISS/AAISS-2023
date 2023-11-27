@@ -42,7 +42,7 @@ const Level = ({ name, color }) => (
   </Stack>
 );
 
-const levelComponentMapping = {
+export const levelComponentMapping = {
   Elementary: <Level name="elementary" color="success.light" />,
   Intermediate: <Level name="intermediate" color="secondary.main" />,
   Advanced: <Level name="advanced" color="warning.light" />,
@@ -108,6 +108,7 @@ const ItemCard = ({
         presenterName={presenterName}
         cost={cost}
         purchaseState={purchaseState}
+        level={level}
         hasProject={hasProject}
         prerequisites={prerequisites}
         syllabus={syllabus}
