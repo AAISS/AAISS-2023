@@ -55,9 +55,10 @@ export function APIProvider({children}) {
                 if (error == null)
                     return
 
+                console.log(error)
                 if (error.response.status === 401) {
                     localStorage.removeItem('user')
-                    setAccessTokenFromLocalStorage()
+                    window.location.reload();
                 }
             })
     }, [refreshToken, service, setAccessTokenFromLocalStorage])
