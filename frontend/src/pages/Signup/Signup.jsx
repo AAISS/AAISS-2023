@@ -48,20 +48,19 @@ const SignUpForm = ({ onLoginClick }) => {
     navigate(ROUTES.myAccount);
   };
 
-  // const handleSignUp = useCallback(() => {
-  //   const data = {};
-  //   data.name = fullname;
-  //   data.phone_number = phoneNumber;
-  //   data.account = {
-  //     password: password,
-  //     email: email,
-  //   };
-  //   createUser(data);
-  // }, [createUser, email, fullname, password, phoneNumber]);
+  const handleSignUp = useCallback(() => {
+    const data = {};
+    data.name = fullname;
+    data.phone_number = phoneNumber;
+    data.account = {
+      password: password,
+      email: email,
+    };
+    createUser(data);
+  }, [createUser, email, fullname, password, phoneNumber]);
 
   // TODO: add form validation
-  const handleFormSubmit = async (e) => {
-    console.log('handle form submit');
+  const handleFormSubmit = (e) => {
     e.preventDefault();
     if (hasEmailError(email)) {
       setIsEmailWrong(true);
@@ -84,42 +83,33 @@ const SignUpForm = ({ onLoginClick }) => {
       setSecondPassHelperText('Passwords are not the same');
       return;
     }
-
-    // API call
-    const data = {
-      name: fullname,
-      phone_number: phoneNumber,
-      account: {
-        password: password,
-        email: email,
-      },
-    };
-    createUser(data);
+    // TODO: route to my-account page
   };
 
   useEffect(() => {
+    if (createUserData == null) return;
+
     const toastDataTemp = {};
-    if (createUserData) {
-      switch (createUserData.status) {
-        case 200:
-        case 201:
-          toastDataTemp.message = 'Account Created Successfully! Please Check Your Email.';
-          toastDataTemp.alertType = 'success';
-          navToMyAccountPage();
-          break;
-        case 400:
-          toastDataTemp.message = 'User with This Email Already Exists!';
-          toastDataTemp.alertType = 'error';
-          break;
-        default:
-          toastDataTemp.message = 'Unexpected Error! Please Try Again Later.';
-          toastDataTemp.alertType = 'error';
-          break;
-      }
-      setAccessTokenFromLocalStorage();
-      setToastData(toastDataTemp);
-      setOpenToast(true);
+    switch (createUserData.status) {
+      case 200:
+      case 201:
+        toastDataTemp.message = 'Account Created Successfully! Please Check Your Email.';
+        toastDataTemp.alertType = 'success';
+        navToMyAccountPage();
+        break;
+      case 400:
+        toastDataTemp.message = 'User with This Email Already Exists!';
+        toastDataTemp.alertType = 'error';
+        break;
+      default:
+        toastDataTemp.message = 'Unexpected Error! Please Try Again Later.';
+        toastDataTemp.alertType = 'error';
+        break;
     }
+
+    setAccessTokenFromLocalStorage();
+    setToastData(toastDataTemp);
+    setOpenToast(true);
   }, [createUserData]);
 
   return (
@@ -195,7 +185,7 @@ const SignUpForm = ({ onLoginClick }) => {
               }}
             />
             <Stack gap={2}>
-              <Button color="primary" variant="contained" type="submit">
+              <Button onClick={handleSignUp} color="primary" variant="contained" type="submit">
                 SignUp
               </Button>
               <Button color="primary" variant="outlined" onClick={onLoginClick}>
@@ -234,9 +224,11 @@ const LoginForm = ({ onSignUpClick }) => {
     // TODO: route to my-account page if it's successful
   };
 
-  const { navigate } = useNavigate();
+  const {navigate} = useNavigate()
   const { issueToken, issueTokenResponse } = useAPI();
-  const { setAccessTokenFromLocalStorage } = useConfig();
+  const {
+    setAccessTokenFromLocalStorage
+  } = useConfig()
 
   useEffect(() => {
     if (issueTokenResponse == null) return;
@@ -245,7 +237,8 @@ const LoginForm = ({ onSignUpClick }) => {
     setOpenToast(true);
 
     localStorage['user'] = JSON.stringify(issueTokenResponse.data);
-    setAccessTokenFromLocalStorage();
+    setAccessTokenFromLocalStorage()
+
   }, [issueTokenResponse]);
 
   const handleClickOnForgotPass = () => {

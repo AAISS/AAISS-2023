@@ -1,0 +1,7 @@
+.back-to-home-container {
+    background-color: var(--background-color-lighter-40);
+}
+
+.back-to-home {
+    color: var(--light-text-color);
+}

@@ -3,6 +3,7 @@ import PageFooter from '../footer/PageFooter';
 import ForgotPassword from '../../pages/ForgotPassword/ForgotPassword.jsx';
 import { useConfig } from '../../providers/config-provider/ConfigProvider.jsx';
 import DrawerAppBar from '../app-bar/AppBar.jsx';
+import PaymentCallbackPage from '../../pages/payment-callback/PaymentCallbackPage';
 
 export default function MainContent() {
   const { ROUTES } = useConfig();
@@ -19,6 +20,7 @@ export default function MainContent() {
             return <Route path={ROUTES[name].path} element={ROUTES[name]?.component} key={name} />;
           })}
           <Route path="/forgotpassword" element={<ForgotPassword />} key="forgot" />
+          <Route path="/payment-callback" element={<PaymentCallbackPage />} />
         </Routes>
       </main>
       {pathname !== '/' && (

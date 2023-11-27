@@ -201,10 +201,13 @@ export function APIProvider({children}) {
     }, [currentYear, service])
 
     const postVerifyPayment = useCallback(async (data) => {
-        await service.post(`${URL.baseURL}${URL.services[currentYear]}${URL.endpoints.payment.verify}`,
+        await service.get(`${URL.baseURL}${URL.services.default}${URL.endpoints.payment.verify}`,
             data)
             .then(response => {
-                setVerifyPaymentData(response.data)
+                setVerifyPaymentData(response)
+            })
+            .catch(error => {
+                setVerifyPaymentData(error.response)
             })
     }, [currentYear, service])
 
