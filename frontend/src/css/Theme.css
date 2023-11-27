@@ -10,6 +10,8 @@
   /*warn color*/
   --warn-color: #ec6803;
   --error-color: #ff3333;
+  --success-color: #197f3c;
+  --info-color: #19517f;
 
   /*background*/
   --background-color: #0a0f26;
