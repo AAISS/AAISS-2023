@@ -19,16 +19,37 @@ const MyAccount = () => {
     switch (tabValue) {
       case 'Workshops':
         if (workshops) {
+          if (workshops.length === 0) {
+            return (
+              <Stack alignItems="center">
+                <Typography>You are not registered in any workshop!</Typography>
+              </Stack>
+            );
+          }
           return <List type="Workshops" items={workshops} />;
         }
         break;
       case 'Presentations':
         if (talks) {
+          if (talks.length === 0) {
+            return (
+              <Stack alignItems="center">
+                <Typography>You are not registered in any presentation!</Typography>
+              </Stack>
+            );
+          }
           return <List type="Talks" items={talks} />;
         }
         break;
       case 'Cart':
         if (cart) {
+          if (cart.length === 0) {
+            return (
+              <Stack alignItems="center">
+                <Typography>Your cart is empty!</Typography>
+              </Stack>
+            );
+          }
           return <List type="Cart" items={cart} />;
         }
         break;
