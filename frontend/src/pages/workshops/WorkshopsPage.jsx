@@ -3,51 +3,85 @@ import ItemCard from '../../components/item-card/item-card.jsx';
 import Toast from '../../components/toast/Toast.jsx';
 import { Helper } from '../../utils/Helper.js';
 import useWorkshopsPage from './useWorkshopsPage.js';
+import './workshops.css'
 
 export default function WorkshopsPage() {
-  const { parsedItemsList, addToCart, toastData, setOpenToast, openToast } = useWorkshopsPage();
 
-  const getItemsList = () => {
-    if (parsedItemsList) {
-      return parsedItemsList.map((item, index) => (
-        <ItemCard
-          key={index}
-          isWorkshop={item.isWorkshop}
-          title={item.name}
-          description={item.desc && Helper.omitLongString(item.desc, 50)}
-          purchaseState={0}
-          presenterName={item.presenters.join(', ')}
-          cost={item.cost}
-          capacity={item.capacity}
-          startDate={new Date(item.start_date).toLocaleString()}
-          endDate={new Date(item.end_date).toLocaleString()}
-          level={item.level}
-          onClickAddToCart={() =>
-            addToCart({
-              id: item.id,
-              type: item.isWorkshop ? 'workshop' : 'presentation',
-            })
-          }
-        />
-      ));
+    const {
+        parsedItemsList,
+        addToCart,
+        gridTemplateColumnsValue,
+        toastData,
+        setOpenToast,
+        openToast,
+        options,
+        filterOption,
+        setFilterOption,
+        fileteredItems,
+        setFileteredItems
+    } = useWorkshopsPage()
+
+
+    const handleFilterChange = (option) => {
+            setFilterOption(option)
+
+            if (option == "All Items"){
+                setFileteredItems(parsedItemsList)
+            }
+
+            else if (option == 'Workshops'){
+                setFileteredItems(parsedItemsList?.filter(item => item.isWorkshop))
+            }
+
+            else if (option == 'Presentations'){
+                setFileteredItems(parsedItemsList?.filter(item => !item.isWorkshop))
+            }
     }
 
-    return <CircularProgress />;
-  };
-
-  return (
-    <section
-      style={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'center',
-        gap: '20px',
-      }}
-    >
-      {toastData && (
-        <Toast open={openToast} setOpen={setOpenToast} alertType={toastData.type} message={toastData.message} />
-      )}
-      {getItemsList()}
-    </section>
-  );
+    return (
+        <section style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          gap: '20px',
+        }}>
+            {toastData && <Toast
+                open={openToast}
+                setOpen={setOpenToast}
+                alertType={toastData.type}
+                message={toastData.message}
+            />}
+            <div className="filter-dropdown-container">
+                <select  name="filter" id="" className="filter-dropdown-select"
+                    value={filterOption}
+                    onChange={(e) => handleFilterChange(e.target.value)}
+                >
+                     {options.map((option) => (
+                        <option key={option} value={option}>
+                        {option}
+                        </option>
+                     ))}
+                </select>
+            </div>
+            {fileteredItems && fileteredItems.map((e, index) => {
+                return (
+                    <ItemCard
+                        key={index}
+                        isWorkshop={e.isWorkshop}
+                        title={e.name}
+                        description={e.desc && Helper.omitLongString(e.desc, 50)}
+                        purchaseState={0}
+                        presenterName={e.presenters.join(", ")}
+                        startDate={new Date(e.start_date).toLocaleString()}
+                        endDate={new Date(e.end_date).toLocaleString()}
+                        level={e.level}
+                        onClickAddToCart={() => addToCart({
+                            id: e.id,
+                            type: e.isWorkshop ? "workshop" : "presentation"
+                        })}
+                    />
+                )
+            })}
+        </section>
+    )
 }
