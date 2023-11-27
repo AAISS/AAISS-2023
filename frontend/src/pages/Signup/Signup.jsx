@@ -98,8 +98,6 @@ const SignUpForm = ({ onLoginClick }) => {
   };
 
   useEffect(() => {
-    if (createUserData == null) return;
-
     const toastDataTemp = {};
     if (createUserData) {
       switch (createUserData.status) {
