@@ -27,7 +27,7 @@ jobs:
         run: docker compose build
 
       - name: Push docker images
-        run: docker compose push backend
+        run: docker compose push backend frontend
 
   deploy:
     needs: build-and-push
@@ -54,4 +54,4 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           # TODO: handle envs
           script: |
-            docker compose -f AAISS-2023/docker-compose.yml up -d --pull always --force-recreate
+            docker compose -f AAISS-2023/docker-compose.yml up -d --pull always --force-recreate --no-build
