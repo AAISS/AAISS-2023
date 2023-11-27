@@ -56,7 +56,7 @@ const ItemCard = ({
   endDate = '2021-08-31 18:00',
   presenterName = 'Presenter Name',
   level = 'elementary',
-  cost = 50000,
+  cost,
   purchaseState = 0, // 0 -> not purchased, 1 -> in cart, 2 -> purchased
   hasProject = true,
   prerequisites = 'List of prerequisites',
@@ -67,6 +67,7 @@ const ItemCard = ({
   onClickAddToCart = () => {},
   onClickRemoveFromCart = () => {},
 }) => {
+  console.log({ cost });
   const [moreInfoModalVisibility, setMoreInfoModalVisibility] = useState(false);
   const hasBought = purchaseState === 2;
 

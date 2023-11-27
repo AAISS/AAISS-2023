@@ -17,6 +17,8 @@ export default function WorkshopsPage() {
           description={item.desc && Helper.omitLongString(item.desc, 50)}
           purchaseState={0}
           presenterName={item.presenters.join(', ')}
+          cost={item.cost}
+          capacity={item.capacity}
           startDate={new Date(item.start_date).toLocaleString()}
           endDate={new Date(item.end_date).toLocaleString()}
           level={item.level}
