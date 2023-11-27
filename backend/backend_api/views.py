@@ -215,6 +215,7 @@ class PaymentViewSet(viewsets.GenericViewSet):
     @action(methods=['POST'], detail=False, permission_classes=[IsAuthenticated])
     def payment(self, request):
         account = request.user
+        call_back = request.data['call_back']
         try:
             user = User.objects.get(account=account)
         except ObjectDoesNotExist:
@@ -223,7 +224,7 @@ class PaymentViewSet(viewsets.GenericViewSet):
 
         payment = Payment.create_payment_for_user(user)
         response = ZIFYRequest().create_payment(str(payment.pk), payment.amount, user.name, user.phone_number,
-                                                user.account.email)
+                                                user.account.email, call_back)
         if response['status'] == ZIFY_STATUS_OK:
             payment.track_id = response['data']['order']
             payment.save()
