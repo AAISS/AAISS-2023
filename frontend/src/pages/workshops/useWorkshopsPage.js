@@ -9,6 +9,10 @@ export default function useWorkshopsPage() {
         presentationsData,
         addToCartResponse,
         addItemToCart,
+        teachersData,
+        getTeachersData,
+        presenterData,
+        getPresenterData,
         setAddToCartResponse,
     } = useAPI()
 
@@ -50,27 +54,45 @@ export default function useWorkshopsPage() {
     useEffect(() => {
         getWorkshopsData()
         getPresentationsData()
+        getTeachersData()
+        getPresenterData()
     }, [getPresentationsData, getWorkshopsData])
 
     useEffect(() => {
-        if (workshopsData == null || presentationsData == null) return
+        if (workshopsData == null
+          || presentationsData == null
+        || teachersData == null
+        || presenterData == null) return
 
-        const parsedData = workshopsData.concat(presentationsData).map(e => {
-            if ("is_full" in e && !("id" in e)) return null
-
+        const parsedData = workshopsData.concat(presentationsData).map(workshop => {
+            if ("is_full" in workshop && !("id" in workshop)) return null
+            if (workshop.year < 2023)
+              return
             const item = {}
-            item["id"] = e.id
-            item["name"] = e.name
-            item["start_date"] = e.start_date
-            item["end_date"] = e.end_date
-            item["level"] = e.level
-            item.presenters = e.presenters ?? e.teachers
-            item["desc"] = e.desc
-            item["isWorkshop"] = !("presenters" in e)
+
+            const presenters = []
+            if (workshop.teachers) {
+              workshop.teachers.forEach(item => {
+                presenters.push(teachersData.filter(el => el.id === item)[0].name);
+              })
+            } else {
+              workshop.presenters.forEach(item => {
+                presenters.push(presenterData.filter(el => el.id === item)[0].name);
+              })
+            }
+            item.presenters = presenters
+
+            item["id"] = workshop.id
+            item["name"] = workshop.name
+            item["start_date"] = workshop.start_date
+            item["end_date"] = workshop.end_date
+            item["level"] = workshop.level
+            item["desc"] = workshop.desc
+            item["isWorkshop"] = !("presenters" in workshop)
             return item
         }).filter(e => e != null)
         setParsedItemsList(parsedData)
-    }, [workshopsData, presentationsData])
+    }, [workshopsData, presentationsData, presenterData, teachersData])
 
     const addToCart = useCallback(({
                                        id,

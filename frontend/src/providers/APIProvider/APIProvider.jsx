@@ -296,8 +296,9 @@ export function APIProvider({children}) {
             })
     }, [currentYear, service])
 
-    const getTeachersData = useCallback(async () => {
-        await service.get(`${URL.baseURL}${URL.services[currentYear]}${URL.endpoints.teacher}`)
+    const getTeachersData = useCallback(async (id) => {
+        if (id != null) id = id + "/"
+        await service.get(`${URL.baseURL}${URL.services[currentYear]}${URL.endpoints.teacher}${id ?? ""}`)
             .then(response => setTeachersData(response.data))
     }, [currentYear, service])
 
