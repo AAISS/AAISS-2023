@@ -1,5 +1,5 @@
-import ItemCard from "../../Components/item-card/item-card.jsx";
-import Toast from "../../Components/toast/Toast.jsx";
+import ItemCard from "../../components/item-card/item-card.jsx";
+import Toast from "../../components/toast/Toast.jsx";
 import {Helper} from "../../utils/Helper.js";
 import useWorkshopsPage from "./useWorkshopsPage.js";
 

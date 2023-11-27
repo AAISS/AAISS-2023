@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Button, CircularProgress, Divider, Stack, Tab, Tabs, Typography } from '@mui/material';
 import ItemCard from '../../components/item-card/item-card.jsx';
-import Toast from '../../Components/toast/Toast.jsx';
+import Toast from '../../components/toast/Toast.jsx';
 import { Helper } from '../../utils/Helper.js';
 import useMyAccount from './useMyAccount.js';
 

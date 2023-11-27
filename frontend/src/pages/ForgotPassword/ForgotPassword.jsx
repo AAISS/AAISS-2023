@@ -1,6 +1,6 @@
 import { Button, FormControl } from '@mui/material'
 import React from 'react'
-import FormTextField from '../../Components/Form/FormTextField'
+import FormTextField from '../../components/Form/FormTextField'
 import '../../css/ForgotPassword.css'
 export default function ForgotPassword() {
   return (

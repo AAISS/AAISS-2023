@@ -32,16 +32,29 @@ services:
       timeout: 2s
       retries: 10
 
+  frontend:
+    image: aaissaut/aaiss:frontend
+    build:
+      context: ./frontend
+      cache_from:
+        - aaissaut/aaiss:frontend
+    volumes:
+      - static_files:/run/dist
+    ports:
+      - "8080:8080"
+
   caddy:
     depends_on:
       backend:
         condition: service_healthy
+      frontend:
+        condition: service_completed_successfully
     image: caddy:2.7.3
     volumes:
       - ./deployment/caddy:/etc/caddy
       - ./backend/static:/static
       - ./backend/media:/media
-      - ./dist:/dist
+      - static_files:/dist:ro
       - caddy_data:/data/caddy
     ports:
       - "80:80"
@@ -49,3 +62,4 @@ services:
 
 volumes:
   caddy_data:
+  static_files:

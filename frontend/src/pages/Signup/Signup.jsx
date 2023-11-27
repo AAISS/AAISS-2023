@@ -3,7 +3,7 @@ import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { Button, Checkbox, FormControl, FormControlLabel, FormHelperText, Stack, Typography } from '@mui/material';
 import ForgotPassModal from '../../components/forgot-pass-modal/forgot-pass-modal';
 import FormTextField from '../../components/Form/FormTextField';
-import Toast from '../../Components/toast/Toast.jsx';
+import Toast from '../../components/toast/Toast.jsx';
 import { useAPI } from '../../providers/APIProvider/APIProvider.jsx';
 import { useConfig } from '../../providers/config-provider/ConfigProvider.jsx';
 import ROUTES from '../../providers/config-provider/ROUTES.jsx';
