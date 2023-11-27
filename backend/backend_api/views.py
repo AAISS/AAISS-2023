@@ -215,6 +215,7 @@ class PaymentViewSet(viewsets.GenericViewSet):
     @action(methods=['POST'], detail=False, permission_classes=[IsAuthenticated])
     def payment(self, request):
         account = request.user
+        call_back = request.data.get('call_back')
         try:
             user = User.objects.get(account=account)
         except ObjectDoesNotExist:
@@ -223,7 +224,7 @@ class PaymentViewSet(viewsets.GenericViewSet):
 
         payment = Payment.create_payment_for_user(user)
         response = ZIFYRequest().create_payment(str(payment.pk), payment.amount, user.name, user.phone_number,
-                                                user.account.email)
+                                                user.account.email, call_back)
         if response['status'] == ZIFY_STATUS_OK:
             payment.track_id = response['data']['order']
             payment.save()
@@ -233,9 +234,9 @@ class PaymentViewSet(viewsets.GenericViewSet):
             return Response(
                 new_detailed_response(response['status'], response["message"]))
 
-    @action(methods=['GET'], detail=False)
+    @action(methods=['POST'], detail=False)
     def verify(self, request):
-        pid = request.GET.get('clientrefid')
+        pid = request.data.get('clientrefid')
         if pid is None:
             return Response(new_detailed_response(
                 status.HTTP_400_BAD_REQUEST, "clientrefid is required"))
@@ -248,11 +249,11 @@ class PaymentViewSet(viewsets.GenericViewSet):
         if response['status'] == ZIFY_STATUS_OK:
             payment.update_payment_status(Payment.PaymentStatus.PAYMENT_CONFIRMED)
             # FIXME: redirect to payment success page
-            return Response(new_detailed_response(status.HTTP_200_OK, "Payment verified successfully"))
+            return Response(new_detailed_response(status.HTTP_200_OK, "Payment verified successfully",  payment.pk))
         else:
             payment.update_payment_status(Payment.PaymentStatus.PAYMENT_REJECTED)
             return Response(
-                new_detailed_response(response['status'], response["message"]))
+                new_detailed_response(response['status'], response["message"], payment.pk))
 
 
 class StaffViewSet(viewsets.GenericViewSet,
