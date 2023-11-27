@@ -156,7 +156,8 @@ class Presentation(models.Model):
     year = models.IntegerField(blank=False, default=2020)
     cost = models.PositiveIntegerField(default=0)
     capacity = models.PositiveIntegerField(default=50)
-
+    has_project = models.BooleanField(default=False, blank=False)
+    
     NOT_ASSIGNED = 'NOT_ASSIGNED'
     ELEMENTARY = 'Elementary'
     INTERMEDIATE = 'Intermediate'
