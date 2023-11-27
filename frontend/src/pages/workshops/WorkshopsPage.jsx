@@ -1,4 +1,4 @@
-import { blue, red } from "@mui/material/colors";
+import { blue} from "@mui/material/colors";
 import ItemCard from "../../components/item-card/item-card.jsx";
 import Toast from "../../components/toast/Toast.jsx";
 import {Helper} from "../../utils/Helper.js";
