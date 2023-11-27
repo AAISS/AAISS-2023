@@ -4,7 +4,7 @@ import { Button, Card, CardActions, CardContent, CardHeader, Chip, Divider, Stac
 import PropTypes from 'prop-types';
 import MoreInfoModal from './more-info-modal';
 
-const Presenter = ({ presenterName }) => (
+export const Presenter = ({ presenterName }) => (
   <Stack flexDirection="row" alignItems="center" gap={1}>
     <Person />
     <Typography variant="body1" sx={{ fontSize: 14 }} color="text.secondary">
@@ -13,8 +13,7 @@ const Presenter = ({ presenterName }) => (
   </Stack>
 );
 
-// TODO: format cost with commas
-const Cost = ({ cost }) => (
+export const Cost = ({ cost }) => (
   <Stack flexDirection="row" alignItems="center" gap={1}>
     <CreditCard />
     <Typography variant="overline" sx={{ fontSize: 14 }} color="text.secondary">
@@ -106,6 +105,8 @@ const ItemCard = ({
         visibility={moreInfoModalVisibility}
         onVisibilityChange={() => setMoreInfoModalVisibility(false)}
         title={title}
+        presenterName={presenterName}
+        cost={cost}
         purchaseState={purchaseState}
         hasProject={hasProject}
         prerequisites={prerequisites}
