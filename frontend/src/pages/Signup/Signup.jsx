@@ -116,11 +116,10 @@ const SignUpForm = ({ onLoginClick }) => {
           toastDataTemp.alertType = 'error';
           break;
       }
+      setAccessTokenFromLocalStorage();
+      setToastData(toastDataTemp);
+      setOpenToast(true);
     }
-
-    setAccessTokenFromLocalStorage();
-    setToastData(toastDataTemp);
-    setOpenToast(true);
   }, [createUserData]);
 
   return (
