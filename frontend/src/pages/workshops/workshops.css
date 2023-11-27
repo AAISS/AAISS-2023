@@ -1,6 +1,9 @@
-/* FilterDropdown.css */
 .filter-dropdown-container {
     margin-bottom: 20px;
+    width: 100%;
+    height:3rem;
+    display: flex;
+    justify-content: center;
   }
   
 .filter-dropdown-container label {
@@ -14,6 +17,8 @@
     border-radius: 4px;
     outline: none;
     cursor: pointer;
+    width: 70%;
+    background-color: #e3f2fd;
   }
   
 .filter-dropdown-select:hover {

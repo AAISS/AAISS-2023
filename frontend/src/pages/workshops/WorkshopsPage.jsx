@@ -51,17 +51,8 @@ export default function WorkshopsPage() {
                 alertType={toastData.type}
                 message={toastData.message}
             />}
-            <div className="filter-dropdown-container" style={{
-                width: '100%',
-                height: '3rem',
-                display: 'flex',
-                justifyContent: 'center',
-            }}>
+            <div className="filter-dropdown-container">
                 <select  name="filter" id="" className="filter-dropdown-select"
-                 style={{
-                    width: '75%',
-                    backgroundColor: blue["50"],
-                }}
                     value={filterOption}
                     onChange={(e) => handleFilterChange(e.target.value)}
                 >
