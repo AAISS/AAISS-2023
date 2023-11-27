@@ -4,7 +4,7 @@ import { Button, Card, CardActions, CardContent, CardHeader, Chip, Divider, Stac
 import PropTypes from 'prop-types';
 import MoreInfoModal from './more-info-modal';
 
-const Presenter = ({ presenterName }) => (
+export const Presenter = ({ presenterName }) => (
   <Stack flexDirection="row" alignItems="center" gap={1}>
     <Person />
     <Typography variant="body1" sx={{ fontSize: 14 }} color="text.secondary">
@@ -13,8 +13,7 @@ const Presenter = ({ presenterName }) => (
   </Stack>
 );
 
-// TODO: format cost with commas
-const Cost = ({ cost }) => (
+export const Cost = ({ cost }) => (
   <Stack flexDirection="row" alignItems="center" gap={1}>
     <CreditCard />
     <Typography variant="overline" sx={{ fontSize: 14 }} color="text.secondary">
@@ -43,7 +42,7 @@ const Level = ({ name, color }) => (
   </Stack>
 );
 
-const levelComponentMapping = {
+export const levelComponentMapping = {
   Elementary: <Level name="elementary" color="success.light" />,
   Intermediate: <Level name="intermediate" color="secondary.main" />,
   Advanced: <Level name="advanced" color="warning.light" />,
@@ -106,7 +105,10 @@ const ItemCard = ({
         visibility={moreInfoModalVisibility}
         onVisibilityChange={() => setMoreInfoModalVisibility(false)}
         title={title}
+        presenterName={presenterName}
+        cost={cost}
         purchaseState={purchaseState}
+        level={level}
         hasProject={hasProject}
         prerequisites={prerequisites}
         syllabus={syllabus}

@@ -1,8 +1,8 @@
-import { blue} from "@mui/material/colors";
-import ItemCard from "../../components/item-card/item-card.jsx";
-import Toast from "../../components/toast/Toast.jsx";
-import {Helper} from "../../utils/Helper.js";
-import useWorkshopsPage from "./useWorkshopsPage.js";
+import { CircularProgress } from '@mui/material';
+import ItemCard from '../../components/item-card/item-card.jsx';
+import Toast from '../../components/toast/Toast.jsx';
+import { Helper } from '../../utils/Helper.js';
+import useWorkshopsPage from './useWorkshopsPage.js';
 import './workshops.css'
 
 export default function WorkshopsPage() {

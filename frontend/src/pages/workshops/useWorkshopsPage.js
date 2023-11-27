@@ -1,5 +1,5 @@
-import {useCallback, useEffect, useState} from "react";
-import {useAPI} from "../../providers/APIProvider/APIProvider.jsx";
+import { useCallback, useEffect, useState } from 'react';
+import { useAPI } from '../../providers/APIProvider/APIProvider.jsx';
 
 export default function useWorkshopsPage() {
     const {
@@ -27,42 +27,42 @@ export default function useWorkshopsPage() {
 
     
 
-    useEffect(() => {
-        const func = () => {
-            setGridTemplateColumnsValue("1fr ".repeat(Math.floor(window.innerWidth / 400)))
-        }
-        func()
-        window.addEventListener("resize", func);
-    }, [])
+  useEffect(() => {
+    const func = () => {
+      setGridTemplateColumnsValue('1fr '.repeat(Math.floor(window.innerWidth / 400)));
+    };
+    func();
+    window.addEventListener('resize', func);
+  }, []);
 
-    useEffect(() => {
-        if (addToCartResponse == null) return
+  useEffect(() => {
+    if (addToCartResponse == null) return;
 
-        const toastDataTemp = {}
-        switch (addToCartResponse.status) {
-            case 200:
-                toastDataTemp.type = "success"
-                toastDataTemp.message = "Item Successfully Added to Cart!"
-                break;
-            case 400:
-                toastDataTemp.type = "error"
-                toastDataTemp.message = "Failed to Add Item to Cart: Item Is Already In Your Cart!"
-                break;
-            case 401:
-                toastDataTemp.type = "error"
-                toastDataTemp.message = "Failed to Add Item to Cart: You Should Login First!"
-        }
-        setToastData(toastDataTemp)
-        setOpenToast(true)
-        setAddToCartResponse(null)
-    }, [addToCartResponse])
+    const toastDataTemp = {};
+    switch (addToCartResponse.status) {
+      case 200:
+        toastDataTemp.type = 'success';
+        toastDataTemp.message = 'Item Successfully Added to Cart!';
+        break;
+      case 400:
+        toastDataTemp.type = 'error';
+        toastDataTemp.message = 'Failed to Add Item to Cart: Item Is Already In Your Cart!';
+        break;
+      case 401:
+        toastDataTemp.type = 'error';
+        toastDataTemp.message = 'Failed to Add Item to Cart: You Should Login First!';
+    }
+    setToastData(toastDataTemp);
+    setOpenToast(true);
+    setAddToCartResponse(null);
+  }, [addToCartResponse]);
 
-    useEffect(() => {
-        getWorkshopsData()
-        getPresentationsData()
-        getTeachersData()
-        getPresenterData()
-    }, [getPresentationsData, getWorkshopsData])
+  useEffect(() => {
+    getWorkshopsData();
+    getPresentationsData();
+    getTeachersData();
+    getPresenterData();
+  }, [getPresentationsData, getWorkshopsData]);
 
     useEffect(() => {
         if (workshopsData == null

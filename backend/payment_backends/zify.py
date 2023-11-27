@@ -13,7 +13,6 @@ ZIFY_STATUS_AUTH_ERROR = 401
 ZIFY_STATUS_BAN = 403
 ZIFY_STATUS_NOT_FOUND = 404
 ZIFY_PAYMENT_DESCRIPTION = 'register workshops or talks'
-ZIFY_CALL_BACK = 'https://aaiss.ir/api/payment/verify/'
 ZIFY_URL = "https://zify.ir/api/order/v2/create"
 ZIFY_URL_VERIFY = "https://zify.ir/api/order/v2/verify"
 ZIFY_PAYMENT_LINK = 'https://zify.ir/order/accept/{track_id}'
@@ -30,7 +29,7 @@ class ZIFYRequest:
     def get_order_url(track_id: str):
         return ZIFY_PAYMENT_LINK.format(track_id=track_id)
 
-    def create_payment(self, order_id, amount, user_name, user_phone, user_email):
+    def create_payment(self, order_id, amount, user_name, user_phone, user_email, call_back):
         body = {
             "payer": {
                 "first_name": "",
@@ -54,7 +53,7 @@ class ZIFYRequest:
                     "description": ZIFY_PAYMENT_DESCRIPTION
                 }
             ],
-            "returnUrl": ZIFY_CALL_BACK,
+            "returnUrl": call_back,
             "clientRefId": order_id,
             "shipping_total": 0,
             "off_total": 0,

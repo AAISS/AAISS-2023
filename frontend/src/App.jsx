@@ -2,6 +2,7 @@ import './App.css';
 import './App-mobile.css';
 import './css/Nav.css';
 import './css/Theme.css';
+import './css/callback-page.css'
 
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';

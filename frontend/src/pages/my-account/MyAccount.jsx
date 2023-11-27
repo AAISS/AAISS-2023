@@ -8,7 +8,7 @@ import useMyAccount from './useMyAccount.js';
 const TAB_ITEMS = ['Workshops', 'Presentations', 'Cart'];
 
 const MyAccount = () => {
-  const { talks, workshops, cart, removeFromCartHandler, toastData, openToast, setOpenToast } = useMyAccount();
+  const { talks, workshops, handleBuyCart, cart, removeFromCartHandler, toastData, openToast, setOpenToast } = useMyAccount();
   const [tabValue, setTabValue] = useState(TAB_ITEMS[0]);
 
   const handleChangeTab = (event, newValue) => {
@@ -60,7 +60,8 @@ const MyAccount = () => {
   };
 
   const List = ({ type, items }) => {
-    return items?.map((item, index) => (
+    if (items == null) return;
+    return items.map((item, index) => (
       <ItemCard
         key={index}
         isWorkshop={type === 'Workshops'}
@@ -119,7 +120,7 @@ const MyAccount = () => {
             <Divider sx={{ my: 2 }} />
             <Stack alignItems="center" gap={1}>
               <Typography>Total: {calculateTotalCost()} T</Typography>
-              <Button variant="contained" sx={{ px: 4 }} disabled={calculateTotalCost() === 0}>
+              <Button onClick={handleBuyCart} variant="contained" sx={{ px: 4 }} disabled={calculateTotalCost() === 0}>
                 Buy
               </Button>
             </Stack>
