@@ -18,7 +18,8 @@
     outline: none;
     cursor: pointer;
     width: 70%;
-    background-color: #e3f2fd;
+    background-color: var(--background-color-lighter-60);
+    color: white !important;
   }
   
 .filter-dropdown-select:hover {
