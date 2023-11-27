@@ -105,14 +105,14 @@ class WorkshopViewSet(viewsets.GenericViewSet,
     def list(self, request, year=None, **kwargs):
         if year is None:
             year = datetime.datetime.now().year
-        queryset = models.Workshop.objects.filter(year=year)
-        return super().list(request, queryset=queryset, **kwargs)
+        self.queryset = models.Workshop.objects.filter(year=year)
+        return super().list(request, **kwargs)
 
     def retrieve(self, request, year=None, pk=None):
         if year is None:
             year = datetime.datetime.now().year
-        queryset = models.Workshop.objects.filter(year=year)
-        return super().retrieve(request, pk=pk, queryset=queryset)
+        self.queryset = models.Workshop.objects.filter(year=year)
+        return super().retrieve(request, pk=pk)
 
 
 class PresentationViewSet(viewsets.GenericViewSet,
@@ -124,14 +124,14 @@ class PresentationViewSet(viewsets.GenericViewSet,
     def list(self, request, year=None, **kwargs):
         if year is None:
             year = datetime.datetime.now().year
-        queryset = self.queryset.filter(year=year)
-        return super().list(request, queryset=queryset, **kwargs)
+        self.queryset = self.queryset.filter(year=year)
+        return super().list(request, **kwargs)
 
     def retrieve(self, request, year=None, pk=None):
         if year is None:
             year = datetime.datetime.now().year
-        queryset = models.Presentation.objects.filter(year=year)
-        return super().retrieve(request, pk=pk, queryset=queryset)
+        self.queryset = models.Presentation.objects.filter(year=year)
+        return super().retrieve(request, pk=pk)
 
 
 class MiscViewSet(viewsets.ViewSet):
