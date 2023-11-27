@@ -31,6 +31,10 @@ const NavBarImage = () => (
   />
 );
 
+const handleLogout = () => {
+  localStorage.removeItem('user');
+};
+
 export default function DrawerAppBar() {
   const { ROUTES, currentRoute, setCurrentRoute, accessToken, refreshToken } = useConfig();
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -61,12 +65,14 @@ export default function DrawerAppBar() {
     return true;
   };
 
+  const shouldShowLogoutButton = Boolean(accessToken);
+
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Link to={ROUTES.home.path} className="logo-item" onClick={() => setCurrentRoute(ROUTES.home)}>
         <NavBarImage />
       </Link>
-      <Divider style={{ backgroundColor: 'var(--dark-text-color)' }} />
+      <Divider />
       <List>
         {appBarPaths.map((name, index) => {
           return (
@@ -81,6 +87,11 @@ export default function DrawerAppBar() {
             )
           );
         })}
+        <ListItem disablePadding>
+          <ListItemButton sx={{ textAlign: 'center' }} onClick={handleLogout}>
+            <ListItemText primary="log out" sx={{ color: 'var(--error-color)' }} />
+          </ListItemButton>
+        </ListItem>
       </List>
     </Box>
   );
@@ -121,6 +132,11 @@ export default function DrawerAppBar() {
               );
             })}
           </Box>
+          {shouldShowLogoutButton && (
+            <Button color="error" variant="contained" sx={{ marginLeft: 'auto' }}>
+              logout
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
       <nav className="nav">
@@ -136,7 +152,7 @@ export default function DrawerAppBar() {
             '& .MuiDrawer-paper': {
               boxSizing: 'border-box',
               width: drawerWidth,
-              background: 'var(--background-color-lighter-20)',
+              background: 'var(--background-color)',
             },
           }}
         >
