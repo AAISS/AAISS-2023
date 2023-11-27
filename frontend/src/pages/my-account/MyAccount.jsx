@@ -60,8 +60,7 @@ const MyAccount = () => {
   };
 
   const List = ({ type, items }) => {
-    if (items == null) return;
-    return items.map((item, index) => (
+    return items?.map((item, index) => (
       <ItemCard
         key={index}
         isWorkshop={type === 'Workshops'}
