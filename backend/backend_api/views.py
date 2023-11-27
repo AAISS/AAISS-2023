@@ -276,7 +276,9 @@ class StaffViewSet(viewsets.GenericViewSet,
                     }
 
                     section_data['people'].append(person_data)
+                
             if len(section_data['people']) != 0:
+                section_data['people'] = sorted(section_data['people'], key=lambda x: x['role'])[::-1]
                 data.append(section_data)
 
         serializer = serializers.AllStaffSectionSerializer(data, many=True)
