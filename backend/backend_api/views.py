@@ -215,7 +215,7 @@ class PaymentViewSet(viewsets.GenericViewSet):
     @action(methods=['POST'], detail=False, permission_classes=[IsAuthenticated])
     def payment(self, request):
         account = request.user
-        call_back = request.data['call_back']
+        call_back = request.data.get('call_back')
         try:
             user = User.objects.get(account=account)
         except ObjectDoesNotExist:
@@ -236,7 +236,7 @@ class PaymentViewSet(viewsets.GenericViewSet):
 
     @action(methods=['POST'], detail=False)
     def verify(self, request):
-        pid = request.data['clientrefid']
+        pid = request.data.get('clientrefid')
         if pid is None:
             return Response(new_detailed_response(
                 status.HTTP_400_BAD_REQUEST, "clientrefid is required"))
