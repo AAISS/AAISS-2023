@@ -1,7 +1,9 @@
+import { blue, red } from "@mui/material/colors";
 import ItemCard from "../../components/item-card/item-card.jsx";
 import Toast from "../../components/toast/Toast.jsx";
 import {Helper} from "../../utils/Helper.js";
 import useWorkshopsPage from "./useWorkshopsPage.js";
+import './workshops.css'
 
 export default function WorkshopsPage() {
 
@@ -12,7 +14,29 @@ export default function WorkshopsPage() {
         toastData,
         setOpenToast,
         openToast,
+        options,
+        filterOption,
+        setFilterOption,
+        fileteredItems,
+        setFileteredItems
     } = useWorkshopsPage()
+
+
+    const handleFilterChange = (option) => {
+            setFilterOption(option)
+
+            if (option == "All Items"){
+                setFileteredItems(parsedItemsList)
+            }
+
+            else if (option == 'Workshops'){
+                setFileteredItems(parsedItemsList?.filter(item => item.isWorkshop))
+            }
+
+            else if (option == 'Presentations'){
+                setFileteredItems(parsedItemsList?.filter(item => !item.isWorkshop))
+            }
+    }
 
     return (
         <section style={{
@@ -27,7 +51,28 @@ export default function WorkshopsPage() {
                 alertType={toastData.type}
                 message={toastData.message}
             />}
-            {parsedItemsList && parsedItemsList.map((e, index) => {
+            <div className="filter-dropdown-container" style={{
+                width: '100%',
+                height: '3rem',
+                display: 'flex',
+                justifyContent: 'center',
+            }}>
+                <select  name="filter" id="" className="filter-dropdown-select"
+                 style={{
+                    width: '75%',
+                    backgroundColor: blue["50"],
+                }}
+                    value={filterOption}
+                    onChange={(e) => handleFilterChange(e.target.value)}
+                >
+                     {options.map((option) => (
+                        <option key={option} value={option}>
+                        {option}
+                        </option>
+                     ))}
+                </select>
+            </div>
+            {fileteredItems && fileteredItems.map((e, index) => {
                 return (
                     <ItemCard
                         key={index}

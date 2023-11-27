@@ -1,0 +1,27 @@
+/* FilterDropdown.css */
+.filter-dropdown-container {
+    margin-bottom: 20px;
+  }
+  
+.filter-dropdown-container label {
+    margin-right: 10px;
+  }
+  
+.filter-dropdown-select {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+  }
+  
+.filter-dropdown-select:hover {
+    border-color: #888;
+  }
+  
+.filter-dropdown-select:focus {
+    border-color: #333;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  }
+  

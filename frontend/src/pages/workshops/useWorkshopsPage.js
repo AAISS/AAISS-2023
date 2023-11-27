@@ -16,10 +16,16 @@ export default function useWorkshopsPage() {
         setAddToCartResponse,
     } = useAPI()
 
+    const options = ["All Items", "Workshops", "Presentations"]
+
     const [parsedItemsList, setParsedItemsList] = useState()
+    const [fileteredItems, setFileteredItems] = useState()
     const [gridTemplateColumnsValue, setGridTemplateColumnsValue] = useState("")
     const [toastData, setToastData] = useState(false)
     const [openToast, setOpenToast] = useState(false)
+    const [filterOption, setFilterOption] = useState(options[0])
+
+    
 
     useEffect(() => {
         const func = () => {
@@ -92,6 +98,7 @@ export default function useWorkshopsPage() {
             return item
         }).filter(e => e != null)
         setParsedItemsList(parsedData)
+        setFileteredItems(parsedData)
     }, [workshopsData, presentationsData, presenterData, teachersData])
 
     const addToCart = useCallback(({
@@ -111,5 +118,10 @@ export default function useWorkshopsPage() {
         toastData,
         setOpenToast,
         openToast,
+        options,
+        filterOption,
+        setFilterOption,
+        fileteredItems,
+        setFileteredItems
     }
 }
