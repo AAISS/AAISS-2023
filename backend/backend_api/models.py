@@ -12,6 +12,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
 from rest_framework import status
+from django.utils.html import escape
 
 from aaiss_backend import settings
 from aaiss_backend.settings import BASE_URL
@@ -100,7 +101,6 @@ class Workshop(models.Model):
     has_project = models.BooleanField(default=False, blank=False)
     prerequisites = models.CharField(max_length=BIG_MAX_LENGTH, default='', blank=True)
     capacity = models.PositiveSmallIntegerField(default=50)
-    add_to_calendar_link = models.CharField(max_length=SMALL_MAX_LENGTH, default='', blank=True)
     year = models.IntegerField(blank=False, default=2020)
 
     NOT_ASSIGNED = 'NOT_ASSIGNED'
@@ -141,6 +141,21 @@ class Workshop(models.Model):
                                                                WorkshopRegistration.StatusChoices.PURCHASED):
             participants += participant.user
         return participants
+
+    @property
+    def generate_google_calendar_link(self):
+        base_url = "https://www.google.com/calendar/render?action=TEMPLATE"
+        workshop_title = escape(self.name)
+        workshop_description = escape(self.desc)
+        start_datetime = self.start_date.strftime("%Y%m%dT%H%M%S")
+        end_datetime = self.end_date.strftime("%Y%m%dT%H%M%S")
+
+        teachers_names = " ".join([teacher.name for teacher in self.teachers.all()])
+        event_details = f"Teachers: {teachers_names}\nDescription: {workshop_description}"
+
+        link = f"{base_url}&text={workshop_title}&dates={start_datetime}/{end_datetime}&details={event_details}"
+
+        return link
 
     def __str__(self):
         name = ""
@@ -196,6 +211,21 @@ class Presentation(models.Model):
                                                                     PresentationParticipation.StatusChoices.PURCHASED):
             participants += participant.user
         return participants
+
+    @property
+    def google_calendar_link(self):
+        base_url = "https://www.google.com/calendar/render?action=TEMPLATE"
+        presentation_title = escape(self.name)
+        presentation_description = escape(self.desc)
+        start_datetime = self.start_date.strftime("%Y%m%dT%H%M%S")
+        end_datetime = self.end_date.strftime("%Y%m%dT%H%M%S")
+
+        presenters_names = " ".join([presenter.name for presenter in self.presenters.all()])
+        event_details = f"Presenters: {presenters_names}\nDescription: {presentation_description}"
+
+        link = f"{base_url}&text={presentation_title}&dates={start_datetime}/{end_datetime}&details={event_details}"
+
+        return link
 
     def __str__(self):
         name = ""
