@@ -226,18 +226,17 @@ export function APIProvider({ children }) {
 
   const postPaymentData = useCallback(
     async (data) => {
-      const tokenStr = JSON.parse(localStorage.getItem('user'))['access'];
       await service
         .post(`${URL.baseURL}${URL.endpoints.payment.default}`, data, {
           headers: {
-            Authorization: `Bearer ${tokenStr}`,
+            Authorization: getAccessTokenHeader(),
           },
         })
         .then((response) => {
           setPaymentData(response.data);
         });
     },
-    [currentYear, service],
+    [currentYear, service, getAccessTokenHeader],
   );
 
   const activateUser = useCallback(async () => {
