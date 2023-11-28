@@ -71,7 +71,7 @@ const MyAccount = () => {
         level={item.level}
         startDate={item.start_date}
         endDate={item.end_date}
-        presenterName={item.presenters?.[0]}
+        presenterName={item.presenters?.join(", ") ?? item.teachers?.join(", ")}
         cost={item.cost}
         hasProject={item.hasProject}
         prerequisites={item.prerequisites}

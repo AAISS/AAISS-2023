@@ -21,6 +21,10 @@ export default function useMyAccount() {
         setPresentationsData,
         postPaymentData,
         paymentData,
+        getTeachersData,
+        teachersData,
+        getPresenterData,
+        presenterData,
     } = useAPI()
 
     const {
@@ -100,19 +104,23 @@ export default function useMyAccount() {
         getPresentationsData()
         getUserWorkshops()
         getUserPresentations()
+        getTeachersData()
+        getPresenterData()
     }, [accessToken, getUserPresentations, getUserWorkshops])
 
     useEffect(() => {
         if (!userPresentationsData
             || !userWorkshopsData
             || !workshopsData
+            || !presenterData
+            || !teachersData
             || !presentationsData)
             return
 
 
-        const userTempPresentations = []
-        const userTempWorkshops = []
-        const userTempCart = []
+        let userTempPresentations = []
+        let userTempWorkshops = []
+        let userTempCart = []
         for (const presentation of presentationsData) {
             for (const userPresentation of userPresentationsData.data) {
                 if (presentation.id === userPresentation.id) {
@@ -138,10 +146,67 @@ export default function useMyAccount() {
             }
         }
 
+        for (const presenterOrTeacher of teachersData.concat(presenterData)) {
+            userTempWorkshops = userTempWorkshops.map(workshop => {
+                const newTeachers = []
+                for (const id of workshop.teachers) {
+                    if (id === presenterOrTeacher.id) {
+                        newTeachers.push(presenterOrTeacher.name)
+                    } else {
+                        newTeachers.push(id)
+                    }
+                }
+                workshop.teachers = newTeachers
+                return workshop
+            })
+            userTempPresentations = userTempPresentations.map(presentation => {
+                const newPresenters = []
+                for (const id of presentation.presenters) {
+                    if (id === presenterOrTeacher.id) {
+                        newPresenters.push(presenterOrTeacher.name)
+                    } else {
+                        newPresenters.push(id)
+                    }
+                }
+                presentation.presenters = newPresenters
+                return presentation
+            })
+            userTempCart = userTempCart.map(cartItem => {
+                const newPresenters = []
+                for (const id of cartItem.presenters ?? []) {
+                    if (id === presenterOrTeacher.id) {
+                        newPresenters.push(presenterOrTeacher.name)
+                    } else {
+                        newPresenters.push(id)
+                    }
+                }
+                for (const id of cartItem.teachers ?? []) {
+                    if (id === presenterOrTeacher.id) {
+                        newPresenters.push(presenterOrTeacher.name)
+                    } else {
+                        newPresenters.push(id)
+                    }
+                }
+                if (cartItem.teachers) {
+                    cartItem.teachers = newPresenters
+                } else {
+                    cartItem.presenters = newPresenters
+                }
+                return cartItem
+            })
+        }
+
+        console.log(userTempCart)
+
         setTalks(userTempPresentations)
         setWorkshops(userTempWorkshops)
         setCart(userTempCart)
-    }, [userPresentationsData, workshopsData, presentationsData, userWorkshopsData])
+    }, [userPresentationsData,
+        workshopsData,
+        presentationsData,
+        teachersData,
+        presenterData,
+        userWorkshopsData])
 
     return {
         talks,
