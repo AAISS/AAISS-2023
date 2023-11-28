@@ -1,0 +1,13 @@
+#radio-container-workshops {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    margin-bottom: 30px;
+}
+
+@media only screen and (max-width: 500px) {
+    #radio-container-workshops {
+        flex-direction: column;
+
+    }
+}
