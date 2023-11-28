@@ -1,14 +1,15 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
 import PropTypes from 'prop-types';
+import ROUTES from '../../providers/config-provider/ROUTES';
 
 const LogoutModal = ({ visibility, onVisibilityChange }) => {
-  const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem('user');
     onVisibilityChange();
-    navigate('/', { replace: true });
+
+    window.location.reload();
+    window.location.replace(ROUTES.signup.path);
   };
 
   return (

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
+import { Link } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -16,7 +16,6 @@ import AAISS from '../../assets/AAISS.png';
 import { useConfig } from '../../providers/config-provider/ConfigProvider.jsx';
 import Image from '../image/Image.jsx';
 import LogoutModal from '../logout-modal/logout-modal.jsx';
-import useNavItem from './useNavItem.js';
 
 const drawerWidth = 240;
 
@@ -33,15 +32,13 @@ const NavBarImage = () => (
 );
 
 export default function DrawerAppBar() {
-  const { ROUTES, currentRoute, setCurrentRoute, accessToken, refreshToken } = useConfig();
+  const { ROUTES, accessToken, refreshToken } = useConfig();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [logoutModalVisibility, setLogoutModalVisibility] = useState(false);
 
   const handleLogout = () => {
     setLogoutModalVisibility(true);
   };
-
-  const { getVariant } = useNavItem();
 
   const appBarPaths = Object.keys(ROUTES).filter((route) => !ROUTES[route]?.hideFromAppBar);
 
@@ -71,7 +68,7 @@ export default function DrawerAppBar() {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-      <Link to={ROUTES.home.path} className="logo-item" onClick={() => setCurrentRoute(ROUTES.home)}>
+      <Link href={ROUTES.home.path} className="logo-item">
         <NavBarImage />
       </Link>
       <Divider />
@@ -79,7 +76,7 @@ export default function DrawerAppBar() {
         {appBarPaths.map((name, index) => {
           return (
             shouldShowRoute(ROUTES[name]) && (
-              <Link to={ROUTES[name].path} style={{ color: 'white', textDecoration: 'none' }} key={index}>
+              <Link href={ROUTES[name].path} style={{ color: 'white', textDecoration: 'none' }} key={index}>
                 <ListItem disablePadding>
                   <ListItemButton sx={{ textAlign: 'center' }}>
                     <ListItemText primary={name} />
@@ -112,7 +109,7 @@ export default function DrawerAppBar() {
           >
             <MenuIcon />
           </IconButton>
-          <Link to={ROUTES.home.path} className="logo-item" onClick={() => setCurrentRoute(ROUTES.home)}>
+          <Link href={ROUTES.home.path} className="logo-item">
             <NavBarImage />
           </Link>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
@@ -120,10 +117,11 @@ export default function DrawerAppBar() {
               return (
                 shouldShowRoute(ROUTES[name]) && (
                   <Button
-                    href={ROUTES[name].path}
                     key={index}
-                    variant={getVariant(ROUTES[name].path, currentRoute.path)}
-                    onClick={() => setCurrentRoute(ROUTES[name])}
+                    href={ROUTES[name].path}
+                    // TODO: below lines will break the app on production :))
+                    // variant={ROUTES[name].path === currentRoute.path ? 'contained' : 'text'}
+                    // onClick={() => setCurrentRoute(ROUTES[name])}
                     sx={{
                       color: '#fff',
                       paddingRight: 2,
@@ -142,26 +140,24 @@ export default function DrawerAppBar() {
           )}
         </Toolbar>
       </AppBar>
-      <nav className="nav">
-        <Drawer
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-          sx={{
-            display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': {
-              boxSizing: 'border-box',
-              width: drawerWidth,
-              background: 'var(--background-color)',
-            },
-          }}
-        >
-          {drawer}
-        </Drawer>
-      </nav>
+      <Drawer
+        variant="temporary"
+        open={mobileOpen}
+        onClose={handleDrawerToggle}
+        ModalProps={{
+          keepMounted: true, // Better open performance on mobile.
+        }}
+        sx={{
+          display: { xs: 'block', sm: 'none' },
+          '& .MuiDrawer-paper': {
+            boxSizing: 'border-box',
+            width: drawerWidth,
+            background: 'var(--background-color)',
+          },
+        }}
+      >
+        {drawer}
+      </Drawer>
     </Box>
   );
 }
