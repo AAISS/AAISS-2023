@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
@@ -15,6 +15,7 @@ import Toolbar from '@mui/material/Toolbar';
 import AAISS from '../../assets/AAISS.png';
 import { useConfig } from '../../providers/config-provider/ConfigProvider.jsx';
 import Image from '../image/Image.jsx';
+import LogoutModal from '../logout-modal/logout-modal.jsx';
 import useNavItem from './useNavItem.js';
 
 const drawerWidth = 240;
@@ -31,13 +32,14 @@ const NavBarImage = () => (
   />
 );
 
-const handleLogout = () => {
-  localStorage.removeItem('user');
-};
-
 export default function DrawerAppBar() {
   const { ROUTES, currentRoute, setCurrentRoute, accessToken, refreshToken } = useConfig();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [logoutModalVisibility, setLogoutModalVisibility] = useState(false);
+
+  const handleLogout = () => {
+    setLogoutModalVisibility(true);
+  };
 
   const { getVariant } = useNavItem();
 
@@ -98,6 +100,7 @@ export default function DrawerAppBar() {
 
   return (
     <Box sx={{ display: 'flex' }} className="nav">
+      <LogoutModal visibility={logoutModalVisibility} onVisibilityChange={() => setLogoutModalVisibility(false)} />
       <AppBar component="nav" className="backdrop-color">
         <Toolbar>
           <IconButton
@@ -133,7 +136,7 @@ export default function DrawerAppBar() {
             })}
           </Box>
           {shouldShowLogoutButton && (
-            <Button color="error" variant="contained" sx={{ marginLeft: 'auto' }}>
+            <Button color="error" variant="contained" sx={{ marginLeft: 'auto' }} onClick={handleLogout}>
               logout
             </Button>
           )}
