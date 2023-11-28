@@ -57,6 +57,7 @@ class AllStaffSectionSerializer(serializers.Serializer):
 
 class WorkshopSerializer(serializers.ModelSerializer):
     remaining_capacity = serializers.IntegerField()
+    google_calendar_link = serializers.CharField()
 
     class Meta:
         model = models.Workshop
@@ -65,6 +66,7 @@ class WorkshopSerializer(serializers.ModelSerializer):
 
 class PresentationSerializer(serializers.ModelSerializer):
     remaining_capacity = serializers.IntegerField()
+    google_calendar_link = serializers.CharField()
 
     class Meta:
         model = models.Presentation
