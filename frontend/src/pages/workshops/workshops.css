@@ -30,4 +30,21 @@
     border-color: #333;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
   }
-  
+
+#filter-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    backdrop-filter: blur(3px);
+    margin: 10px 0;
+}
+
+#filter-box .MuiFormGroup-root {
+    margin-bottom: 0 !important;
+}
+
+#filter-box > label {
+    margin-right: 15px;
+}

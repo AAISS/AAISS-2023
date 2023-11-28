@@ -86,7 +86,7 @@ export default function WorkshopsPage() {
                 alignItems: "center",
                 flexDirection: 'column'
             }}>
-                <div>
+                <div id="filter-box">
                     <FormLabel id={"radio-container-workshops-container-label"}>
                         Filter By:
                     </FormLabel>
