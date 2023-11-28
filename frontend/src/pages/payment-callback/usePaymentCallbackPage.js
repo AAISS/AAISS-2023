@@ -14,28 +14,35 @@ export default function usePaymentCallbackPage() {
     if (routeParams == null) return;
 
     const clientrefid = routeParams['clientrefid'];
+    if (!clientrefid)
+      return
     postVerifyPayment({
       clientrefid,
     });
-  }, [routeParams]);
+  }, [postVerifyPayment, routeParams]);
 
   useEffect(() => {
     if (verifyPaymentData == null) return;
 
+    const paymentResultTemp = {};
     if (verifyPaymentData.status !== 200 || verifyPaymentData.data.status !== 200) {
       setPaymentStatus(false);
+      paymentResultTemp['Message'] = "Payment Failed!"
     } else {
+      paymentResultTemp['Message'] = "Success!"
       setPaymentStatus(true);
     }
-    setPaymentStatus(false);
 
-    const paymentResultTemp = {};
     const keyDict = {
       message: 'Message',
       refid: 'Reference ID',
       card_number: 'Credit Card Number',
+      data: "Reference ID"
     };
+    const removedKeys = ['status', 'message']
     Object.keys(verifyPaymentData.data).forEach((key) => {
+      if (removedKeys.indexOf(key) > -1)
+        return
       if (key in keyDict) paymentResultTemp[keyDict[key]] = verifyPaymentData.data[key];
       else paymentResultTemp[key] = verifyPaymentData.data[key];
     });
