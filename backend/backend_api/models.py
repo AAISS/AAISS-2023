@@ -143,7 +143,7 @@ class Workshop(models.Model):
         return participants
 
     @property
-    def generate_google_calendar_link(self):
+    def google_calendar_link(self):
         base_url = "https://www.google.com/calendar/render?action=TEMPLATE"
         workshop_title = escape(self.name)
         workshop_description = escape(self.desc)
