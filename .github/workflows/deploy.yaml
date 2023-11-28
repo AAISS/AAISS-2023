@@ -24,10 +24,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build docker images
-        run: docker compose build
-
-      - name: Push docker images
-        run: docker compose push backend frontend
+        run: docker compose build --push
 
   deploy:
     needs: build-and-push
