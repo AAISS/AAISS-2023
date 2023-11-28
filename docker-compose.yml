@@ -21,6 +21,10 @@ services:
       cache_from:
         - aaissaut/aaiss:backend
     command: gunicorn aaiss_backend.wsgi:application --bind 0.0.0.0:6446
+    environment:
+      SECRET_KEY: ${SECRET_KEY}
+      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
+      ZIFY_AUTH: ${ZIFY_AUTH}
     volumes:
       - ./backend/data:/backend-aaiss/data
       - ./backend/static:/backend-aaiss/static
