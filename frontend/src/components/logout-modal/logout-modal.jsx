@@ -27,10 +27,8 @@ const LogoutModal = ({ visibility, onVisibilityChange }) => {
         <DialogContentText>Are you sure you want to logout?</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onVisibilityChange} variant="outlined">
-          Cancel
-        </Button>
-        <Button onClick={handleLogout} color="error">
+        <Button onClick={onVisibilityChange}>Cancel</Button>
+        <Button onClick={handleLogout} color="error" variant="contained">
           Logout
         </Button>
       </DialogActions>
