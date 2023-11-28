@@ -208,7 +208,7 @@ class UserViewSet(viewsets.GenericViewSet,
                 status.HTTP_400_BAD_REQUEST, "Token didn't match with any user"))
         account.is_active = True
         account.save()
-        return redirect(urllib.parse.urljoin(BASE_URL, 'signup'))
+        return redirect(urllib.parse.urljoin(BASE_URL, 'signup') + '?login=true')
 
 
 class PaymentViewSet(viewsets.GenericViewSet):
