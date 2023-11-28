@@ -1,7 +1,7 @@
-import {useCallback, useEffect, useState} from "react";
-import {useAPI} from "../../providers/APIProvider/APIProvider.jsx";
-import {useConfig} from "../../providers/config-provider/ConfigProvider.jsx";
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAPI } from '../../providers/APIProvider/APIProvider.jsx';
+import { useConfig } from '../../providers/config-provider/ConfigProvider.jsx';
 
 export default function useMyAccount() {
 
@@ -46,13 +46,22 @@ export default function useMyAccount() {
         })
     }, [removeFromUserCart])
 
-    const handleBuyCart = useCallback(() => {
-        postPaymentData()
-    }, [postPaymentData])
+  const handleBuyCart = useCallback(() => {
+    // TODO: this endpoint has some issues
+    postPaymentData({ call_back: 'https://aaiss.ir/callback' });
+  }, [postPaymentData]);
 
-    useEffect(() => {
-        if (paymentData == null)
-            return
+  useEffect(() => {
+    if (paymentData) {
+      console.log({ paymentData });
+      const { message } = paymentData;
+      // TODO: THIS SHOULD BE TESTED ON LIVE TEST!!!!!
+      window.location.replace(message);
+    }
+  }, [paymentData]);
+
+  useEffect(() => {
+    if (paymentData == null) return;
 
         if (paymentData.status !== 200 || paymentData.data.status !== 200) {
             const toastTemp = {}
