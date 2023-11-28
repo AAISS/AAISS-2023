@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAPI } from '../../providers/APIProvider/APIProvider.jsx';
-import { useConfig } from '../../providers/config-provider/ConfigProvider.jsx';
+import {useCallback, useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {useAPI} from '../../providers/APIProvider/APIProvider.jsx';
+import {useConfig} from '../../providers/config-provider/ConfigProvider.jsx';
 
 export default function useMyAccount() {
 
@@ -46,35 +46,32 @@ export default function useMyAccount() {
         })
     }, [removeFromUserCart])
 
-  const handleBuyCart = useCallback(() => {
-    // TODO: this endpoint has some issues
-    postPaymentData({ call_back: 'https://aaiss.ir/callback' });
-  }, [postPaymentData]);
+    const handleBuyCart = useCallback(() => {
+        postPaymentData({call_back: 'https://aaiss.ir/callback'});
+    }, [postPaymentData]);
 
-  useEffect(() => {
-    if (paymentData) {
-      console.log({ paymentData });
-      const { message } = paymentData;
-      // TODO: THIS SHOULD BE TESTED ON LIVE TEST!!!!!
-      window.location.replace(message);
-    }
-  }, [paymentData]);
-
-  useEffect(() => {
-    if (paymentData == null) return;
+    useEffect(() => {
+        if (!paymentData)
+            return
 
         if (paymentData.status !== 200 || paymentData.data.status !== 200) {
-            const toastTemp = {}
-            toastTemp.message = "Unknown Error! Please Try Again Later"
-            toastTemp.alertType = "error"
             setOpenToast(true)
-            setToastData(toastTemp)
+            setToastData({
+                message: "There was an Error Regarding Payment! Please Try Again Later",
+                alertType: "error"
+            })
             return
         }
 
-        console.log(paymentData.data.message)
-        navigate(paymentData.data.message)
-    }, [paymentData])
+        setOpenToast(true)
+        setToastData({
+            message: "Success! Redirecting You to the Desired Website...",
+            alertType: "success"
+        })
+        setTimeout(() => {
+            window.location.href = paymentData.data.data.payment_url
+        }, 2000)
+    }, [paymentData]);
 
     useEffect(() => {
         if (removeFromCartResponse == null)
@@ -96,14 +93,11 @@ export default function useMyAccount() {
                 break;
         }
 
-        setRemoveFromCartResponse(null)
         setToastData(toastDataTemp)
         setOpenToast(true)
-        setWorkshopsData(null)
-        setPresentationsData(null)
         getUserWorkshops()
         getUserPresentations()
-    }, [removeFromCartResponse])
+    }, [removeFromCartResponse, getUserPresentations, getUserWorkshops, setOpenToast, setToastData])
 
     useEffect(() => {
         if (!accessToken)

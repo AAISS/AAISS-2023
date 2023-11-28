@@ -213,7 +213,7 @@ export function APIProvider({ children }) {
   const postVerifyPayment = useCallback(
     async (data) => {
       await service
-        .get(`${URL.baseURL}${URL.services.default}${URL.endpoints.payment.verify}`, data)
+        .post(`${URL.baseURL}${URL.services.default}${URL.endpoints.payment.verify}`, data)
         .then((response) => {
           setVerifyPaymentData(response);
         })
@@ -233,8 +233,11 @@ export function APIProvider({ children }) {
           },
         })
         .then((response) => {
-          setPaymentData(response.data);
-        });
+          setPaymentData(response);
+        })
+          .catch(error => {
+            setPaymentData(error.response)
+          });
     },
     [currentYear, service, getAccessTokenHeader],
   );
