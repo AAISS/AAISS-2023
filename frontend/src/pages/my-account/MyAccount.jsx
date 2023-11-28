@@ -67,7 +67,7 @@ const MyAccount = () => {
         isWorkshop={type === 'Workshops'}
         purchaseState={type === 'Cart' ? 1 : 2}
         title={item.name}
-        description={Helper.omitLongString(item.desc, 100)}
+        description={item.desc}
         level={item.level}
         startDate={item.start_date}
         endDate={item.end_date}
@@ -77,6 +77,7 @@ const MyAccount = () => {
         prerequisites={item.prerequisites}
         syllabus={item.syllabus}
         capacity={item.capacity}
+        remainingCapacity={item.remaining_capacity}
         isFull={item.isFull}
         addToCalendarLink={item.addToCalendarLink}
         onClickAddToCart={() => {}}

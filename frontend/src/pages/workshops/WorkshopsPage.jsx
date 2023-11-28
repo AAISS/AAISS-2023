@@ -42,7 +42,8 @@ export default function WorkshopsPage() {
                 key={index}
                 isWorkshop={item.isWorkshop}
                 title={item.name}
-                description={item.desc && Helper.omitLongString(item.desc, 50)}
+                description={item.desc}
+                remainingCapacity={item.remaining_capacity}
                 purchaseState={0}
                 presenterName={item.presenters.join(', ')}
                 startDate={new Date(item.start_date).toLocaleString()}

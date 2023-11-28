@@ -112,6 +112,7 @@ export default function useWorkshopsPage() {
                 item['isWorkshop'] = !('presenters' in workshop);
                 item['capacity'] = workshop.capacity;
                 item['cost'] = workshop.cost;
+                item['remaining_capacity'] = workshop.remaining_capacity
                 return item;
             })
             .filter((e) => e != null);
