@@ -45,10 +45,14 @@ jobs:
 
       - name: Deploy to the VM
         uses: appleboy/ssh-action@master
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
+          ZIFY_AUTH: ${{ secrets.ZIFY_AUTH }}
         with:
           host: ${{ vars.VM_HOST }}
           username: ${{ vars.VM_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          # TODO: handle envs
+          envs: SECRET_KEY,EMAIL_HOST_PASSWORD,ZIFY_AUTH
           script: |
             docker compose -f AAISS-2023/docker-compose.yml up -d --pull always --force-recreate --no-build
