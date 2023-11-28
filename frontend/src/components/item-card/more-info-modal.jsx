@@ -63,7 +63,6 @@ const MoreInfoModal = ({
     <Dialog
       onClose={onVisibilityChange}
       open={visibility}
-      backgroundColor="var(--background-color)"
       PaperProps={{
         style: {
           backgroundColor: 'var(--background-color-lighter-20)',
