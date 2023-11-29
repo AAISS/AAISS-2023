@@ -8,7 +8,17 @@ import useMyAccount from './useMyAccount.js';
 const TAB_ITEMS = ['Workshops', 'Presentations', 'Cart'];
 
 const MyAccount = () => {
-  const { talks, workshops, handleBuyCart, buyButtonLoading, cart, removeFromCartHandler, toastData, openToast, setOpenToast } = useMyAccount();
+  const {
+    talks,
+    workshops,
+    handleBuyCart,
+    buyButtonLoading,
+    cart,
+    removeFromCartHandler,
+    toastData,
+    openToast,
+    setOpenToast,
+  } = useMyAccount();
   const [tabValue, setTabValue] = useState(TAB_ITEMS[0]);
 
   const handleChangeTab = (event, newValue) => {
@@ -64,14 +74,14 @@ const MyAccount = () => {
     return items.map((item, index) => (
       <ItemCard
         key={index}
-        isWorkshop={type === 'Workshops'}
+        isWorkshop={item.type === 'workshop'}
         purchaseState={type === 'Cart' ? 1 : 2}
         title={item.name}
         description={item.desc}
         level={item.level}
         startDate={item.start_date}
         endDate={item.end_date}
-        presenterName={item.presenters?.join(", ") ?? item.teachers?.join(", ")}
+        presenterName={item.presenters?.join(', ') ?? item.teachers?.join(', ')}
         cost={item.cost}
         hasProject={item.has_project}
         prerequisites={item.prerequisites}
@@ -121,9 +131,14 @@ const MyAccount = () => {
             <Divider sx={{ my: 2 }} />
             <Stack alignItems="center" gap={1}>
               <Typography>Total: {calculateTotalCost()} T</Typography>
-              <Button onClick={handleBuyCart} variant="contained" sx={{ px: 4 }} disabled={buyButtonLoading || calculateTotalCost() === 0}>
-                {!buyButtonLoading && "Buy"}
-                {buyButtonLoading && <CircularProgress/>}
+              <Button
+                onClick={handleBuyCart}
+                variant="contained"
+                sx={{ px: 4 }}
+                disabled={buyButtonLoading || calculateTotalCost() === 0}
+              >
+                {!buyButtonLoading && 'Buy'}
+                {buyButtonLoading && <CircularProgress />}
               </Button>
             </Stack>
           </>
