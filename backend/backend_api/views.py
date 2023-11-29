@@ -105,7 +105,7 @@ class WorkshopViewSet(viewsets.GenericViewSet,
     def list(self, request, year=None, **kwargs):
         if year is None:
             year = datetime.datetime.now().year
-        self.queryset = models.Workshop.objects.filter(year=year)
+        self.queryset = models.Workshop.objects.filter(year=year).order_by('start_date')
         return super().list(request, **kwargs)
 
     def retrieve(self, request, year=None, pk=None):
@@ -124,7 +124,7 @@ class PresentationViewSet(viewsets.GenericViewSet,
     def list(self, request, year=None, **kwargs):
         if year is None:
             year = datetime.datetime.now().year
-        self.queryset = self.queryset.filter(year=year)
+        self.queryset = self.queryset.filter(year=year).order_by('start_date')
         return super().list(request, **kwargs)
 
     def retrieve(self, request, year=None, pk=None):
