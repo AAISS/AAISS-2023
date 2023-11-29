@@ -86,11 +86,13 @@ export default function DrawerAppBar() {
             )
           );
         })}
-        <ListItem disablePadding>
-          <ListItemButton sx={{ textAlign: 'center' }} onClick={handleLogout}>
-            <ListItemText primary="log out" sx={{ color: 'var(--error-color)' }} />
-          </ListItemButton>
-        </ListItem>
+        {shouldShowLogoutButton && (
+          <ListItem disablePadding>
+            <ListItemButton sx={{ textAlign: 'center' }} onClick={handleLogout}>
+              <ListItemText primary="log out" sx={{ color: 'var(--error-color)' }} />
+            </ListItemButton>
+          </ListItem>
+        )}
       </List>
     </Box>
   );
