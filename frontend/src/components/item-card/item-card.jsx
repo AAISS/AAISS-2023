@@ -145,10 +145,10 @@ const ItemCard = ({
             {Helper.omitLongString(description, 50)}
           </Typography>
           <Typography variant="body1" sx={{ fontSize: 14 }} color="text.secondary">
-            From: {new Date(startDate).toLocaleString('fa-IR-u-nu-latn')}
+            From: {new Date(startDate).toLocaleString('fa-IR-u-nu-latn').replace(/:\d{2}$/, '')}
           </Typography>
           <Typography variant="body1" sx={{ fontSize: 14 }} color="text.secondary">
-            To: {new Date(endDate).toLocaleString('fa-IR-u-nu-latn')}
+            To: {new Date(endDate).toLocaleString('fa-IR-u-nu-latn').replace(/:\d{2}$/, '')}
           </Typography>
           <Divider sx={{ my: 1 }} />
           <Presenter presenterName={presenterName} />

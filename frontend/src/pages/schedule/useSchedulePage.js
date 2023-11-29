@@ -21,13 +21,15 @@ export default function useSchedulePage() {
     useEffect(() => {
         if (workshopsData == null) return
         setTableWorkshopsData(workshopsData.map(item => {
-            const startDate = Helper.convertStringToDateWithoutTimezone(item["start_date"])
-            const endDate = Helper.convertStringToDateWithoutTimezone(item["end_date"])
+            const startDate = new Date(item["start_date"]).toLocaleString('fa-IR-u-nu-latn')
+              .replace(/:\d{2}$/, '')
+            const endDate = new Date(item["end_date"]).toLocaleString('fa-IR-u-nu-latn')
+              .replace(/:\d{2}$/, '')
             return {
                 Title: item.name,
-                date: Helper.convertDateTimeToDate(startDate),
-                Starts: Helper.convertDateTimeToTime(startDate),
-                Ends: Helper.convertDateTimeToTime(endDate),
+                date: startDate.split(',')[0],
+                Starts: startDate.split(',')[1],
+                Ends: endDate.split(',')[1],
             }
         }))
     }, [workshopsData])
@@ -37,13 +39,15 @@ export default function useSchedulePage() {
         setTablePresentationsData(presentationsData.filter(element => {
             return element.name != null
         }).map(item => {
-            const startDate = Helper.convertStringToDateWithoutTimezone(item["start_date"])
-            const endDate = Helper.convertStringToDateWithoutTimezone(item["end_date"])
+            const startDate = new Date(item["start_date"]).toLocaleString('fa-IR-u-nu-latn')
+              .replace(/:\d{2}$/, '')
+            const endDate = new Date(item["end_date"]).toLocaleString('fa-IR-u-nu-latn')
+              .replace(/:\d{2}$/, '')
             return {
                 Title: item.name,
-                date: Helper.convertDateTimeToDate(startDate),
-                Starts: Helper.convertDateTimeToTime(startDate),
-                Ends: Helper.convertDateTimeToTime(endDate),
+                date: startDate.split(',')[0],
+                Starts: startDate.split(',')[1],
+                Ends: endDate.split(',')[1],
             }
         }))
     }, [presentationsData])
