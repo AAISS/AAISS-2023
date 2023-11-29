@@ -84,7 +84,7 @@ export default function useWorkshopsPage() {
     useEffect(() => {
         if (workshopsData == null || presentationsData == null || teachersData == null || presenterData == null) return;
 
-        const parsedData = workshopsData
+        let parsedData = workshopsData
             .concat(presentationsData)
             .map((workshop) => {
                 if ('is_full' in workshop && !('id' in workshop)) return null;
@@ -116,8 +116,43 @@ export default function useWorkshopsPage() {
                 return item;
             })
             .filter((e) => e != null);
+        parsedData.sort((a, b) => a.start_date > b.start_date ? 1 : -1)
+
+        const now = removeEverythingFromDateString(new Date().toLocaleString('fa-IR-u-nu-latn'))
+        let index = -1
+        console.log("now:", now)
+        for (const item of parsedData) {
+            const itemDate = removeEverythingFromDateString(new Date(item.start_date).toLocaleString('fa-IR-u-nu-latn'))
+            console.log(itemDate, now, itemDate > now)
+            index++
+            if (itemDate > now)
+                break
+        }
+
+        const notEligibleItems = parsedData.slice(0, index)
+        parsedData = parsedData.slice(index)
+        parsedData.push(...notEligibleItems)
+        console.log(parsedData)
+        console.log(index)
         setParsedItemsList(parsedData);
         setFileteredItems(parsedData);
+
+        function removeEverythingFromDateString(str) {
+            const splittedStr = str.split('/')
+            if (splittedStr[1].length === 1)
+                splittedStr[1] = '0' + splittedStr[1]
+            const secondSplittedStr = splittedStr[2].split(",")
+            if (secondSplittedStr[0].length === 1)
+                splittedStr[2] = "0" + secondSplittedStr.join(",")
+            str = splittedStr.join('/')
+            console.log(str)
+            return str
+                .replaceAll("/", '')
+                .replaceAll(" ", '')
+                .replaceAll(":", "")
+                .replaceAll(",", "")
+        }
+
     }, [workshopsData, presentationsData, presenterData, teachersData]);
 
     const addToCart = useCallback(
