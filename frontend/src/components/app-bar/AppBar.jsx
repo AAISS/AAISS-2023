@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
@@ -11,6 +12,8 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import AAISS from '../../assets/AAISS.png';
 import { useConfig } from '../../providers/config-provider/ConfigProvider.jsx';
@@ -35,9 +38,19 @@ export default function DrawerAppBar() {
   const { ROUTES, accessToken, refreshToken } = useConfig();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [logoutModalVisibility, setLogoutModalVisibility] = useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleLogout = () => {
+    handleClose();
     setLogoutModalVisibility(true);
+  };
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   const appBarPaths = Object.keys(ROUTES).filter((route) => !ROUTES[route]?.hideFromAppBar);
@@ -47,13 +60,6 @@ export default function DrawerAppBar() {
   };
 
   const shouldShowRoute = (route) => {
-    if (route.title === 'My Account') {
-      if (accessToken || refreshToken) {
-        return true;
-      }
-      return false;
-    }
-
     if (route.title === 'Signup') {
       if (accessToken || refreshToken) {
         return false;
@@ -64,7 +70,7 @@ export default function DrawerAppBar() {
     return true;
   };
 
-  const shouldShowLogoutButton = Boolean(accessToken);
+  const isLoggedIn = Boolean(accessToken);
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
@@ -86,13 +92,6 @@ export default function DrawerAppBar() {
             )
           );
         })}
-        {shouldShowLogoutButton && (
-          <ListItem disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }} onClick={handleLogout}>
-              <ListItemText primary="log out" sx={{ color: 'var(--error-color)' }} />
-            </ListItemButton>
-          </ListItem>
-        )}
       </List>
     </Box>
   );
@@ -135,10 +134,37 @@ export default function DrawerAppBar() {
               );
             })}
           </Box>
-          {shouldShowLogoutButton && (
-            <Button color="error" variant="contained" sx={{ marginLeft: 'auto' }} onClick={handleLogout}>
-              logout
-            </Button>
+          {isLoggedIn && (
+            <Box sx={{ marginLeft: 'auto' }}>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={() => window.location.replace(ROUTES.myAccount.path)}>My account</MenuItem>
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              </Menu>
+            </Box>
           )}
         </Toolbar>
       </AppBar>
