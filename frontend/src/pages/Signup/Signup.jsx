@@ -48,42 +48,49 @@ const SignUpForm = ({ onLoginClick }) => {
     navigate(ROUTES.myAccount);
   };
 
-  const handleSignUp = useCallback(() => {
-    const data = {};
-    data.name = fullname;
-    data.phone_number = phoneNumber;
-    data.account = {
-      password: password,
-      email: email,
-    };
-    createUser(data);
-  }, [createUser, email, fullname, password, phoneNumber]);
-
-  // TODO: add form validation
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
+  const validateForm = useCallback(() => {
     if (hasEmailError(email)) {
       setIsEmailWrong(true);
       setEmailHelperText('Your email is not valid');
-      return;
+      return false;
     }
     const { lengthIsOk, startsWithZeroNine } = validatePhone(phoneNumber);
     if (!lengthIsOk) {
       setIsPhoneWrong(true);
       setPhoneHelperText('Phone number is two short');
-      return;
+      return false;
     }
     if (!startsWithZeroNine) {
       setIsPhoneWrong(true);
       setPhoneHelperText('Phone number should start with 09');
-      return;
+      return false;
     }
     if (password !== secondPass) {
       setIsSecondPassWrong(true);
       setSecondPassHelperText('Passwords are not the same');
-      return;
+      return false;
     }
-    // TODO: route to my-account page
+    return true;
+  }, [email, phoneNumber, password, secondPass]);
+
+  const handleSignUp = useCallback(() => {
+    const isFormValid = validateForm();
+    if (isFormValid) {
+      const data = {
+        name: fullname,
+        phone_number: phoneNumber,
+        account: {
+          password,
+          email: email.trim(),
+        },
+      };
+      createUser(data);
+    }
+  }, [createUser, email, fullname, password, phoneNumber, validateForm]);
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    validateForm();
   };
 
   useEffect(() => {
@@ -211,24 +218,22 @@ const LoginForm = ({ onSignUpClick }) => {
   const [openToast, setOpenToast] = useState(false);
   const [toastData, setToastData] = useState();
 
-  const handleFormSubmit = (e) => {
+  const validateForm = useCallback(() => {
     if (hasEmailError(email)) {
       setIsEmailWrong(true);
       setEmailHelperText('Your email is not valid');
-      return;
+      return false;
     }
+    return true;
+  }, [email]);
+
+  const handleFormSubmit = (e) => {
+    validateForm();
     e.preventDefault();
-    // TODO: add API call for login
-    // TODO: setIsPasswordWrong(true) if pass is wrong
-    // TODO: setPasswordHelperText('Wrong password')
-    // TODO: route to my-account page if it's successful
   };
 
-  const {navigate} = useNavigate()
   const { issueToken, issueTokenResponse } = useAPI();
-  const {
-    setAccessTokenFromLocalStorage
-  } = useConfig()
+  const { setAccessTokenFromLocalStorage } = useConfig();
 
   useEffect(() => {
     if (issueTokenResponse == null) return;
@@ -237,22 +242,24 @@ const LoginForm = ({ onSignUpClick }) => {
     setOpenToast(true);
 
     localStorage['user'] = JSON.stringify(issueTokenResponse.data);
-    setAccessTokenFromLocalStorage()
-
-  }, [issueTokenResponse]);
+    setAccessTokenFromLocalStorage();
+  }, [issueTokenResponse, setAccessTokenFromLocalStorage]);
 
   const handleClickOnForgotPass = () => {
     setForgotPassModalVisibility(true);
   };
 
   const handleLogin = useCallback(() => {
-    const data = {
-      password: password,
-      email: email,
-    };
+    const isFormValid = validateForm();
+    if (isFormValid) {
+      const data = {
+        password: password,
+        email: email.trim(),
+      };
 
-    issueToken(data);
-  }, [email, issueToken, password]);
+      issueToken(data);
+    }
+  }, [email, issueToken, password, validateForm]);
 
   return (
     <Stack justifyContent="center" alignItems="center" className="form-container">

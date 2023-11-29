@@ -48,6 +48,7 @@ const ROUTES = {
     path: '/my-account',
     title: 'My Account',
     component: <MyAccount />,
+    hideFromAppBar: true,
   },
 };
 
