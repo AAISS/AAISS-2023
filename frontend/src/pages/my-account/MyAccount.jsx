@@ -135,7 +135,8 @@ const MyAccount = () => {
                 onClick={handleBuyCart}
                 variant="contained"
                 sx={{ px: 4 }}
-                disabled={buyButtonLoading || calculateTotalCost() === 0}
+                // disabled={buyButtonLoading || calculateTotalCost() === 0}
+                disabled
               >
                 {!buyButtonLoading && 'Buy'}
                 {buyButtonLoading && <CircularProgress />}
