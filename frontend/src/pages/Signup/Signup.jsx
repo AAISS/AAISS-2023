@@ -14,7 +14,6 @@ import { Helper } from '../../utils/Helper.js';
 const validatePhone = (phone) => {
   const PHONE_LENGTH = 11;
   const phoneStr = String(phone);
-  // 09102014779
   const lengthIsOk = phoneStr.length === PHONE_LENGTH;
   const startsWithZeroNine = phoneStr.startsWith('09');
   return {
@@ -57,7 +56,7 @@ const SignUpForm = ({ onLoginClick }) => {
     const { lengthIsOk, startsWithZeroNine } = validatePhone(phoneNumber);
     if (!lengthIsOk) {
       setIsPhoneWrong(true);
-      setPhoneHelperText('Phone number is two short');
+      setPhoneHelperText('Phone number should be 11 digits');
       return false;
     }
     if (!startsWithZeroNine) {
