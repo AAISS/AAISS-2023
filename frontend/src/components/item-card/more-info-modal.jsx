@@ -99,12 +99,20 @@ const MoreInfoModal = ({
           )}
         </div>
         <Presenter presenterName={presenterName} />
-        {levelComponentMapping[level]}
+        {level && levelComponentMapping[level]}
         <Cost cost={cost} />
-        <Divider sx={{ my: 2 }} />
-        <Prerequisites prerequisites={prerequisites} />
-        <Divider sx={{ my: 2 }} />
-        <Syllabus syllabus={syllabus} />
+        {prerequisites && (
+          <>
+            <Divider sx={{ my: 2 }} />
+            <Prerequisites prerequisites={prerequisites} />
+          </>
+        )}
+        {syllabus && (
+          <>
+            <Divider sx={{ my: 2 }} />
+            <Syllabus syllabus={syllabus} />
+          </>
+        )}
         {hasProject && (
           <>
             <Divider sx={{ my: 2 }} />
