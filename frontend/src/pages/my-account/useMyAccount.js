@@ -38,6 +38,7 @@ export default function useMyAccount() {
     const [cart, setCart] = useState()
     const [openToast, setOpenToast] = useState()
     const [toastData, setToastData] = useState()
+    const [buyButtonLoading, setBuyButtonLoading] = useState(false)
 
     const removeFromCartHandler = useCallback(({id, type}) => {
         removeFromUserCart({
@@ -48,6 +49,7 @@ export default function useMyAccount() {
 
     const handleBuyCart = useCallback(() => {
         postPaymentData({call_back: 'https://aaiss.ir/callback'});
+        setBuyButtonLoading(true)
     }, [postPaymentData]);
 
     useEffect(() => {
@@ -60,6 +62,7 @@ export default function useMyAccount() {
                 message: "There was an Error Regarding Payment! Please Try Again Later",
                 alertType: "error"
             })
+            setBuyButtonLoading(false)
             return
         }
 
@@ -219,6 +222,7 @@ export default function useMyAccount() {
         toastData,
         openToast,
         setOpenToast,
+        buyButtonLoading,
         handleBuyCart,
     };
 }

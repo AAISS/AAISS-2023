@@ -9,6 +9,7 @@ export default function usePaymentCallbackPage() {
 
   const [paymentStatus, setPaymentStatus] = useState(false);
   const [paymentResultsData, setPaymentResultsData] = useState();
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     if (routeParams == null) return;
@@ -47,12 +48,13 @@ export default function usePaymentCallbackPage() {
       else paymentResultTemp[key] = verifyPaymentData.data[key];
     });
     setPaymentResultsData(paymentResultTemp);
-    console.log(paymentResultTemp);
+    setIsLoading(false)
   }, [verifyPaymentData]);
 
   return {
     routeParams,
     paymentStatus,
+    isLoading,
     paymentResultsData,
   };
 }

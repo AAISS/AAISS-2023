@@ -8,7 +8,7 @@ import useMyAccount from './useMyAccount.js';
 const TAB_ITEMS = ['Workshops', 'Presentations', 'Cart'];
 
 const MyAccount = () => {
-  const { talks, workshops, handleBuyCart, cart, removeFromCartHandler, toastData, openToast, setOpenToast } = useMyAccount();
+  const { talks, workshops, handleBuyCart, buyButtonLoading, cart, removeFromCartHandler, toastData, openToast, setOpenToast } = useMyAccount();
   const [tabValue, setTabValue] = useState(TAB_ITEMS[0]);
 
   const handleChangeTab = (event, newValue) => {
@@ -73,13 +73,13 @@ const MyAccount = () => {
         endDate={item.end_date}
         presenterName={item.presenters?.join(", ") ?? item.teachers?.join(", ")}
         cost={item.cost}
-        hasProject={item.hasProject}
+        hasProject={item.has_project}
         prerequisites={item.prerequisites}
         syllabus={item.syllabus}
         capacity={item.capacity}
         remainingCapacity={item.remaining_capacity}
-        isFull={item.isFull}
-        addToCalendarLink={item.addToCalendarLink}
+        isFull={item.remaining_capacity === 0}
+        addToCalendarLink={item.google_calendar_link}
         onClickAddToCart={() => {}}
         onClickRemoveFromCart={() => removeFromCartHandler({ id: item.id, type: item.type })}
       />
@@ -121,8 +121,9 @@ const MyAccount = () => {
             <Divider sx={{ my: 2 }} />
             <Stack alignItems="center" gap={1}>
               <Typography>Total: {calculateTotalCost()} T</Typography>
-              <Button onClick={handleBuyCart} variant="contained" sx={{ px: 4 }} disabled={calculateTotalCost() === 0}>
-                Buy
+              <Button onClick={handleBuyCart} variant="contained" sx={{ px: 4 }} disabled={buyButtonLoading || calculateTotalCost() === 0}>
+                {!buyButtonLoading && "Buy"}
+                {buyButtonLoading && <CircularProgress/>}
               </Button>
             </Stack>
           </>
