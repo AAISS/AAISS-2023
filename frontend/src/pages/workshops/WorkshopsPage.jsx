@@ -46,8 +46,8 @@ export default function WorkshopsPage() {
                 remainingCapacity={item.remaining_capacity}
                 purchaseState={0}
                 presenterName={item.presenters.join(', ')}
-                startDate={new Date(item.start_date).toLocaleString()}
-                endDate={new Date(item.end_date).toLocaleString()}
+                startDate={item.start_date}
+                endDate={item.end_date}
                 level={item.level}
                 capacity={item.capacity}
                 cost={item.cost}
