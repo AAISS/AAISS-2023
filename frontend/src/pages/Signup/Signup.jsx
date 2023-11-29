@@ -81,7 +81,7 @@ const SignUpForm = ({ onLoginClick }) => {
         phone_number: phoneNumber,
         account: {
           password,
-          email,
+          email: email.trim(),
         },
       };
       createUser(data);
@@ -254,7 +254,7 @@ const LoginForm = ({ onSignUpClick }) => {
     if (isFormValid) {
       const data = {
         password: password,
-        email: email,
+        email: email.trim(),
       };
 
       issueToken(data);

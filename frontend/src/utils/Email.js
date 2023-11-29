@@ -3,7 +3,9 @@ export const hasEmailError = (email) => {
     return false;
   }
 
-  const result = String(email)
+  const trimmedEmail = String(email).trim();
+
+  const result = trimmedEmail
     .toLowerCase()
     .match(
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
