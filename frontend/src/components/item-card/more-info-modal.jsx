@@ -1,7 +1,7 @@
 import React from 'react';
 import { Checklist } from '@mui/icons-material';
-import ListIcon from '@mui/icons-material/List';
 import InfoIcon from '@mui/icons-material/Info';
+import ListIcon from '@mui/icons-material/List';
 import {
   Dialog,
   DialogTitle,
@@ -11,7 +11,10 @@ import {
   Button,
   Divider,
   Stack,
-  Chip, Icon, Box,
+  Chip,
+  Icon,
+  Box,
+  Typography,
 } from '@mui/material';
 import PropTypes from 'prop-types';
 import { Cost, levelComponentMapping, Presenter } from './item-card';
@@ -47,7 +50,7 @@ const MoreInfoModal = ({
   presenterName,
   cost,
   level,
-    description,
+  description,
   purchaseState,
   hasProject,
   prerequisites,
@@ -73,13 +76,27 @@ const MoreInfoModal = ({
     >
       <DialogTitle variant="h5">{title}</DialogTitle>
       <DialogContent>
-        <div style={{
-          display: "flex",
-          flexWrap: "nowrap",
-          justifyContent: "start",
-        }}>
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'nowrap',
+            justifyContent: 'start',
+          }}
+        >
           <InfoIcon />
-          {description && <Box style={{marginLeft: "5px", paddingLeft: "5px", marginTop: "0px", marginBottom: "10px", borderLeft: "1px solid white"}}>{description}</Box>}
+          {description && (
+            <Typography
+              style={{
+                marginLeft: '5px',
+                paddingLeft: '5px',
+                marginTop: '0px',
+                marginBottom: '10px',
+                borderLeft: '1px solid white',
+              }}
+            >
+              {description}
+            </Typography>
+          )}
         </div>
         <Presenter presenterName={presenterName} />
         {levelComponentMapping[level]}
