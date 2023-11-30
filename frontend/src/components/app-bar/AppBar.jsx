@@ -161,7 +161,7 @@ export default function DrawerAppBar() {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={() => window.location.replace(ROUTES.myAccount.path)}>My account</MenuItem>
+                <MenuItem onClick={() => window.location.replace(ROUTES.myAccount.path)}>My cart</MenuItem>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </Box>

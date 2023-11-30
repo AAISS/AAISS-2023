@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Box, Button, CircularProgress, Divider, Stack, Tab, Tabs, Typography } from '@mui/material';
 import ItemCard from '../../components/item-card/item-card.jsx';
 import Toast from '../../components/toast/Toast.jsx';
-import { Helper } from '../../utils/Helper.js';
 import useMyAccount from './useMyAccount.js';
 
 const TAB_ITEMS = ['Workshops', 'Presentations', 'Cart'];
@@ -19,7 +18,7 @@ const MyAccount = () => {
     openToast,
     setOpenToast,
   } = useMyAccount();
-  const [tabValue, setTabValue] = useState(TAB_ITEMS[0]);
+  const [tabValue, setTabValue] = useState(TAB_ITEMS[2]);
 
   const handleChangeTab = (event, newValue) => {
     setTabValue(newValue);
