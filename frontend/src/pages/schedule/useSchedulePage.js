@@ -35,7 +35,7 @@ export default function useSchedulePage() {
             })
             return {
                 Title: item.name,
-                date: startDate.format("YYYY/MM/DD"),
+                date: startDate.format("YYYY/MM/DD") + ' UTC+03:30',
                 Starts: startDate.format("HH:mm"),
                 Ends: endDate.format("HH:mm"),
             }
@@ -59,7 +59,7 @@ export default function useSchedulePage() {
             })
             return {
                 Title: item.name,
-                date: startDate.format("YYYY/MM/DD"),
+                date: startDate.format("YYYY/MM/DD") + ' UTC+03:30',
                 Starts: startDate.format("HH:mm"),
                 Ends: endDate.format("HH:mm"),
             }

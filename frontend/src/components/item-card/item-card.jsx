@@ -148,21 +148,21 @@ const ItemCard = ({
           <Typography variant="body2" gutterBottom>
             {Helper.omitLongString(description, 50)}
           </Typography>
-          <Typography variant="body1" sx={{ fontSize: 14 }} color="text.secondary">
+          <Typography variant="body1" sx={{ fontSize: 14, textWrap: 'nowrap' }} color="text.secondary">
             From: {new DateObject({
             date: new Date(startDate),
             format: "YYYY/MM/DD, HH:mm",
             calendar: persian,
             locale: persian_en,
-          }).format()}
+          }).format() + ' UTC+03:30'}
           </Typography>
-          <Typography variant="body1" sx={{ fontSize: 14 }} color="text.secondary">
+          <Typography variant="body1" sx={{ fontSize: 14, textWrap: 'nowrap' }} color="text.secondary">
             To: {new DateObject({
             date: new Date(endDate),
             format: "YYYY/MM/DD, HH:mm",
             calendar: persian,
             locale: persian_en,
-          }).format()}
+          }).format() + ' UTC+03:30'}
           </Typography>
           <Divider sx={{ my: 1 }} />
           <Presenter presenterName={presenterName} />
