@@ -172,22 +172,27 @@ export function APIProvider({ children }) {
           break;
       }
 
-      const tokenStr = JSON.parse(localStorage.getItem('user'))['access'];
-      await service
-        .post(`${URL.baseURL}${URL.services.default}${endpoint}`, body, {
-          headers: { Authorization: `Bearer ${tokenStr}` },
-        })
-        .then((response) => {
-          setAddToCartResponse(response);
-        })
-        .catch((error) => {
-          setAddToCartResponse(error.response);
-          if (!error) return;
+      const userKey = JSON.parse(localStorage.getItem('user'));
+      if (userKey == null) {
+        setAddToCartResponse({ status: 401 });
+      } else {
+        const tokenStr = userKey.access;
+        await service
+          .post(`${URL.baseURL}${URL.services.default}${endpoint}`, body, {
+            headers: { Authorization: `Bearer ${tokenStr}` },
+          })
+          .then((response) => {
+            setAddToCartResponse(response);
+          })
+          .catch((error) => {
+            setAddToCartResponse(error.response);
+            if (!error) return;
 
-          if (error.response.status === 401) {
-            updateAccessTokenWithRefreshToken();
-          }
-        });
+            if (error.response.status === 401) {
+              updateAccessTokenWithRefreshToken();
+            }
+          });
+      }
     },
     [service],
   );
@@ -235,9 +240,9 @@ export function APIProvider({ children }) {
         .then((response) => {
           setPaymentData(response);
         })
-          .catch(error => {
-            setPaymentData(error.response)
-          });
+        .catch((error) => {
+          setPaymentData(error.response);
+        });
     },
     [currentYear, service, getAccessTokenHeader],
   );
