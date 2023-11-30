@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Box, Button, CircularProgress, Divider, Stack, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Button, Chip, CircularProgress, Divider, Stack, Tab, Tabs, Typography } from '@mui/material';
 import ItemCard from '../../components/item-card/item-card.jsx';
 import Toast from '../../components/toast/Toast.jsx';
 import useMyAccount from './useMyAccount.js';
 
 const TAB_ITEMS = ['Workshops', 'Presentations', 'Cart'];
+const DISCOUNT = 0.25;
+const MIN_TOTAL_PRICE_TO_GET_DISCOUNT = 200000;
 
 const MyAccount = () => {
   const {
@@ -101,7 +103,47 @@ const MyAccount = () => {
     cart.forEach(({ cost }) => {
       total += cost;
     });
-    return total;
+
+    if (total >= MIN_TOTAL_PRICE_TO_GET_DISCOUNT) {
+      const orgPrice = total;
+      total -= DISCOUNT * total;
+
+      return {
+        total: orgPrice,
+        discountedPrice: total,
+      };
+    }
+
+    return {
+      total,
+      discountedPrice: null,
+    };
+  };
+
+  const renderTotalPrice = () => {
+    const { total, discountedPrice } = calculateTotalCost();
+    if (discountedPrice) {
+      return (
+        <Stack flexDirection="row" alignItems="center" gap={1}>
+          <Typography variant="overline" sx={{ fontSize: 14 }} color="text.secondary">
+            Total:{' '}
+          </Typography>
+          <Typography variant="overline" sx={{ fontSize: 14, textDecoration: 'line-through' }} color="text.secondary">
+            {total} T
+          </Typography>
+          <Chip label="-25%" size="small" color="error" />
+          <Typography variant="overline" sx={{ fontSize: 15, fontWeight: 'bolder', color: 'var(--error-color)' }}>
+            {discountedPrice} T
+          </Typography>
+        </Stack>
+      );
+    }
+
+    return (
+      <Typography variant="overline" sx={{ fontSize: 14 }} color="text.secondary">
+        Total: {total} T
+      </Typography>
+    );
   };
 
   return (
@@ -129,7 +171,7 @@ const MyAccount = () => {
           <>
             <Divider sx={{ my: 2 }} />
             <Stack alignItems="center" gap={1}>
-              <Typography>Total: {calculateTotalCost()} T</Typography>
+              {renderTotalPrice()}
               <Button
                 onClick={handleBuyCart}
                 variant="contained"
