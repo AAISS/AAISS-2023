@@ -139,7 +139,7 @@ class Workshop(models.Model):
         for participant in WorkshopRegistration.objects.filter(workshop=self,
                                                                status=
                                                                WorkshopRegistration.StatusChoices.PURCHASED):
-            participants += participant.user
+            participants.append(participant.user)
         return participants
 
     @property
@@ -210,7 +210,7 @@ class Presentation(models.Model):
         for participant in PresentationParticipation.objects.filter(presentation=self,
                                                                     status=
                                                                     PresentationParticipation.StatusChoices.PURCHASED):
-            participants += participant.user
+            participants.append(participant.user)
         return participants
 
     @property
