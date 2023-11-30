@@ -23,11 +23,11 @@ export const Cost = ({ cost }) => (
   </Stack>
 );
 
-const CapacityChip = ({ capacity, isFull, remainingCapacity }) => (
+const FullCapacityChip = () => (
   <Chip
-    color={isFull ? 'error' : 'success'}
+    color="error"
     size="small"
-    label={isFull ? 'Capacity Full' : `Capacity ${remainingCapacity}/${capacity}`}
+    label="Capacity Full!"
     sx={{
       mt: 1,
     }}
@@ -71,6 +71,7 @@ const ItemCard = ({
 }) => {
   const [moreInfoModalVisibility, setMoreInfoModalVisibility] = useState(false);
   const hasBought = purchaseState === 2;
+  const shouldShowFullCapacity = isFull || remainingCapacity === 0;
 
   const handleClickOnMoreInfo = () => {
     setMoreInfoModalVisibility(true);
@@ -154,7 +155,7 @@ const ItemCard = ({
           <Presenter presenterName={presenterName} />
           {levelComponentMapping[level]}
           {!hasBought && <Cost cost={cost} />}
-          {!hasBought && <CapacityChip isFull={isFull} remainingCapacity={remainingCapacity} capacity={capacity} />}
+          {!hasBought && shouldShowFullCapacity && <FullCapacityChip />}
         </CardContent>
         <CardActions
           sx={{
