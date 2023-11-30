@@ -347,6 +347,9 @@ class Payment(models.Model):
         PAYMENT_CONFIRMED = 1, _('Payment confirmed')
         PAYMENT_REJECTED = 2, _('Payment rejected')
 
+    _DISCOUNT_THRESHOLD = 200000  # in Tomans
+    _DISCOUNT_PERCENTAGE = 25  # in percent
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     amount = models.PositiveIntegerField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -416,6 +419,8 @@ class Payment(models.Model):
         if len(workshops) == 0 and len(presentations) == 0:
             raise ValidationError(
                 new_detailed_response(status.HTTP_400_BAD_REQUEST, f"User {user} has no unpaid registrations"))
+        if total_cost >= Payment._DISCOUNT_THRESHOLD:
+            total_cost = int(total_cost * (1 - Payment._DISCOUNT_PERCENTAGE / 100))
         payment = Payment.objects.create(user=user, amount=total_cost, year=datetime.date.today().year,
                                          date=datetime.datetime.now())
         payment.workshops.set(workshops)
