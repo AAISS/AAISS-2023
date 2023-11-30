@@ -259,9 +259,9 @@ class PaymentViewSet(viewsets.GenericViewSet):
 
 class StaffViewSet(viewsets.GenericViewSet,
                    mixins.ListModelMixin):
-    queryset = Staff.objects.all()
 
     def list(self, request, *args, **kwargs):
+        queryset = Staff.objects.all()
         data = []
         for section in Staff.SECTIONS:
             section_data = {
@@ -269,7 +269,7 @@ class StaffViewSet(viewsets.GenericViewSet,
                 'people': []
             }
 
-            for staff_member in self.queryset:
+            for staff_member in queryset:
                 if staff_member.section_name == section[0]:
                     person_data = {
                         'name': staff_member.name,
