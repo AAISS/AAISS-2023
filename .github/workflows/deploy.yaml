@@ -57,3 +57,14 @@ jobs:
           script: |
             docker compose -f AAISS-2023/docker-compose.yml pull 
             docker compose -f AAISS-2023/docker-compose.yml up -d --force-recreate --no-build
+
+      - name: Cleanup docker images
+        uses: appleboy/ssh-action@master
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        with:
+          host: ${{ vars.VM_HOST }}
+          username: ${{ vars.VM_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            docker image prune -af
