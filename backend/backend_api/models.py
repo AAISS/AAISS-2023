@@ -388,7 +388,7 @@ class Payment(models.Model):
         presentations: list[Presentation] = []
         for workshop in user.registered_workshops.all():
             try:
-                workshop_registration = workshop.workshopregistration_set.get(workshop_id=workshop.id)
+                workshop_registration = workshop.workshopregistration_set.get(workshop_id=workshop.id, user=user)
                 if workshop_registration.status != WorkshopRegistration.StatusChoices.AWAITING_PAYMENT:
                     continue
                 if workshop.remaining_capacity <= 0:
@@ -402,7 +402,7 @@ class Payment(models.Model):
         for presentation in user.participated_presentations.all():
             try:
                 presentation_participation = presentation.presentationparticipation_set.get(
-                    presentation_id=presentation.id)
+                    presentation_id=presentation.id, user=user)
                 if presentation_participation.status != PresentationParticipation.StatusChoices.AWAITING_PAYMENT:
                     continue
                 if presentation.remaining_capacity <= 0:

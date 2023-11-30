@@ -216,6 +216,8 @@ class PaymentViewSet(viewsets.GenericViewSet):
     def payment(self, request):
         account = request.user
         call_back = request.data.get('call_back')
+        if call_back is None:
+            return Response(new_detailed_response(status.HTTP_400_BAD_REQUEST, "call_back field is required"))
         try:
             user = User.objects.get(account=account)
         except ObjectDoesNotExist:
@@ -248,7 +250,6 @@ class PaymentViewSet(viewsets.GenericViewSet):
         response = ZIFYRequest().verify_payment(payment.track_id)
         if response['status'] == ZIFY_STATUS_OK:
             payment.update_payment_status(Payment.PaymentStatus.PAYMENT_CONFIRMED)
-            # FIXME: redirect to payment success page
             return Response(new_detailed_response(status.HTTP_200_OK, "Payment verified successfully",  payment.pk))
         else:
             payment.update_payment_status(Payment.PaymentStatus.PAYMENT_REJECTED)
