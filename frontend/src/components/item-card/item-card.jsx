@@ -4,6 +4,9 @@ import { Button, Card, CardActions, CardContent, CardHeader, Chip, Divider, Stac
 import PropTypes from 'prop-types';
 import { Helper } from '../../utils/Helper.js';
 import MoreInfoModal from './more-info-modal';
+import DateObject from 'react-date-object';
+import persian from "react-date-object/calendars/persian";
+import persian_en from "react-date-object/locales/persian_en";
 
 export const Presenter = ({ presenterName }) => (
   <Stack flexDirection="row" alignItems="center" gap={1}>
@@ -145,10 +148,20 @@ const ItemCard = ({
             {Helper.omitLongString(description, 50)}
           </Typography>
           <Typography variant="body1" sx={{ fontSize: 14 }} color="text.secondary">
-            From: {new Date(startDate).toLocaleString('fa-IR-u-nu-latn').replace(/:\d{2}$/, '')}
+            From: {new DateObject({
+            date: new Date(startDate),
+            format: "YYYY/MM/DD, HH:mm",
+            calendar: persian,
+            locale: persian_en,
+          }).format()}
           </Typography>
           <Typography variant="body1" sx={{ fontSize: 14 }} color="text.secondary">
-            To: {new Date(endDate).toLocaleString('fa-IR-u-nu-latn').replace(/:\d{2}$/, '')}
+            To: {new DateObject({
+            date: new Date(endDate),
+            format: "YYYY/MM/DD, HH:mm",
+            calendar: persian,
+            locale: persian_en,
+          }).format()}
           </Typography>
           <Divider sx={{ my: 1 }} />
           <Presenter presenterName={presenterName} />

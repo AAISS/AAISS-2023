@@ -1,6 +1,8 @@
 import {useAPI} from "../../providers/APIProvider/APIProvider.jsx";
 import {useEffect, useState} from "react";
-import {Helper} from "../../utils/Helper.js";
+import DateObject from 'react-date-object';
+import persian from "react-date-object/calendars/persian";
+import persian_en from "react-date-object/locales/persian_en";
 
 export default function useSchedulePage() {
     const {
@@ -21,15 +23,21 @@ export default function useSchedulePage() {
     useEffect(() => {
         if (workshopsData == null) return
         setTableWorkshopsData(workshopsData.map(item => {
-            const startDate = new Date(item["start_date"]).toLocaleString('fa-IR-u-nu-latn')
-              .replace(/:\d{2}$/, '')
-            const endDate = new Date(item["end_date"]).toLocaleString('fa-IR-u-nu-latn')
-              .replace(/:\d{2}$/, '')
+            const startDate = new DateObject({
+                date: new Date(item["start_date"]),
+                calendar: persian,
+                locale: persian_en,
+            })
+            const endDate = new DateObject({
+                date: new Date(item["end_date"]),
+                calendar: persian,
+                locale: persian_en,
+            })
             return {
                 Title: item.name,
-                date: startDate.split(',')[0],
-                Starts: startDate.split(',')[1],
-                Ends: endDate.split(',')[1],
+                date: startDate.format("YYYY/MM/DD"),
+                Starts: startDate.format("HH:mm"),
+                Ends: endDate.format("HH:mm"),
             }
         }))
     }, [workshopsData])
@@ -39,15 +47,21 @@ export default function useSchedulePage() {
         setTablePresentationsData(presentationsData.filter(element => {
             return element.name != null
         }).map(item => {
-            const startDate = new Date(item["start_date"]).toLocaleString('fa-IR-u-nu-latn')
-              .replace(/:\d{2}$/, '')
-            const endDate = new Date(item["end_date"]).toLocaleString('fa-IR-u-nu-latn')
-              .replace(/:\d{2}$/, '')
+            const startDate = new DateObject({
+                date: new Date(item["start_date"]),
+                calendar: persian,
+                locale: persian_en,
+            })
+            const endDate = new DateObject({
+                date: new Date(item["end_date"]),
+                calendar: persian,
+                locale: persian_en,
+            })
             return {
                 Title: item.name,
-                date: startDate.split(',')[0],
-                Starts: startDate.split(',')[1],
-                Ends: endDate.split(',')[1],
+                date: startDate.format("YYYY/MM/DD"),
+                Starts: startDate.format("HH:mm"),
+                Ends: endDate.format("HH:mm"),
             }
         }))
     }, [presentationsData])
