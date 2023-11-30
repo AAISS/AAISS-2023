@@ -438,10 +438,12 @@ class Committee(models.Model):
 class Staff(models.Model):
     ROLE = [
         ("Team Lead", "TL"),
-        ("Member", "MB")
+        ("Member", "MB"),
+        ("Organizer", "OR")
     ]
 
     SECTIONS = [
+        ("Organizers", "OR"),
         ("Executive", "EXC"),
         ("Scientific", "SCI"),
         ("Technical", "TCH"),
