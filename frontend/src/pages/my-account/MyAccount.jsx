@@ -150,13 +150,13 @@ const MyAccount = () => {
     <Stack alignItems="center">
       <Toast open={openToast} setOpen={setOpenToast} alertType={toastData?.alertType} message={toastData?.message} />
       <Box sx={{ bgcolor: 'var(--background-color)', px: 4, pb: 8, borderRadius: '30px', width: '80%' }}>
-        <Box sx={{ width: '100%' }}>
-          <Tabs value={tabValue} onChange={handleChangeTab} centered>
+        <Stack alignItems="center" sx={{ width: '100%' }}>
+          <Tabs value={tabValue} onChange={handleChangeTab} variant="scrollable" centered>
             {TAB_ITEMS.map((item, index) => (
               <Tab key={index} value={item} label={item} sx={{ color: 'var(--light-text-color)' }} />
             ))}
           </Tabs>
-        </Box>
+        </Stack>
         <Stack
           flexDirection="row"
           gap={4}
