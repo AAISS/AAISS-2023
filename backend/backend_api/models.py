@@ -363,21 +363,21 @@ class Discount(models.Model):
         return users
 
     def _remaining_capacity(self) -> int:
-        return self.capacity - self.payment_set.count()
+        return self.capacity - self.payment_set.filter(status=Payment.PaymentStatus.PAYMENT_CONFIRMED).count()
 
     def is_usable(self, user: User) -> bool:
         if not self.is_active:
             raise ValidationError(new_detailed_response(status.HTTP_400_BAD_REQUEST,
-                                                                "Discount is not active"))
+                                                        "Discount is not active"))
         if self._remaining_capacity() <= 0:
             raise ValidationError(new_detailed_response(status.HTTP_400_BAD_REQUEST,
-                                                                "Discount capacity is full"))
+                                                        "Discount capacity is full"))
         if self.expiration_date < timezone.now():
             raise ValidationError(new_detailed_response(status.HTTP_400_BAD_REQUEST,
-                                                                "Discount has expired"))
+                                                        "Discount has expired"))
         if self.payment_set.filter(user=user).exists():
             raise ValidationError(new_detailed_response(status.HTTP_400_BAD_REQUEST,
-                                                                "Discount has already been used by this user"))
+                                                        "Discount has already been used by this user"))
         return True
 
 
