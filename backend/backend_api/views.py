@@ -2,7 +2,7 @@ import datetime
 import os
 import urllib.parse
 
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.shortcuts import get_object_or_404, redirect
 from rest_framework import status, mixins
 from rest_framework import viewsets
@@ -17,7 +17,7 @@ from rest_framework.response import Response
 from aaiss_backend.settings import BASE_URL
 from backend_api import models
 from backend_api import serializers
-from backend_api.models import User, Account, Payment, Staff, WorkshopRegistration, PresentationParticipation
+from backend_api.models import User, Account, Payment, Staff, WorkshopRegistration, PresentationParticipation, Discount
 from backend_api.serializers import WorkshopRegistrationSerializer, PresentationParticipationSerializer
 from payment_backends.zify import ZIFYRequest, ZIFY_STATUS_OK
 from utils.renderers import new_detailed_response
@@ -215,17 +215,29 @@ class PaymentViewSet(viewsets.GenericViewSet):
     @action(methods=['POST'], detail=False, permission_classes=[IsAuthenticated])
     def payment(self, request):
         account = request.user
-        call_back = request.data.get('call_back')
-        if call_back is None:
-            return Response(new_detailed_response(status.HTTP_400_BAD_REQUEST, "call_back field is required"))
         try:
             user = User.objects.get(account=account)
         except ObjectDoesNotExist:
             return Response(new_detailed_response(
                 status.HTTP_400_BAD_REQUEST, "User not found"))
-
-        payment = Payment.create_payment_for_user(user)
-        response = ZIFYRequest().create_payment(str(payment.pk), payment.amount, user.name, user.phone_number,
+        call_back = request.data.get('call_back')
+        if call_back is None:
+            return Response(new_detailed_response(status.HTTP_400_BAD_REQUEST, "call_back field is required"))
+        discount = None
+        discount_code = request.data.get('discount_code')
+        if discount_code is not None:
+            try:
+                discount = Discount.objects.get(code=discount_code)
+            except ObjectDoesNotExist:
+                return Response(new_detailed_response(
+                    status.HTTP_400_BAD_REQUEST, "Discount code not found"))
+            try:
+                discount.is_usable(user)
+            except ValidationError as e:
+                return Response(e)
+        payment = Payment.create_payment_for_user(user, discount)
+        response = ZIFYRequest().create_payment(str(payment.pk), payment.discounted_amount, user.name,
+                                                user.phone_number,
                                                 user.account.email, call_back)
         if response['status'] == ZIFY_STATUS_OK:
             payment.track_id = response['data']['order']
@@ -250,7 +262,7 @@ class PaymentViewSet(viewsets.GenericViewSet):
         response = ZIFYRequest().verify_payment(payment.track_id)
         if response['status'] == ZIFY_STATUS_OK:
             payment.update_payment_status(Payment.PaymentStatus.PAYMENT_CONFIRMED)
-            return Response(new_detailed_response(status.HTTP_200_OK, "Payment verified successfully",  payment.pk))
+            return Response(new_detailed_response(status.HTTP_200_OK, "Payment verified successfully", payment.pk))
         else:
             payment.update_payment_status(Payment.PaymentStatus.PAYMENT_REJECTED)
             return Response(
@@ -278,7 +290,7 @@ class StaffViewSet(viewsets.GenericViewSet,
                     }
 
                     section_data['people'].append(person_data)
-                
+
             if len(section_data['people']) != 0:
                 section_data['people'] = sorted(section_data['people'], key=lambda x: x['role'])[::-1]
                 data.append(section_data)
