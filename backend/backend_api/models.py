@@ -358,7 +358,7 @@ class Discount(models.Model):
     @property
     def participants(self):
         users = []
-        for payment in self.payment_set.all():
+        for payment in self.payment_set.filter(status=Payment.PaymentStatus.PAYMENT_CONFIRMED):
             users.append(payment.user)
         return users
 
