@@ -3,6 +3,7 @@ from django.contrib import admin
 
 from backend_api import models
 from backend_api.email import MailerThread
+from backend_api.models import Discount
 
 
 def desc_creator(selected_model):
@@ -101,6 +102,15 @@ class MailerAdmin(admin.ModelAdmin):
     actions = ['execute_mailer']
 
 
+class DiscountAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'is_active', 'discount_percent', 'capacity', 'expiration_date')
+    readonly_fields = ('participants',)
+
+    class Meta:
+        model = Discount
+        fields = '__all__'
+
+
 class PaymentAdmin(admin.ModelAdmin):
     rdfields = []
     for field in models.Payment._meta.get_fields():
@@ -123,6 +133,7 @@ admin.site.register(models.Teacher, TeacherAdmin)
 admin.site.register(models.Presenter, PresenterAdmin)
 admin.site.register(models.User, UserAdmin)
 admin.site.register(models.Mailer, MailerAdmin)
+admin.site.register(models.Discount, DiscountAdmin)
 admin.site.register(models.Payment, PaymentAdmin)
 admin.site.register(models.WorkshopRegistration)
 admin.site.register(models.PresentationParticipation)

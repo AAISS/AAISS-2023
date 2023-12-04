@@ -9,6 +9,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
 from rest_framework import status
@@ -21,6 +22,7 @@ from backend_api.email import MailerThread
 from utils.random import create_random_string
 from utils.renderers import new_detailed_response
 from urllib.parse import quote
+
 SMALL_MAX_LENGTH = 255
 BIG_MAX_LENGTH = 65535
 
@@ -173,7 +175,7 @@ class Presentation(models.Model):
     cost = models.PositiveIntegerField(default=0)
     capacity = models.PositiveIntegerField(default=50)
     has_project = models.BooleanField(default=False, blank=False)
-    
+
     NOT_ASSIGNED = 'NOT_ASSIGNED'
     ELEMENTARY = 'Elementary'
     INTERMEDIATE = 'Intermediate'
@@ -341,6 +343,44 @@ class Mailer(models.Model):
         return f"Mailer with id {self.id}: subject= {self.subject}"
 
 
+class Discount(models.Model):
+    _CODE_LENGTH = 8
+    code = models.CharField(max_length=_CODE_LENGTH, null=False, default=create_random_string(_CODE_LENGTH),
+                            unique=True)
+    discount_percent = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=False)
+    capacity = models.IntegerField(default=0)
+    expiration_date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.code
+
+    @property
+    def participants(self):
+        users = []
+        for payment in self.payment_set.all():
+            users.append(payment.user)
+        return users
+
+    def _remaining_capacity(self) -> int:
+        return self.capacity - self.payment_set.filter(status=Payment.PaymentStatus.PAYMENT_CONFIRMED).count()
+
+    def is_usable(self, user: User) -> bool:
+        if not self.is_active:
+            raise ValidationError(new_detailed_response(status.HTTP_400_BAD_REQUEST,
+                                                        "Discount is not active"))
+        if self._remaining_capacity() <= 0:
+            raise ValidationError(new_detailed_response(status.HTTP_400_BAD_REQUEST,
+                                                        "Discount capacity is full"))
+        if self.expiration_date < timezone.now():
+            raise ValidationError(new_detailed_response(status.HTTP_400_BAD_REQUEST,
+                                                        "Discount has expired"))
+        if self.payment_set.filter(user=user).exists():
+            raise ValidationError(new_detailed_response(status.HTTP_400_BAD_REQUEST,
+                                                        "Discount has already been used by this user"))
+        return True
+
+
 class Payment(models.Model):
     class PaymentStatus(models.IntegerChoices):
         AWAITING_PAYMENT = 0, _('Awaiting payment')
@@ -361,6 +401,7 @@ class Payment(models.Model):
                             default=datetime.datetime(year=2020, month=7, day=1, hour=0, minute=0, second=0,
                                                       microsecond=0))
     track_id = models.CharField(max_length=20, null=True, default=None)
+    discount = models.ForeignKey(Discount, on_delete=models.SET_NULL, null=True, default=None)
 
     def __str__(self):
         return f"Payment for {self.user.account} ({self.amount})  in {str(self.date)}"
@@ -385,7 +426,7 @@ class Payment(models.Model):
         self.save()
 
     @staticmethod
-    def create_payment_for_user(user: User):
+    def create_payment_for_user(user: User, discount: Discount):
         total_cost = 0
         workshops: list[Workshop] = []
         presentations: list[Presentation] = []
@@ -419,14 +460,19 @@ class Payment(models.Model):
         if len(workshops) == 0 and len(presentations) == 0:
             raise ValidationError(
                 new_detailed_response(status.HTTP_400_BAD_REQUEST, f"User {user} has no unpaid registrations"))
-        if total_cost >= Payment._DISCOUNT_THRESHOLD:
-            total_cost = int(total_cost * (1 - Payment._DISCOUNT_PERCENTAGE / 100))
         payment = Payment.objects.create(user=user, amount=total_cost, year=datetime.date.today().year,
-                                         date=datetime.datetime.now())
+                                         date=datetime.datetime.now(), discount=discount)
         payment.workshops.set(workshops)
         payment.presentations.set(presentations)
         payment.save()
         return payment
+
+    @property
+    def discounted_amount(self):
+        if self.discount is None:
+            return self.amount if self.amount < self._DISCOUNT_THRESHOLD else int(
+                self.amount * (1 - self._DISCOUNT_PERCENTAGE / 100))
+        return int(self.amount * (1 - self.discount.discount_percent / 100))
 
 
 class Committee(models.Model):
