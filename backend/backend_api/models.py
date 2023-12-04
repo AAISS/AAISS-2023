@@ -387,6 +387,9 @@ class Payment(models.Model):
         PAYMENT_CONFIRMED = 1, _('Payment confirmed')
         PAYMENT_REJECTED = 2, _('Payment rejected')
 
+    _DISCOUNT_THRESHOLD = 200000  # in Tomans
+    _DISCOUNT_PERCENTAGE = 25  # in percent
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     amount = models.PositiveIntegerField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -467,7 +470,8 @@ class Payment(models.Model):
     @property
     def discounted_amount(self):
         if self.discount is None:
-            return self.amount
+            return self.amount if self.amount < self._DISCOUNT_THRESHOLD else int(
+                self.amount * (1 - self._DISCOUNT_PERCENTAGE / 100))
         return int(self.amount * (1 - self.discount.discount_percent / 100))
 
 
