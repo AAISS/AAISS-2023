@@ -12,4 +12,4 @@ FROM alpine:3.17.6 AS production
 
 WORKDIR /run
 COPY --from=build /run/dist /dist
-CMD cp -r /dist /run/dist
+CMD cp -r /dist /run
