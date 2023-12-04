@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Chip, CircularProgress, Divider, Stack, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Button, Chip, CircularProgress, Divider, Stack, Tab, Tabs, TextField, Typography } from '@mui/material';
 import ItemCard from '../../components/item-card/item-card.jsx';
 import Toast from '../../components/toast/Toast.jsx';
 import useMyAccount from './useMyAccount.js';
@@ -21,9 +21,21 @@ const MyAccount = () => {
     setOpenToast,
   } = useMyAccount();
   const [tabValue, setTabValue] = useState(TAB_ITEMS[2]);
+  const [discountCode, setDiscountCode] = useState('');
+  const [discount, setDiscount] = useState(DISCOUNT);
 
   const handleChangeTab = (event, newValue) => {
     setTabValue(newValue);
+  };
+
+  const handleApplyDiscountCode = () => {
+    // api call
+    // response body:
+    const response = {
+      expiration_date: '?',
+      used: false,
+      discountValue: 0.5,
+    };
   };
 
   const getList = () => {
@@ -106,7 +118,7 @@ const MyAccount = () => {
 
     if (total >= MIN_TOTAL_PRICE_TO_GET_DISCOUNT) {
       const orgPrice = total;
-      total -= DISCOUNT * total;
+      total -= discount * total;
 
       return {
         total: orgPrice,
@@ -146,6 +158,28 @@ const MyAccount = () => {
     );
   };
 
+  const renderDiscountCodeInput = () => {
+    return (
+      <Stack alignItems="flex-start" gap={1}>
+        <Stack flexDirection="row" justifyContent="center" alignItems="center" gap={1}>
+          <TextField
+            type="text"
+            size="small"
+            label="Discount code"
+            required={false}
+            value={discountCode}
+            onChange={(event) => {
+              setDiscountCode(event.target.value);
+            }}
+          />
+          <Button color="success" variant="contained" disabled={!discountCode} onClick={handleApplyDiscountCode}>
+            Apply
+          </Button>
+        </Stack>
+      </Stack>
+    );
+  };
+
   return (
     <Stack alignItems="center">
       <Toast open={openToast} setOpen={setOpenToast} alertType={toastData?.alertType} message={toastData?.message} />
@@ -171,6 +205,7 @@ const MyAccount = () => {
           <>
             <Divider sx={{ my: 2 }} />
             <Stack alignItems="center" gap={1}>
+              {renderDiscountCodeInput()}
               {renderTotalPrice()}
               <Button
                 onClick={handleBuyCart}
