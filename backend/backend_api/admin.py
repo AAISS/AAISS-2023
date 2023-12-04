@@ -103,7 +103,7 @@ class MailerAdmin(admin.ModelAdmin):
 
 
 class DiscountAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'is_active', 'discount_percent', 'capacity', 'expiration_date')
+    list_display = ('__str__', 'is_active', 'discount_percent', 'capacity', 'remaining_capacity', 'expiration_date')
     readonly_fields = ('participants',)
 
     class Meta:
