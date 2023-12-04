@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Chip, CircularProgress, Divider, Stack, Tab, Tabs, Typography } from '@mui/material';
+import {Box, Button, Chip, CircularProgress, Divider, Stack, Tab, Tabs, TextField, Typography} from '@mui/material';
 import ItemCard from '../../components/item-card/item-card.jsx';
 import Toast from '../../components/toast/Toast.jsx';
 import useMyAccount from './useMyAccount.js';
@@ -18,6 +18,8 @@ const MyAccount = () => {
     removeFromCartHandler,
     toastData,
     openToast,
+    offCode,
+    handleOffCodeInputHandler,
     setOpenToast,
   } = useMyAccount();
   const [tabValue, setTabValue] = useState(TAB_ITEMS[2]);
@@ -171,6 +173,16 @@ const MyAccount = () => {
           <>
             <Divider sx={{ my: 2 }} />
             <Stack alignItems="center" gap={1}>
+              <br />
+              Have a Discount Code?
+              <TextField
+                  id={"off-input-field"}
+                  label={"Discount Code Here!"}
+                  variant={"outlined"}
+                  onChange={handleOffCodeInputHandler}
+                  value={offCode}
+              />
+              <br />
               {renderTotalPrice()}
               <Button
                 onClick={handleBuyCart}

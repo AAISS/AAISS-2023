@@ -39,6 +39,7 @@ export default function useMyAccount() {
     const [openToast, setOpenToast] = useState()
     const [toastData, setToastData] = useState()
     const [buyButtonLoading, setBuyButtonLoading] = useState(false)
+    const [offCode, setOffCode] = useState("")
 
     const removeFromCartHandler = useCallback(({id, type}) => {
         removeFromUserCart({
@@ -48,9 +49,22 @@ export default function useMyAccount() {
     }, [removeFromUserCart])
 
     const handleBuyCart = useCallback(() => {
-        postPaymentData({call_back: 'https://aaiss.ir/callback'});
+        if (offCode === "") {
+            postPaymentData({
+                call_back: 'https://aaiss.ir/callback',
+            });
+        } else {
+            postPaymentData({
+                call_back: 'https://aaiss.ir/callback',
+                discount_code: offCode
+            });
+        }
         setBuyButtonLoading(true)
-    }, [postPaymentData]);
+    }, [offCode, postPaymentData]);
+
+    const handleOffCodeInputHandler = useCallback(e => {
+        setOffCode(e.target.value)
+    }, [])
 
     useEffect(() => {
         if (!paymentData)
@@ -58,10 +72,24 @@ export default function useMyAccount() {
 
         if (paymentData.status !== 200 || paymentData.data.status !== 200) {
             setOpenToast(true)
-            setToastData({
-                message: "There was an Error Regarding Payment! Please Try Again Later",
-                alertType: "error"
-            })
+            if (paymentData.status !== 200) {
+                if (paymentData.data?.message?.split(" ")[0] === "Discount") {
+                    setToastData({
+                        message: "Invalid Offer Code! Please Try Again",
+                        alertType: "error"
+                    })
+                } else {
+                    setToastData({
+                        message: "There was an Error Regarding Your Payment! Please Try Again Later",
+                        alertType: "error"
+                    })
+                }
+            } else {
+                setToastData({
+                    message: "Invalid Offer Code! Please Try Again",
+                    alertType: "error"
+                })
+            }
             setBuyButtonLoading(false)
             return
         }
@@ -224,5 +252,7 @@ export default function useMyAccount() {
         setOpenToast,
         buyButtonLoading,
         handleBuyCart,
+        offCode,
+        handleOffCodeInputHandler,
     };
 }
