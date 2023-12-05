@@ -451,6 +451,10 @@ class Payment(models.Model):
                     raise ValidationError(
                         new_detailed_response(status.HTTP_400_BAD_REQUEST,
                                               f"Workshop {workshop.id} is full"))
+                if workshop.start_date - timezone.now() <= timezone.timedelta(hours=1):
+                    raise ValidationError(new_detailed_response(
+                        status.HTTP_400_BAD_REQUEST, f"Workshop {workshop.id} Registraition closed"
+                    ))
                 total_cost += workshop.cost
                 workshops.append(workshop)
             except ObjectDoesNotExist:
@@ -465,6 +469,11 @@ class Payment(models.Model):
                     raise ValidationError(
                         new_detailed_response(status.HTTP_400_BAD_REQUEST,
                                               f"Presentation {presentation.id} is full"))
+                    
+                if presentation.start_date - timezone.now() <= timezone.timedelta(hours=1):
+                    raise ValidationError(new_detailed_response(
+                        status.HTTP_400_BAD_REQUEST, f"Workshop {presentation.id} Participation closed"
+                    ))
                 total_cost += presentation.cost
                 presentations.append(presentation)
             except ObjectDoesNotExist:
