@@ -2,35 +2,50 @@
 
 from django.core.management.base import BaseCommand
 from backend_api.models import WorkshopRegistration, PresentationParticipation
-import json
-class Command(BaseCommand):
-    help = 'Extract user emails for WorkshopRegistration and PresentationParticipation models and save as separate JSON files'
+import pandas as pd
+# from openpyxl import Workbook 
+import random
+import string
 
-    def handle(self, *args, **options):
+ 
 
-        workshop_registrations = WorkshopRegistration.objects.all()
-        for registration in workshop_registrations:
-            user_email = registration.user.account.email
-            workshop_name = registration.workshop.name  
-            output_file = f'workshop_{workshop_name}_user_emails.json'
 
-            result = {'user_emails': [user_email]}
-
-            with open(output_file, 'w') as json_file:
-                json.dump(result, json_file)
-
-            self.stdout.write(self.style.SUCCESS(f'Successfully saved user emails for {workshop_name} to {output_file}'))
 
         
-        presentation_participations = PresentationParticipation.objects.all()
-        for participation in presentation_participations:
-            user_email = participation.user.account.email
-            presentation_name = participation.presentation.name  
-            output_file = f'presentation_{presentation_name}_user_emails.json'
+class Command(BaseCommand):
+    help = 'Extract user emails for WorkshopRegistration and PresentationParticipation models and save as separate JSON files'
+    
+    def handle(self, *args, **options):
+        data_ws = self.extract_data(WorkshopRegistration.objects.all())
+        data_pr = self.extract_data(PresentationParticipation.objects.all())
+        self.save_xlsx(data_ws, prefix="workshop")
+        self.save_xlsx(data_pr, prefix="presentation")
+            
+            
+            
+    def extract_data(self, queryset):
+        res = {}
+        for registration in queryset:
+            event_name = registration.workshop.name  
+            if (event_name not in res.keys()):
+                res[event_name] = []
+            result = {
+                'username': registration.username,
+                'password': registration.password,
+                'FullName': registration.user.name,
+                "room": "aaiss",
+                "access": "normal"
+                
+            }
+            
+            res[event_name].append(result)
+        return res
 
-            result = {'user_emails': [user_email]}
-
-            with open(output_file, 'w') as json_file:
-                json.dump(result, json_file)
-
-            self.stdout.write(self.style.SUCCESS(f'Successfully saved user emails for {presentation_name} to {output_file}'))
+    def save_xlsx(self, data, prefix):
+        for key, data_list in data.items():
+            df = pd.DataFrame(data_list)
+            file_name = "{}[{}]_data.xlsx".format(key, prefix)
+            df.to_excel(file_name, index=False, header=None, engine='openpyxl', startrow=0)
+            with pd.ExcelWriter(file_name, engine='openpyxl', mode='a') as writer:
+                writer.sheets["Sheet1"].sheet_view.rightToLeft = True
+            self.stdout.write(self.style.SUCCESS(f'save for {key} in {file_name}'))
