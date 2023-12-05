@@ -3,27 +3,8 @@ from django.contrib import admin
 
 from backend_api import models
 from backend_api.email import MailerThread
-from backend_api.models import Discount
-
-
-def desc_creator(selected_model):
-    class AdminForm(forms.ModelForm):
-        desc = forms.CharField(widget=forms.Textarea)
-
-        class Meta:
-            model = selected_model
-            fields = '__all__'
-
-    class Admin(admin.ModelAdmin):
-        form = AdminForm
-        if selected_model == models.Workshop:
-            list_display = ('__str__', 'capacity', 'cost', 'has_project', 'level', 'no_of_participants', 'year')
-            readonly_fields = ('participants',)
-        elif selected_model == models.Presentation:
-            list_display = ('__str__', 'level', 'no_of_participants', 'year')
-            readonly_fields = ('participants',)
-
-    return Admin
+from backend_api.models import Discount, Presentation
+from utils.skyroom_exporter import SkyroomCredentials, convert_credentials_to_csv_response
 
 
 class TeacherAdminForm(forms.ModelForm):
@@ -129,6 +110,54 @@ class PaymentAdmin(admin.ModelAdmin):
         fields = '__all__'
 
 
+class PresentationAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'level', 'no_of_participants', 'year')
+    readonly_fields = ('participants',)
+    actions = ['export_login_credentials']
+
+    class Meta:
+        model = Presentation
+        fields = '__all__'
+
+    @admin.action(description='Export login credentials')
+    def export_login_credentials(self, request, obj):
+        user_credentials: list[SkyroomCredentials] = []
+        for presentation in obj:
+            for presentation_registration in presentation.presentationparticipation_set.all():
+                user_credentials.append(
+                    SkyroomCredentials(presentation_registration.username, presentation_registration.password,
+                                       presentation_registration.user.account.email))
+        return convert_credentials_to_csv_response(user_credentials)
+
+
+class WorkshopAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'capacity', 'cost', 'has_project', 'level', 'no_of_participants', 'year')
+    readonly_fields = ('participants',)
+    actions = ['export_login_credentials']
+
+    class Meta:
+        model = models.Workshop
+        fields = '__all__'
+
+    @admin.action(description='Export login credentials')
+    def export_login_credentials(self, request, obj):
+        user_credentials: list[SkyroomCredentials] = []
+        for workshop in obj:
+            for workshop_registration in workshop.workshopregistration_set.all():
+                user_credentials.append(
+                    SkyroomCredentials(workshop_registration.username, workshop_registration.password,
+                                       workshop_registration.user.account.email))
+        return convert_credentials_to_csv_response(user_credentials)
+
+
+class MiscAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'year')
+
+    class Meta:
+        model = models.Misc
+        fields = '__all__'
+
+
 admin.site.register(models.Teacher, TeacherAdmin)
 admin.site.register(models.Presenter, PresenterAdmin)
 admin.site.register(models.User, UserAdmin)
@@ -141,6 +170,6 @@ admin.site.register(models.Account)
 admin.site.register(models.Committee)
 admin.site.register(models.FieldOfInterest)
 admin.site.register(models.Staff)
-admin.site.register(models.Workshop, desc_creator(models.Workshop))
-admin.site.register(models.Presentation, desc_creator(models.Presentation))
-admin.site.register(models.Misc, desc_creator(models.Misc))
+admin.site.register(models.Workshop, WorkshopAdmin)
+admin.site.register(models.Presentation, PresentationAdmin)
+admin.site.register(models.Misc, MiscAdmin)

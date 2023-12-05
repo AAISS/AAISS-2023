@@ -1,5 +1,6 @@
 import datetime
 import uuid
+from urllib.parse import quote
 from urllib.parse import urljoin
 
 from django.contrib.auth.models import AbstractBaseUser
@@ -10,10 +11,10 @@ from django.db import models
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.translation import gettext_lazy as _
-from rest_framework.exceptions import ValidationError
-from rest_framework import status
 from django.utils.html import escape
+from django.utils.translation import gettext_lazy as _
+from rest_framework import status
+from rest_framework.exceptions import ValidationError
 
 from aaiss_backend import settings
 from aaiss_backend.settings import BASE_URL
@@ -21,7 +22,6 @@ from backend_api import validators
 from backend_api.email import MailerThread
 from utils.random import create_random_string
 from utils.renderers import new_detailed_response
-from urllib.parse import quote
 
 SMALL_MAX_LENGTH = 255
 BIG_MAX_LENGTH = 65535
