@@ -344,7 +344,7 @@ class Mailer(models.Model):
 
 
 class Discount(models.Model):
-    _CODE_LENGTH = 8
+    _CODE_LENGTH = 32
     code = models.CharField(max_length=_CODE_LENGTH, null=False, default=create_random_string(_CODE_LENGTH),
                             unique=True)
     discount_percent = models.IntegerField(default=0)
