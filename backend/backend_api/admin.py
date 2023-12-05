@@ -3,7 +3,7 @@ from django.contrib import admin
 
 from backend_api import models
 from backend_api.email import MailerThread
-from backend_api.models import Discount, Presentation
+from backend_api.models import Discount, Presentation, PresentationParticipation, WorkshopRegistration
 from utils.skyroom_exporter import SkyroomCredentials, convert_credentials_to_csv_response
 
 
@@ -123,7 +123,8 @@ class PresentationAdmin(admin.ModelAdmin):
     def export_login_credentials(self, request, obj):
         user_credentials: list[SkyroomCredentials] = []
         for presentation in obj:
-            for presentation_registration in presentation.presentationparticipation_set.all():
+            for presentation_registration in presentation.presentationparticipation_set.filter(
+                    status=PresentationParticipation.StatusChoices.PURCHASED):
                 user_credentials.append(
                     SkyroomCredentials(presentation_registration.username, presentation_registration.password,
                                        presentation_registration.user.account.email))
@@ -143,7 +144,8 @@ class WorkshopAdmin(admin.ModelAdmin):
     def export_login_credentials(self, request, obj):
         user_credentials: list[SkyroomCredentials] = []
         for workshop in obj:
-            for workshop_registration in workshop.workshopregistration_set.all():
+            for workshop_registration in workshop.workshopregistration_set.filter(
+                    status=WorkshopRegistration.StatusChoices.PURCHASED):
                 user_credentials.append(
                     SkyroomCredentials(workshop_registration.username, workshop_registration.password,
                                        workshop_registration.user.account.email))
