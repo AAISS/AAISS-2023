@@ -287,12 +287,18 @@ class WorkshopRegistration(models.Model):
         AWAITING_PAYMENT = 1, _('Waiting for payment')
         PURCHASED = 2, _('Purchase confirmed')
 
+    _PASSWORD_LENGTH = 16
     workshop = models.ForeignKey(Workshop, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.IntegerField(choices=StatusChoices.choices, default=StatusChoices.AWAITING_PAYMENT)
+    password = models.CharField(max_length=SMALL_MAX_LENGTH, default=create_random_string(_PASSWORD_LENGTH))
 
     class Meta:
         unique_together = ('workshop', 'user',)
+
+    @property
+    def username(self) -> str:
+        return f'{self.user.account.email.split("@")[0]}_workshop_{self.workshop.id}'
 
 
 class PresentationParticipation(models.Model):
@@ -300,12 +306,18 @@ class PresentationParticipation(models.Model):
         AWAITING_PAYMENT = 1, _('Waiting for payment')
         PURCHASED = 2, _('Purchase confirmed')
 
+    _PASSWORD_LENGTH = 16
     presentation = models.ForeignKey(Presentation, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.IntegerField(choices=StatusChoices.choices, default=StatusChoices.AWAITING_PAYMENT)
+    password = models.CharField(max_length=SMALL_MAX_LENGTH, default=create_random_string(_PASSWORD_LENGTH))
 
     class Meta:
         unique_together = ('presentation', 'user',)
+
+    @property
+    def username(self) -> str:
+        return f'{self.user.account.email.split("@")[0]}_presentation_{self.presentation.id}'
 
 
 class Misc(models.Model):
