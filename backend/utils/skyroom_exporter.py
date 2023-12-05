@@ -15,7 +15,6 @@ def convert_credentials_to_csv_response(credentials: list[SkyroomCredentials]) -
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="login_credentials.csv"'
     writer = csv.writer(response)
-    writer.writerow(['username', 'password', 'full_name', 'room', 'access'])
     for credential in credentials:
         writer.writerow([credential.username, credential.password, credential.full_name, 'aaiss', 'normal'])
     return response

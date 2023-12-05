@@ -298,7 +298,7 @@ class WorkshopRegistration(models.Model):
 
     @property
     def username(self) -> str:
-        return f'{self.user.account.email.split("@")[0]}_workshop_{self.workshop.id}'
+        return f'{self.user.account.email.split("@")[0]}_w_{self.workshop.id}'
 
 
 class PresentationParticipation(models.Model):
@@ -317,7 +317,7 @@ class PresentationParticipation(models.Model):
 
     @property
     def username(self) -> str:
-        return f'{self.user.account.email.split("@")[0]}_presentation_{self.presentation.id}'
+        return f'{self.user.account.email.split("@")[0]}_p_{self.presentation.id}'
 
 
 class Misc(models.Model):
