@@ -41,7 +41,6 @@ export default function useWorkshopsPage() {
 
     const handleCheckbox = useCallback(e => {
         setRadioSelectedItem(e.target.value)
-        console.log(e.target.value)
     }, [])
 
     useEffect(() => {
@@ -113,6 +112,7 @@ export default function useWorkshopsPage() {
                 item['capacity'] = workshop.capacity;
                 item['cost'] = workshop.cost;
                 item['remaining_capacity'] = workshop.remaining_capacity
+                item['finished'] = false
                 return item;
             })
             .filter((e) => e != null);
@@ -120,32 +120,31 @@ export default function useWorkshopsPage() {
 
         const now = removeEverythingFromDateString(new Date().toLocaleString('fa-IR-u-nu-latn'))
         let index = -1
-        console.log("now:", now)
         for (const item of parsedData) {
             const itemDate = removeEverythingFromDateString(new Date(item.start_date).toLocaleString('fa-IR-u-nu-latn'))
-            console.log(itemDate, now, itemDate > now)
             index++
             if (itemDate > now)
                 break
+            item['finished'] = true
         }
 
         const notEligibleItems = parsedData.slice(0, index)
         parsedData = parsedData.slice(index)
         parsedData.push(...notEligibleItems)
-        console.log(parsedData)
-        console.log(index)
         setParsedItemsList(parsedData);
         setFileteredItems(parsedData);
 
         function removeEverythingFromDateString(str) {
-            const splittedStr = str.split('/')
-            if (splittedStr[1].length === 1)
-                splittedStr[1] = '0' + splittedStr[1]
-            const secondSplittedStr = splittedStr[2].split(",")
-            if (secondSplittedStr[0].length === 1)
-                splittedStr[2] = "0" + secondSplittedStr.join(",")
-            str = splittedStr.join('/')
-            console.log(str)
+            const splitStr = str.split('/')
+            if (splitStr[1].length === 1)
+                splitStr[1] = '0' + splitStr[1]
+            const secondSplitStr = splitStr[2].split(",")
+            if (secondSplitStr[0].length === 1)
+                splitStr[2] = "0" + secondSplitStr.join(",")
+            const timeSplitStr = splitStr[2].split(",")[1].split(":")[0].trim()
+            if (timeSplitStr.length === 1)
+                splitStr[2] = splitStr[2].split(",")[0] + "0" + splitStr[2].split(",")[1].split(":")[0].trim()
+            str = splitStr.join('/')
             return str
                 .replaceAll("/", '')
                 .replaceAll(" ", '')

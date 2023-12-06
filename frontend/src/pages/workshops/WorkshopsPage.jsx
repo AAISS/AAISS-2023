@@ -52,6 +52,7 @@ export default function WorkshopsPage() {
                 capacity={item.capacity}
                 cost={item.cost}
                 hasProject={item.has_project}
+                finished={item.finished}
                 onClickAddToCart={() =>
                     addToCart({
                         id: item.id,

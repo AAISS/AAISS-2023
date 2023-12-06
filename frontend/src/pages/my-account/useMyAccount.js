@@ -230,8 +230,6 @@ export default function useMyAccount() {
             })
         }
 
-        console.log(userTempCart)
-
         setTalks(userTempPresentations)
         setWorkshops(userTempWorkshops)
         setCart(userTempCart)

@@ -30,14 +30,12 @@ export function ConfigProvider({ children }) {
     if (!currentPath) return;
     switch ('/' + currentPath) {
       case ROUTES.myAccount.path:
-        console.log('myacc');
         if (!accessToken) {
           window.location.replace(ROUTES.signup.path);
           // navigate(ROUTES.signup.path)
         }
         break;
       case ROUTES.signup.path:
-        console.log('sign');
         if (accessToken) {
           window.location.replace(ROUTES.myAccount.path);
           // navigate(ROUTES.myAccount.path)

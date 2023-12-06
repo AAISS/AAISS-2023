@@ -49,7 +49,6 @@ export function APIProvider({ children }) {
       .catch((error) => {
         if (error == null) return;
 
-        console.log(error);
         if (error.response.status === 401) {
           localStorage.removeItem('user');
           window.location.reload();
