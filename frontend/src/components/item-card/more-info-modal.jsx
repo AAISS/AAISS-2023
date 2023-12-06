@@ -93,6 +93,7 @@ const MoreInfoModal = ({
                 marginTop: '0px',
                 marginBottom: '10px',
                 overflowY:"auto",
+                maxHeight: "30vh",
                 borderLeft: '1px solid var(--light-text-color-lighter)',
               }}
             >
