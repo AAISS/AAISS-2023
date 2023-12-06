@@ -27,7 +27,7 @@ class MailerThread(threading.Thread):
             subject=self.subject,
             body=html_message,
             from_email=settings.EMAIL_HOST_USER,
-            bcc=self.targets,
+            to=self.targets,
             reply_to=(settings.EMAIL_HOST_USER,)
         )
         email.content_subtype = "html"
