@@ -46,6 +46,7 @@ const Syllabus = ({ syllabus }) => (
 const MoreInfoModal = ({
   visibility,
   onVisibilityChange,
+    finished,
   title,
   presenterName,
   cost,
@@ -124,7 +125,7 @@ const MoreInfoModal = ({
       <DialogActions>
         <Button onClick={onVisibilityChange}>Close</Button>
         {purchaseState === 0 ? (
-          <Button disabled={isFull} onClick={handleClickAddToCart}>
+          <Button disabled={finished || isFull} onClick={handleClickAddToCart}>
             Add To Cart
           </Button>
         ) : purchaseState === 1 ? (
@@ -150,6 +151,7 @@ MoreInfoModal.propTypes = {
   description: PropTypes.string,
   onClickAddToCart: PropTypes.func,
   onClickRemoveFromCart: PropTypes.func,
+  finished: PropTypes.bool,
 };
 
 export default MoreInfoModal;

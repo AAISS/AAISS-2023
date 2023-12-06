@@ -85,7 +85,7 @@ const ItemCard = ({
     switch (purchaseState) {
       case 0:
         return (
-          <Button variant="outlined" size="small" disabled={isFull} onClick={onClickAddToCart}>
+          <Button variant="outlined" size="small" disabled={isFull || finished} onClick={onClickAddToCart}>
             Add to Cart
           </Button>
         );
@@ -117,6 +117,7 @@ const ItemCard = ({
         purchaseState={purchaseState}
         description={description}
         level={level}
+        finished={finished}
         hasProject={hasProject}
         prerequisites={prerequisites}
         syllabus={syllabus}
@@ -171,7 +172,7 @@ const ItemCard = ({
           {!hasBought && <Cost cost={cost} />}
           {!hasBought && shouldShowFullCapacity && <FullCapacityChip />}
             {finished && <div style={{
-                backgroundColor: "grey",
+                backgroundColor: "#ec6803",
                 borderRadius: "5px",
                 display: "inline-block",
                 padding: "2px 5px 2px 5px"
