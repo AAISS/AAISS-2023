@@ -83,7 +83,7 @@ class PresentationAdmin(admin.ModelAdmin):
                     status=PresentationParticipation.StatusChoices.PURCHASED):
                 user_credentials.append(
                     SkyroomCredentials(registration.username, registration.password,
-                                       registration.user.account.email))
+                                       registration.user.name))
         return convert_credentials_to_csv_response(user_credentials)
 
     @admin.action(description='Send registration emails')
@@ -120,7 +120,7 @@ class WorkshopAdmin(admin.ModelAdmin):
                     status=WorkshopRegistration.StatusChoices.PURCHASED):
                 user_credentials.append(
                     SkyroomCredentials(registration.username, registration.password,
-                                       registration.user.account.email))
+                                       registration.user.name))
         return convert_credentials_to_csv_response(user_credentials)
 
     @admin.action(description='Send registration emails')
