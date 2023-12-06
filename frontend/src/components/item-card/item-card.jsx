@@ -59,6 +59,7 @@ const ItemCard = ({
   startDate,
   endDate,
   presenterName,
+    finished,
   level,
   cost = 50000,
   purchaseState = 0, // 0 -> not purchased, 1 -> in cart, 2 -> purchased
@@ -169,6 +170,12 @@ const ItemCard = ({
           {levelComponentMapping[level]}
           {!hasBought && <Cost cost={cost} />}
           {!hasBought && shouldShowFullCapacity && <FullCapacityChip />}
+            {finished && <div style={{
+                backgroundColor: "grey",
+                borderRadius: "5px",
+                display: "inline-block",
+                padding: "2px 5px 2px 5px"
+            }}>Finished!</div>}
         </CardContent>
         <CardActions
           sx={{
@@ -208,6 +215,7 @@ ItemCard.propTypes = {
   addToCalendarLink: PropTypes.string,
   onClickAddToCart: PropTypes.func,
   remainingCapacity: PropTypes.number,
+    finished: PropTypes.bool,
 };
 
 export default ItemCard;
