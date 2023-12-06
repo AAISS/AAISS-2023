@@ -35,7 +35,7 @@ class MailerThread(threading.Thread):
             has_send = False
             for i in range(self._MAXIMUM_RETRIES):
                 try:
-                    email.send(fail_silently=True)
+                    email.send(fail_silently=False)
                     has_send = True
                     break
                 except Exception as e:
