@@ -1,8 +1,9 @@
 from django import forms
 from django.contrib import admin
 from django.template.loader import render_to_string
+from django.contrib.admin.helpers import ActionForm
 
-from aaiss_backend.settings import SKYROOM_URL
+from aaiss_backend.settings import SKYROOM_BASE_URL
 from backend_api import models
 from backend_api.email import MailerThread
 from backend_api.models import Discount, Presentation, PresentationParticipation, WorkshopRegistration
@@ -67,9 +68,14 @@ class PaymentAdmin(admin.ModelAdmin):
 
 
 class PresentationAdmin(admin.ModelAdmin):
+    class PresentationForm(ActionForm):
+        _CHOISES = (('aaiss', 'aaiss'), ('aaiss2', 'aaiss2'))
+        room_name = forms.ChoiceField(choices=_CHOISES, required=True)
+
     list_display = ('__str__', 'level', 'no_of_participants', 'year')
     readonly_fields = ('participants',)
     actions = ['export_login_credentials', 'send_registration_emails']
+    action_form = PresentationForm
 
     class Meta:
         model = Presentation
@@ -83,7 +89,7 @@ class PresentationAdmin(admin.ModelAdmin):
                     status=PresentationParticipation.StatusChoices.PURCHASED):
                 user_credentials.append(
                     SkyroomCredentials(registration.username, registration.password,
-                                       registration.user.name))
+                                       registration.user.name, request.POST['room_name']))
         return convert_credentials_to_csv_response(user_credentials)
 
     @admin.action(description='Send registration emails')
@@ -97,16 +103,21 @@ class PresentationAdmin(admin.ModelAdmin):
                                               {
                                                   'username': registration.username,
                                                   'password': registration.password,
-                                                  'meeting_url': SKYROOM_URL,
+                                                  'meeting_url': SKYROOM_BASE_URL + '/' + request.POST['room_name'],
                                                   'meeting_type': 'presentation',
                                                   'meeting_title': presentation.name,
                                               })).start()
 
 
 class WorkshopAdmin(admin.ModelAdmin):
+    class WorkshopForm(ActionForm):
+        _CHOISES = (('aaiss', 'aaiss'), ('aaiss2', 'aaiss2'))
+        room_name = forms.ChoiceField(choices=_CHOISES, required=True)
+
     list_display = ('__str__', 'capacity', 'cost', 'has_project', 'level', 'no_of_participants', 'year')
     readonly_fields = ('participants',)
     actions = ['export_login_credentials', 'send_registration_emails']
+    action_form = WorkshopForm
 
     class Meta:
         model = models.Workshop
@@ -120,7 +131,7 @@ class WorkshopAdmin(admin.ModelAdmin):
                     status=WorkshopRegistration.StatusChoices.PURCHASED):
                 user_credentials.append(
                     SkyroomCredentials(registration.username, registration.password,
-                                       registration.user.name))
+                                       registration.user.name, request.POST['room_name']))
         return convert_credentials_to_csv_response(user_credentials)
 
     @admin.action(description='Send registration emails')
@@ -134,7 +145,7 @@ class WorkshopAdmin(admin.ModelAdmin):
                                               {
                                                   'username': registration.username,
                                                   'password': registration.password,
-                                                  'meeting_url': SKYROOM_URL,
+                                                  'meeting_url': SKYROOM_BASE_URL + '/' + request.POST['room_name'],
                                                   'meeting_type': 'workshop',
                                                   'meeting_title': workshop.name,
                                               })).start()

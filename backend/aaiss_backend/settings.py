@@ -193,4 +193,4 @@ PAYWALL = env.str("PAYWALL", "ZIFY")
 #ZIFY
 ZIFY_AUTH = env.str("ZIFY_AUTH", "")
 
-SKYROOM_URL = env.str("SKYROOM_URL", "https://www.skyroom.online/ch/aut_ceit_ssc/aaiss")
+SKYROOM_BASE_URL = env.str("SKYROOM_URL", "https://www.skyroom.online/ch/aut_ceit_ssc")
