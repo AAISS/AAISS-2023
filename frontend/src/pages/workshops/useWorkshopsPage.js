@@ -1,5 +1,6 @@
 import {useCallback, useEffect, useState} from 'react';
 import {useAPI} from '../../providers/APIProvider/APIProvider.jsx';
+import {Helper} from "../../utils/Helper.js";
 
 export default function useWorkshopsPage() {
     const {
@@ -118,10 +119,10 @@ export default function useWorkshopsPage() {
             .filter((e) => e != null);
         parsedData.sort((a, b) => a.start_date > b.start_date ? 1 : -1)
 
-        const now = removeEverythingFromDateString(new Date().toLocaleString('fa-IR-u-nu-latn'))
+        const now = Helper.removeEverythingFromDateString(new Date().toLocaleString('fa-IR-u-nu-latn'))
         let index = -1
         for (const item of parsedData) {
-            const itemDate = removeEverythingFromDateString(new Date(item.start_date).toLocaleString('fa-IR-u-nu-latn'))
+            const itemDate = Helper.removeEverythingFromDateString(new Date(item.start_date).toLocaleString('fa-IR-u-nu-latn'))
             index++
             if (itemDate > now)
                 break
@@ -133,24 +134,6 @@ export default function useWorkshopsPage() {
         parsedData.push(...notEligibleItems)
         setParsedItemsList(parsedData);
         setFileteredItems(parsedData);
-
-        function removeEverythingFromDateString(str) {
-            const splitStr = str.split('/')
-            if (splitStr[1].length === 1)
-                splitStr[1] = '0' + splitStr[1]
-            const secondSplitStr = splitStr[2].split(",")
-            if (secondSplitStr[0].length === 1)
-                splitStr[2] = "0" + secondSplitStr.join(",")
-            const timeSplitStr = splitStr[2].split(",")[1].split(":")[0].trim()
-            if (timeSplitStr.length === 1)
-                splitStr[2] = splitStr[2].split(",")[0] + "0" + splitStr[2].split(",")[1].split(":")[0].trim()
-            str = splitStr.join('/')
-            return str
-                .replaceAll("/", '')
-                .replaceAll(" ", '')
-                .replaceAll(":", "")
-                .replaceAll(",", "")
-        }
 
     }, [workshopsData, presentationsData, presenterData, teachersData]);
 
