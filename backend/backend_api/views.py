@@ -258,14 +258,12 @@ class PaymentViewSet(viewsets.GenericViewSet):
         response = ZIFYRequest().verify_payment(payment.track_id)
         if response['status'] == ZIFY_STATUS_OK:
             payment.update_payment_status(Payment.PaymentStatus.PAYMENT_CONFIRMED)
-            return Response(
-                new_detailed_response(status.HTTP_200_OK, "Payment verified successfully", {
-                    'client_ref_id': payment.pk, 'payment_status': 'succeeded'}))
+            return redirect(urllib.parse.urljoin(BASE_URL, 'callback') + '?client_ref_id=' + str(
+                payment.pk) + '&payment_status=succeeded')
         else:
             payment.update_payment_status(Payment.PaymentStatus.PAYMENT_REJECTED)
-            return Response(
-                new_detailed_response(response['status'], response["message"], {
-                    'client_ref_id': payment.pk, 'payment_status': 'failed'}))
+            return redirect(urllib.parse.urljoin(BASE_URL, 'callback') + '?client_ref_id=' + str(
+                payment.pk) + '&payment_status=failed')
 
 
 class StaffViewSet(viewsets.GenericViewSet,
