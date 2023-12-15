@@ -244,9 +244,9 @@ class PaymentViewSet(viewsets.GenericViewSet):
             return Response(
                 new_detailed_response(response['status'], response["message"]))
 
-    @action(methods=['POST'], detail=False)
+    @action(methods=['GET', 'POST'], detail=False)
     def verify(self, request):
-        pid = request.data.get('clientrefid')
+        pid = request.query_params.get('clientrefid')
         if pid is None:
             return Response(new_detailed_response(
                 status.HTTP_400_BAD_REQUEST, "clientrefid is required"))

@@ -90,5 +90,5 @@ urlpatterns = [
     path('', include(committee_routes)),
     path('', include(user_route)),
     path('payment/', views.PaymentViewSet.as_view({'post': 'payment'})),
-    path('payment/verify/', views.PaymentViewSet.as_view({'post': 'verify'})),
+    path('payment/verify/', views.PaymentViewSet.as_view({'get': 'verify', 'post': 'verify'})),
 ]
