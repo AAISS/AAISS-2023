@@ -16,6 +16,7 @@ ZIFY_PAYMENT_DESCRIPTION = 'register workshops or talks'
 ZIFY_URL = "https://zify.ir/api/order/v2/create"
 ZIFY_URL_VERIFY = "https://zify.ir/api/order/v2/verify"
 ZIFY_PAYMENT_LINK = 'https://zify.ir/order/accept/{track_id}'
+ZIFY_CALLBACK = 'https://aaiss.ir/api/payment/verify'
 
 
 class ZIFYRequest:
@@ -29,7 +30,7 @@ class ZIFYRequest:
     def get_order_url(track_id: str):
         return ZIFY_PAYMENT_LINK.format(track_id=track_id)
 
-    def create_payment(self, order_id, amount, user_name, user_phone, user_email, call_back):
+    def create_payment(self, order_id, amount, user_name, user_phone, user_email):
         body = {
             "payer": {
                 "first_name": "",
@@ -53,7 +54,7 @@ class ZIFYRequest:
                     "description": ZIFY_PAYMENT_DESCRIPTION
                 }
             ],
-            "returnUrl": call_back,
+            "returnUrl": ZIFY_CALLBACK,
             "clientRefId": order_id,
             "shipping_total": 0,
             "off_total": 0,
