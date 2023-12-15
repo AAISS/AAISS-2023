@@ -1,5 +1,4 @@
 import datetime
-import os
 import urllib.parse
 
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
@@ -220,9 +219,6 @@ class PaymentViewSet(viewsets.GenericViewSet):
         except ObjectDoesNotExist:
             return Response(new_detailed_response(
                 status.HTTP_400_BAD_REQUEST, "User not found"))
-        call_back = request.data.get('call_back')
-        if call_back is None:
-            return Response(new_detailed_response(status.HTTP_400_BAD_REQUEST, "call_back field is required"))
         discount = None
         discount_code = request.data.get('discount_code')
         if discount_code is not None:
@@ -238,7 +234,7 @@ class PaymentViewSet(viewsets.GenericViewSet):
         payment = Payment.create_payment_for_user(user, discount)
         response = ZIFYRequest().create_payment(str(payment.pk), payment.discounted_amount, user.name,
                                                 user.phone_number,
-                                                user.account.email, call_back)
+                                                user.account.email)
         if response['status'] == ZIFY_STATUS_OK:
             payment.track_id = response['data']['order']
             payment.save()
@@ -262,11 +258,12 @@ class PaymentViewSet(viewsets.GenericViewSet):
         response = ZIFYRequest().verify_payment(payment.track_id)
         if response['status'] == ZIFY_STATUS_OK:
             payment.update_payment_status(Payment.PaymentStatus.PAYMENT_CONFIRMED)
-            return Response(new_detailed_response(status.HTTP_200_OK, "Payment verified successfully", payment.pk))
+            return redirect(urllib.parse.urljoin(BASE_URL, 'callback') + '?client_ref_id=' + str(
+                payment.pk) + '&payment_status=succeeded')
         else:
             payment.update_payment_status(Payment.PaymentStatus.PAYMENT_REJECTED)
-            return Response(
-                new_detailed_response(response['status'], response["message"], payment.pk))
+            return redirect(urllib.parse.urljoin(BASE_URL, 'callback') + '?client_ref_id=' + str(
+                payment.pk) + '&payment_status=failed')
 
 
 class StaffViewSet(viewsets.GenericViewSet,
