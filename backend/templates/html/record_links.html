@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AAISS 2023 Recorded Links</title>
+</head>
+<body>
+<div>Here are the recorded links for the AAISS 2023 presentations and workshops that you attended:</div>
+<br>
+{% for presentation in presentations %}
+<a href="{{ presentation.url }}">{{ presentation.name }}</a>
+<br>
+{% endfor %}
+</body>
+</html>

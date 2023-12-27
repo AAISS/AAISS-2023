@@ -104,6 +104,7 @@ class Workshop(models.Model):
     prerequisites = models.CharField(max_length=BIG_MAX_LENGTH, default='', blank=True)
     capacity = models.PositiveSmallIntegerField(default=50)
     year = models.IntegerField(blank=False, default=2020)
+    recorded_link = models.URLField(null=True, default=None)
 
     NOT_ASSIGNED = 'NOT_ASSIGNED'
     ELEMENTARY = 'Elementary'
@@ -175,6 +176,7 @@ class Presentation(models.Model):
     cost = models.PositiveIntegerField(default=0)
     capacity = models.PositiveIntegerField(default=50)
     has_project = models.BooleanField(default=False, blank=False)
+    recorded_link = models.URLField(null=True, default=None)
 
     NOT_ASSIGNED = 'NOT_ASSIGNED'
     ELEMENTARY = 'Elementary'

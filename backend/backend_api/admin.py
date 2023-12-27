@@ -38,6 +38,37 @@ class PresenterAdmin(admin.ModelAdmin):
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ('account',)
+    actions = ['send_record_links']
+
+    @admin.action(description='Send presentation/workshop record links')
+    def send_record_links(self, request, obj):
+        for user in obj:
+            presentation_participation = PresentationParticipation.objects.filter(user=user,
+                                                                     status=PresentationParticipation.
+                                                                     StatusChoices.PURCHASED)
+            workshop_participation = WorkshopRegistration.objects.filter(user=user,
+                                                            status=WorkshopRegistration.StatusChoices.PURCHASED)
+            if len(presentation_participation) == 0 and len(workshop_participation) == 0:
+                continue
+
+            presentation_links = []
+            for presentation in presentation_participation:
+                presentation_links.append({
+                    'url': presentation.presentation.recorded_link,
+                    'name': presentation.presentation.name
+                })
+            for workshop in workshop_participation:
+                presentation_links.append({
+                    'url': workshop.workshop.recorded_link,
+                    'name': workshop.workshop.name
+                })
+            MailerThread(f"AAISS recorded links",
+                         [user.account.email],
+                         render_to_string('record_links.html',
+                                          {
+                                              'presentations': presentation_links,
+                                          })).start()
+
 
 
 class DiscountAdmin(admin.ModelAdmin):

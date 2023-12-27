@@ -61,7 +61,7 @@ class WorkshopSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Workshop
-        fields = '__all__'
+        exclude = ['recorded_link']
 
 
 class PresentationSerializer(serializers.ModelSerializer):
@@ -70,7 +70,7 @@ class PresentationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Presentation
-        fields = '__all__'
+        exclude = ['recorded_link']
 
 
 class WorkshopRegistrationSerializer(serializers.ModelSerializer):
