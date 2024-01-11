@@ -1,6 +1,9 @@
+import urllib.parse
+
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers, status
 
+from aaiss_backend.settings import BASE_URL
 from backend_api import models
 from backend_api.models import User, Account, WorkshopRegistration, PresentationParticipation
 from utils.renderers import new_detailed_response
@@ -75,10 +78,11 @@ class PresentationSerializer(serializers.ModelSerializer):
 
 class WorkshopRegistrationSerializer(serializers.ModelSerializer):
     workshop = serializers.PrimaryKeyRelatedField(queryset=WorkshopSerializer.Meta.model.objects.all())
+    certificate = serializers.CharField(required=False, allow_blank=True, allow_null=True)
 
     class Meta:
         model = WorkshopRegistration
-        fields = ('workshop',)
+        fields = ('workshop', 'certificate')
 
     def create(self, validated_data):
         user = self.context['request'].user.user
@@ -99,6 +103,10 @@ class WorkshopRegistrationSerializer(serializers.ModelSerializer):
         response = {}
         user = self.context['request'].user.user
         for key, val in super_response.items():
+            if key == 'certificate':
+                if val:
+                    response[key] = urllib.parse.urljoin(BASE_URL, val)
+                continue
             response["id"] = val
             try:
                 workshop_status = WorkshopRegistration.objects.get(user=user, workshop_id=val).status
@@ -110,10 +118,11 @@ class WorkshopRegistrationSerializer(serializers.ModelSerializer):
 
 class PresentationParticipationSerializer(serializers.ModelSerializer):
     presentation = serializers.PrimaryKeyRelatedField(queryset=PresentationSerializer.Meta.model.objects.all())
+    certificate = serializers.CharField(required=False, allow_blank=True, allow_null=True)
 
     class Meta:
         model = PresentationParticipation
-        fields = ('presentation',)
+        fields = ('presentation', 'certificate')
 
     def create(self, validated_data):
         user = self.context['request'].user.user
@@ -133,6 +142,10 @@ class PresentationParticipationSerializer(serializers.ModelSerializer):
         response = {}
         user = self.context['request'].user.user
         for key, val in super_response.items():
+            if key == 'certificate':
+                if val:
+                    response[key] = urllib.parse.urljoin(BASE_URL, val)
+                continue
             response["id"] = val
             try:
                 presentation_status = PresentationParticipation.objects.get(user=user, presentation_id=val).status

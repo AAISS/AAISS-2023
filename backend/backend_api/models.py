@@ -294,7 +294,7 @@ class WorkshopRegistration(models.Model):
     status = models.IntegerField(choices=StatusChoices.choices, default=StatusChoices.AWAITING_PAYMENT)
     password = models.CharField(max_length=SMALL_MAX_LENGTH, default=random_password)
     certificate_uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    certificate = models.FileField(upload_to=update_certificate_filename, null=True, default=None)
+    certificate = models.FileField(upload_to=update_certificate_filename, null=True, default=None, blank=True)
 
     class Meta:
         unique_together = ('workshop', 'user',)
@@ -314,7 +314,7 @@ class PresentationParticipation(models.Model):
     status = models.IntegerField(choices=StatusChoices.choices, default=StatusChoices.AWAITING_PAYMENT)
     password = models.CharField(max_length=SMALL_MAX_LENGTH, default=random_password)
     certificate_uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    certificate = models.FileField(upload_to=update_certificate_filename, null=True, default=None)
+    certificate = models.FileField(upload_to=update_certificate_filename, null=True, default=None, blank=True)
 
     class Meta:
         unique_together = ('presentation', 'user',)
