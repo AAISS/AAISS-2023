@@ -87,6 +87,7 @@ const MyAccount = () => {
         presenterName={item.presenters?.join(', ') ?? item.teachers?.join(', ')}
         cost={item.cost}
         hasProject={item.has_project}
+        certificateLink={item.certificateLink}
         prerequisites={item.prerequisites}
         syllabus={item.syllabus}
         capacity={item.capacity}
