@@ -44,10 +44,10 @@ class UserAdmin(admin.ModelAdmin):
     def send_record_links(self, request, obj):
         for user in obj:
             presentation_participation = PresentationParticipation.objects.filter(user=user,
-                                                                     status=PresentationParticipation.
-                                                                     StatusChoices.PURCHASED)
+                                                                                  status=PresentationParticipation.
+                                                                                  StatusChoices.PURCHASED)
             workshop_participation = WorkshopRegistration.objects.filter(user=user,
-                                                            status=WorkshopRegistration.StatusChoices.PURCHASED)
+                                                                         status=WorkshopRegistration.StatusChoices.PURCHASED)
             if len(presentation_participation) == 0 and len(workshop_participation) == 0:
                 continue
 
@@ -68,7 +68,6 @@ class UserAdmin(admin.ModelAdmin):
                                           {
                                               'presentations': presentation_links,
                                           })).start()
-
 
 
 class DiscountAdmin(admin.ModelAdmin):

@@ -20,6 +20,7 @@ from aaiss_backend import settings
 from aaiss_backend.settings import BASE_URL
 from backend_api import validators
 from backend_api.email import MailerThread
+from utils.image_uploader import update_certificate_filename
 from utils.random import create_random_string, random_password, random_discount_code
 from utils.renderers import new_detailed_response
 
@@ -292,6 +293,8 @@ class WorkshopRegistration(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.IntegerField(choices=StatusChoices.choices, default=StatusChoices.AWAITING_PAYMENT)
     password = models.CharField(max_length=SMALL_MAX_LENGTH, default=random_password)
+    certificate_uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    certificate = models.FileField(upload_to=update_certificate_filename, null=True, default=None)
 
     class Meta:
         unique_together = ('workshop', 'user',)
@@ -310,6 +313,8 @@ class PresentationParticipation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.IntegerField(choices=StatusChoices.choices, default=StatusChoices.AWAITING_PAYMENT)
     password = models.CharField(max_length=SMALL_MAX_LENGTH, default=random_password)
+    certificate_uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    certificate = models.FileField(upload_to=update_certificate_filename, null=True, default=None)
 
     class Meta:
         unique_together = ('presentation', 'user',)
