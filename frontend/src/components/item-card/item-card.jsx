@@ -59,6 +59,7 @@ const ItemCard = ({
   startDate,
   endDate,
   presenterName,
+    certificateLink,
     finished,
   level,
   cost = 50000,
@@ -193,6 +194,18 @@ const ItemCard = ({
           </Button>
           {getActionComponent()}
         </CardActions>
+          {certificateLink &&
+              <Button
+                  href={certificateLink}
+                  style={{
+                      backgroundColor: "#ec6803",
+                      color: "#fff",
+                      width: "100%",
+                  }}
+              >
+                  Download Certificate!
+              </Button>
+          }
       </Card>
     </>
   );
@@ -216,6 +229,7 @@ ItemCard.propTypes = {
   addToCalendarLink: PropTypes.string,
   onClickAddToCart: PropTypes.func,
   remainingCapacity: PropTypes.number,
+    certificateLink: PropTypes.string,
     finished: PropTypes.bool,
 };
 
