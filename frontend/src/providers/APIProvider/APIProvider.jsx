@@ -8,7 +8,7 @@ export function APIProvider({ children }) {
   const { accessToken, refreshToken, setAccessTokenFromLocalStorage } = useConfig();
 
   const service = axios;
-  const currentYear = new Date().getFullYear();
+  const year = "2023";
 
   const [workshopsData, setWorkshopsData] = useState();
   const [presentationsData, setPresentationsData] = useState();
@@ -200,19 +200,19 @@ export function APIProvider({ children }) {
     async (id) => {
       if (id != null) id = id + '/';
       await service
-        .get(`${URL.baseURL}${URL.services[currentYear]}${URL.endpoints.presenter}${id ?? ''}`)
+        .get(`${URL.baseURL}${URL.services[year]}${URL.endpoints.presenter}${id ?? ''}`)
         .then((response) => {
           setPresenterData(response.data);
         });
     },
-    [currentYear, service],
+    [year, service],
   );
 
   const getCommitteeData = useCallback(async () => {
-    await service.get(`${URL.baseURL}${URL.services[currentYear]}${URL.endpoints.committee}`).then((response) => {
+    await service.get(`${URL.baseURL}${URL.services[year]}${URL.endpoints.committee}`).then((response) => {
       setCommitteeData(response.data);
     });
-  }, [currentYear, service]);
+  }, [year, service]);
 
   const postVerifyPayment = useCallback(
     async (data) => {
@@ -225,7 +225,7 @@ export function APIProvider({ children }) {
           setVerifyPaymentData(error.response);
         });
     },
-    [currentYear, service],
+    [year, service],
   );
 
   const postPaymentData = useCallback(
@@ -243,46 +243,46 @@ export function APIProvider({ children }) {
           setPaymentData(error.response);
         });
     },
-    [currentYear, service, getAccessTokenHeader],
+    [year, service, getAccessTokenHeader],
   );
 
   const activateUser = useCallback(async () => {
-    await service.get(`${URL.baseURL}${URL.services[currentYear]}${URL.endpoints.user.activate}`).then((response) => {
+    await service.get(`${URL.baseURL}${URL.services[year]}${URL.endpoints.user.activate}`).then((response) => {
       setActivateUserData(response.data);
     });
-  }, [currentYear, service]);
+  }, [year, service]);
 
   const deleteUser = useCallback(
     async (data) => {
       await service
-        .delete(`${URL.baseURL}${URL.services[currentYear]}${URL.endpoints.user.default}`, data)
+        .delete(`${URL.baseURL}${URL.services[year]}${URL.endpoints.user.default}`, data)
         .then((response) => {
           setDeleteUserData(response.data);
         });
     },
-    [currentYear, service],
+    [year, service],
   );
 
   const partiallyUpdateUser = useCallback(
     async (data) => {
       await service
-        .patch(`${URL.baseURL}${URL.services[currentYear]}${URL.endpoints.user.default}`, data)
+        .patch(`${URL.baseURL}${URL.services[year]}${URL.endpoints.user.default}`, data)
         .then((response) => {
           setPartiallyUpdateUserData(response.data);
         });
     },
-    [currentYear, service],
+    [year, service],
   );
 
   const updateUser = useCallback(
     async (data) => {
       await service
-        .put(`${URL.baseURL}${URL.services[currentYear]}${URL.endpoints.user.default}`, data)
+        .put(`${URL.baseURL}${URL.services[year]}${URL.endpoints.user.default}`, data)
         .then((response) => {
           setUpdateUserData(response);
         });
     },
-    [currentYear, service],
+    [year, service],
   );
 
   const createUser = useCallback(
@@ -303,58 +303,58 @@ export function APIProvider({ children }) {
     async (id) => {
       if (id != null) id = id + '/';
       await service
-        .get(`${URL.baseURL}${URL.services[currentYear]}${URL.endpoints.user.default}${id ?? ''}`)
+        .get(`${URL.baseURL}${URL.services[year]}${URL.endpoints.user.default}${id ?? ''}`)
         .then((response) => {
           setUserData(response.data);
         });
     },
-    [currentYear, service],
+    [year, service],
   );
 
   const getMiscData = useCallback(
     async (id) => {
       if (id != null) id = id + '/';
       await service
-        .get(`${URL.baseURL}${URL.services[currentYear]}${URL.endpoints.misc}${id ?? ''}`)
+        .get(`${URL.baseURL}${URL.services[year]}${URL.endpoints.misc}${id ?? ''}`)
         .then((response) => {
           setMiscData(response.data);
         });
     },
-    [currentYear, service],
+    [year, service],
   );
 
   const getStaffData = useCallback(async () => {
-    await service.get(`${URL.baseURL}${URL.services[currentYear]}${URL.endpoints.staff}`).then((response) => {
+    await service.get(`${URL.baseURL}${URL.services[year]}${URL.endpoints.staff}`).then((response) => {
       setStaffData(response.data);
     });
-  }, [currentYear, service]);
+  }, [year, service]);
 
   const getWorkshopsData = useCallback(
     async (id) => {
       if (id != null) id = id + '/';
       await service
-        .get(`${URL.baseURL}${URL.services[currentYear]}${URL.endpoints.workshop}${id ?? ''}`)
+        .get(`${URL.baseURL}${URL.services[year]}${URL.endpoints.workshop}${id ?? ''}`)
         .then((response) => {
           setWorkshopsData(response.data);
         });
     },
-    [currentYear, service],
+    [year, service],
   );
 
   const getPresentationsData = useCallback(async () => {
-    await service.get(`${URL.baseURL}${URL.services[currentYear]}${URL.endpoints.presentation}`).then((response) => {
+    await service.get(`${URL.baseURL}${URL.services[year]}${URL.endpoints.presentation}`).then((response) => {
       setPresentationsData(response.data);
     });
-  }, [currentYear, service]);
+  }, [year, service]);
 
   const getTeachersData = useCallback(
     async (id) => {
       if (id != null) id = id + '/';
       await service
-        .get(`${URL.baseURL}${URL.services[currentYear]}${URL.endpoints.teacher}${id ?? ''}`)
+        .get(`${URL.baseURL}${URL.services[year]}${URL.endpoints.teacher}${id ?? ''}`)
         .then((response) => setTeachersData(response.data));
     },
-    [currentYear, service],
+    [year, service],
   );
 
   useEffect(() => {
