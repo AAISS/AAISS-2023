@@ -3,7 +3,7 @@ import urllib.parse
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers, status
 
-from aaiss_backend.settings import BASE_URL
+from aaiss_backend.settings import BASE_URL, MEDIA_URL
 from backend_api import models
 from backend_api.models import User, Account, WorkshopRegistration, PresentationParticipation
 from utils.renderers import new_detailed_response
@@ -105,7 +105,7 @@ class WorkshopRegistrationSerializer(serializers.ModelSerializer):
         for key, val in super_response.items():
             if key == 'certificate':
                 if val:
-                    response[key] = urllib.parse.urljoin(BASE_URL, val)
+                    response[key] = urllib.parse.urljoin(urllib.parse.urljoin(BASE_URL, MEDIA_URL), val)
                 continue
             response["id"] = val
             try:
@@ -144,7 +144,7 @@ class PresentationParticipationSerializer(serializers.ModelSerializer):
         for key, val in super_response.items():
             if key == 'certificate':
                 if val:
-                    response[key] = urllib.parse.urljoin(BASE_URL, val)
+                    response[key] = urllib.parse.urljoin(urllib.parse.urljoin(BASE_URL, MEDIA_URL), val)
                 continue
             response["id"] = val
             try:
