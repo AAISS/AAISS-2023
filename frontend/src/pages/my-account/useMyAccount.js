@@ -160,6 +160,9 @@ export default function useMyAccount() {
                 if (presentation.id === userPresentation.id) {
                     presentation.type = "presentation"
                     if (userPresentation.status !== "AWAITING_PAYMENT") {
+                        if (userPresentation.certificate) {
+                            presentation.certificateLink = userPresentation.certificate
+                        }
                         userTempPresentations.push(presentation)
                     } else {
                         userTempCart.push(presentation)
@@ -172,6 +175,9 @@ export default function useMyAccount() {
                 if (workshop.id === userWorkshop.id) {
                     workshop.type = "workshop"
                     if (userWorkshop.status !== "AWAITING_PAYMENT") {
+                        if (userWorkshop.certificate) {
+                            workshop.certificateLink = userWorkshop.certificate
+                        }
                         userTempWorkshops.push(workshop)
                     } else {
                         userTempCart.push(workshop)
