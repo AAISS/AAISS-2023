@@ -20,7 +20,7 @@ from aaiss_backend import settings
 from aaiss_backend.settings import BASE_URL
 from backend_api import validators
 from backend_api.email import MailerThread
-from utils.random import create_random_string
+from utils.random import create_random_string, random_password, random_discount_code
 from utils.renderers import new_detailed_response
 
 SMALL_MAX_LENGTH = 255
@@ -288,11 +288,10 @@ class WorkshopRegistration(models.Model):
         AWAITING_PAYMENT = 1, _('Waiting for payment')
         PURCHASED = 2, _('Purchase confirmed')
 
-    _PASSWORD_LENGTH = 16
     workshop = models.ForeignKey(Workshop, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.IntegerField(choices=StatusChoices.choices, default=StatusChoices.AWAITING_PAYMENT)
-    password = models.CharField(max_length=SMALL_MAX_LENGTH, default=create_random_string(_PASSWORD_LENGTH))
+    password = models.CharField(max_length=SMALL_MAX_LENGTH, default=random_password)
 
     class Meta:
         unique_together = ('workshop', 'user',)
@@ -307,11 +306,10 @@ class PresentationParticipation(models.Model):
         AWAITING_PAYMENT = 1, _('Waiting for payment')
         PURCHASED = 2, _('Purchase confirmed')
 
-    _PASSWORD_LENGTH = 16
     presentation = models.ForeignKey(Presentation, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.IntegerField(choices=StatusChoices.choices, default=StatusChoices.AWAITING_PAYMENT)
-    password = models.CharField(max_length=SMALL_MAX_LENGTH, default=create_random_string(_PASSWORD_LENGTH))
+    password = models.CharField(max_length=SMALL_MAX_LENGTH, default=random_password)
 
     class Meta:
         unique_together = ('presentation', 'user',)
@@ -357,8 +355,8 @@ class Mailer(models.Model):
 
 
 class Discount(models.Model):
-    _CODE_LENGTH = 32
-    code = models.CharField(max_length=_CODE_LENGTH, null=False, default=create_random_string(_CODE_LENGTH),
+    _MAX_CODE_LENGTH = 32
+    code = models.CharField(max_length=_MAX_CODE_LENGTH, null=False, default=random_discount_code,
                             unique=True)
     discount_percent = models.IntegerField(default=0)
     is_active = models.BooleanField(default=False)
