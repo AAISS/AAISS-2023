@@ -50,7 +50,7 @@ const SignUpForm = ({ onLoginClick }) => {
   const validateForm = useCallback(() => {
     if (hasEmailError(email)) {
       setIsEmailWrong(true);
-      setEmailHelperText('Your email is not valid');
+      setEmailHelperText('Only Gmail accounts are accepted');
       return false;
     }
     const { lengthIsOk, startsWithZeroNine } = validatePhone(phoneNumber);
@@ -125,13 +125,17 @@ const SignUpForm = ({ onLoginClick }) => {
         alignItems="center"
         gap={2}
         p={8}
-        style={{ backgroundColor: 'var(--background-color)', borderRadius: 20, width: '250px' }}
+        className="w-full md:w-1/2 xl:w-1/3"
+        style={{ backgroundColor: 'var(--background-color)', borderRadius: 20 }}
       >
         <Typography variant="h2" fontSize={45} style={{ textAlign: 'center' }}>
           Sign Up
         </Typography>
-        <form onSubmit={handleFormSubmit}>
-          <FormControl>
+        <form
+          onSubmit={handleFormSubmit}
+          className="w-full"
+        >
+          <FormControl className="w-full">
             <Toast
               open={openToast}
               setOpen={setOpenToast}
@@ -164,6 +168,7 @@ const SignUpForm = ({ onLoginClick }) => {
               label="Phone Number"
               value={phoneNumber}
               error={isPhoneWrong}
+              required
               onChange={(event) => {
                 setPhoneNumber(event.target.value);
                 setIsPhoneWrong(false);
