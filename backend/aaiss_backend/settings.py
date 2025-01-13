@@ -25,7 +25,7 @@ SECRET_KEY = env.str("SECRET_KEY", 'orlch#mu_+2-my=fo)akh_3+^j7+7tc@v*-*z^(g*%(&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG", False)
 
-ALLOWED_HOSTS = ['aaiss.ir', '127.0.0.1', 'localhost', "http://185.252.86.114"]
+ALLOWED_HOSTS = ['aaiss.ir', '127.0.0.1', 'localhost', "185.252.86.114"]
 CSRF_TRUSTED_ORIGINS = ['https://aaiss.ir', 'https://localhost', 'https://127.0.0.1', "http://185.252.86.114"]
 
 # Application definition
