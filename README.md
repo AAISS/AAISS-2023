@@ -7,3 +7,5 @@ The project is divided into three main parts:
 1. Backend: Located in `backend` directory which contains the source code of the backend. Head over to [backend/README.md](backend/README.md) for more information.
 2. Frontend: Located in `frontend` directory which contains the source code of the frontend. Head over to [frontend/README.md](frontend/README.md) for more information.
 3. Deployment: Located in `deployment` directory which contains the materials need to deploy the project. Head over to [deployment/README.md](deployment/README.md) for more information.
+
+the end
