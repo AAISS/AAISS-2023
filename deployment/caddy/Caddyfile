@@ -1,35 +1,67 @@
 aaiss.ir {
-	@statics {
-		path /static/* /media/*
-	}
-	@backend {
-		path /admin* /api*
-	}
-	@frontend {
-	    not path /static/* /admin* /api* /media*
-	}
+        @statics {
+                path /static/* /media/*
+        }
+        @backend {
+                path /admin* /api*
+        }
+        @frontend {
+            not path /static/* /admin* /api* /media*
+        }
 
-	file_server @statics {
-		root /
-	}
+        file_server @statics {
+                root /
+        }
 
-	reverse_proxy @backend {
-		to backend:6446
-	}
+        reverse_proxy @backend {
+                to backend:6446
+        }
 
-    handle @frontend {
-        # TODO: dockerize the frontend project to be able to build the dist directory automatically
-        root * /dist
-        try_files {path} /index.html
-        file_server
-    }
+        handle @frontend {
+            # TODO: dockerize the frontend project to be able to build the dist directory automatically
+            root * /dist
+            try_files {path} /index.html
+            file_server
+        }
 
-	log {
-		level error
-		output stdout
-	}
+        log {
+                level error
+                output stdout
+        }
+}
+
+http://185.252.86.114 {
+        @statics {
+                path /static/* /media/*
+        }
+        @backend {
+                path /admin* /api*
+        }
+        @frontend {
+            not path /static/* /admin* /api* /media*
+        }
+
+        file_server @statics {
+                root /
+        }
+
+        reverse_proxy @backend {
+                to backend:6446
+        }
+
+        handle @frontend {
+            # TODO: dockerize the frontend project to be able to build the dist directory automatically
+            root * /dist
+            try_files {path} /index.html
+            file_server
+        }
+
+        log {
+                level error
+                output stdout
+        }
 }
 
 www.aaiss.ir {
-	redir https://aaiss.ir{uri}
+        redir http://aaiss.ir{uri}
 }
