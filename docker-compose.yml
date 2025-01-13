@@ -2,11 +2,8 @@ version: '3.8'
 
 services:
   migrate_db:
-    image: aaissaut/aaiss:backend
     build:
       context: ./backend
-      cache_from:
-        - aaissaut/aaiss:backend
     command: ./manage.py migrate
     volumes:
       - ./backend/data:/backend-aaiss/data
@@ -15,11 +12,8 @@ services:
     depends_on:
       migrate_db:
         condition: service_completed_successfully
-    image: aaissaut/aaiss:backend
     build:
       context: ./backend
-      cache_from:
-        - aaissaut/aaiss:backend
     command: gunicorn aaiss_backend.wsgi:application --bind 0.0.0.0:6446
     environment:
       SECRET_KEY: ${SECRET_KEY}
@@ -37,11 +31,8 @@ services:
       retries: 10
 
   frontend:
-    image: aaissaut/aaiss:frontend
     build:
       context: ./frontend
-      cache_from:
-        - aaissaut/aaiss:frontend
     volumes:
       - static_files:/run/dist
     ports:
@@ -53,7 +44,7 @@ services:
         condition: service_healthy
       frontend:
         condition: service_completed_successfully
-    image: focker.ir/caddy:2.7.3
+    image: caddy:2.7.3
     volumes:
       - ./deployment/caddy:/etc/caddy
       - ./backend/static:/static
