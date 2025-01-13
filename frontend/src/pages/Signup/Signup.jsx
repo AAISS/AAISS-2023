@@ -276,7 +276,7 @@ const LoginForm = ({ onSignUpClick }) => {
         alignItems="center"
         gap={2}
         p={8}
-        style={{ backgroundColor: 'var(--background-color)', borderRadius: 20, width: '250px' }}
+        style={{ backgroundColor: 'var(--background-color)', borderRadius: 20,}}
       >
         <Typography variant="h2" fontSize={45} style={{ textAlign: 'center' }}>
           Login
