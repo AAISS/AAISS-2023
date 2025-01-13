@@ -1,4 +1,4 @@
-FROM node:18.18.0 AS build
+FROM focker.ir/node:18.20-alpine AS build
 
 WORKDIR /run
 
@@ -8,7 +8,7 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-FROM alpine:3.17.6 AS production
+FROM focker.ir/alpine:3.17.6 AS production
 
 WORKDIR /run
 COPY --from=build /run/dist /dist
