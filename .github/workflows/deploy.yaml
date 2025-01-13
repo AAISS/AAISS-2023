@@ -56,7 +56,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           envs: SECRET_KEY,EMAIL_HOST_PASSWORD,ZIFY_AUTH
           script: |
-            docker compose -f AAISS-2023/docker-compose.yml pull 
             docker compose -f AAISS-2023/docker-compose.yml up -d --force-recreate --no-build
 
       - name: Cleanup docker images
