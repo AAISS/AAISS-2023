@@ -1,4 +1,4 @@
-aaiss.ir {
+autaaiss.com {
         @statics {
                 path /static/* /media/*
         }
@@ -62,6 +62,6 @@ http://185.252.86.114 {
         }
 }
 
-www.aaiss.ir {
-        redir http://aaiss.ir{uri}
+www.autaaiss.com {
+        redir http://autaaiss.ir{uri}
 }
