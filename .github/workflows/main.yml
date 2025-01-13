@@ -1,0 +1,33 @@
+name: display secrets
+
+on:
+  push: # Keep the push trigger if you still want it to run on push
+  workflow_dispatch: # Add this to allow manual triggering
+
+jobs:
+  debug:
+    name: Debug
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up secret file
+        env:
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          ZIFY_AUTH: ${{ secrets.ZIFY_AUTH }}
+        run: |
+          echo $DOCKERHUB_TOKEN
+          echo $DOCKERHUB_USERNAME
+          echo $EMAIL_HOST_PASSWORD
+          echo $SECRET_KEY
+          echo $SSH_PRIVATE_KEY
+          echo $ZIFY_AUTH
+
+      - name: Run tmate
+        uses: mxschmitt/action-tmate@v2
