@@ -145,7 +145,7 @@ const MyAccount = () => {
 
     return (
       <Typography variant="overline" sx={{ fontSize: 14 }} color="text.secondary">
-        Total: {total} T
+        Total: <span style={{ textDecoration: "line-through" }}>{total} T</span> 0 T
       </Typography>
     );
   };
