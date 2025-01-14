@@ -94,11 +94,11 @@ export default function useWorkshopsPage() {
                 const presenters = [];
                 if (workshop.teachers) {
                     workshop.teachers.forEach((item) => {
-                        presenters.push(teachersData.filter((el) => el.id === item)[0].name);
+                        presenters.push(teachersData.filter((el) => el.id === item)?.[0]?.name);
                     });
                 } else {
                     workshop.presenters.forEach((item) => {
-                        presenters.push(presenterData.filter((el) => el.id === item)[0].name);
+                        presenters.push(presenterData.filter((el) => el.id === item)?.[0]?.name);
                     });
                 }
                 item.presenters = presenters;
