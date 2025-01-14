@@ -84,6 +84,18 @@ export default function useMyAccount() {
                         alertType: "error"
                     })
                 }
+            } else if (paymentData.status === 200 && paymentData.data.status === 202) {
+                setToastData({
+                    message: "Success! Don't forget to attend them ;)",
+                    alertType: "success"
+                })
+
+                getWorkshopsData()
+                getPresentationsData()
+                getUserWorkshops()
+                getUserPresentations()
+                getTeachersData()
+                getPresenterData()
             } else {
                 setToastData({
                     message: "Invalid Offer Code! Please Try Again",
