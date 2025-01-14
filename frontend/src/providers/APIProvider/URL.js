@@ -1,5 +1,5 @@
 const URL = {
-  baseURL: 'https://autaaiss.com/',
+  baseURL: 'http://localhost:8000/',
   services: {
     default: 'api/',
     2021: 'api/2021/',

@@ -23,7 +23,7 @@ environ.Env.read_env(BASE_DIR.joinpath('.env'))
 # production/development key
 SECRET_KEY = env.str("SECRET_KEY", 'orlch#mu_+2-my=fo)akh_3+^j7+7tc@v*-*z^(g*%(&lih@pv')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool("DEBUG", False)
+DEBUG = env.bool("DEBUG", True)
 
 ALLOWED_HOSTS = ['autaaiss.com', '127.0.0.1', 'localhost', "185.252.86.114"]
 CSRF_TRUSTED_ORIGINS = ['https://autaaiss.com', 'https://localhost', 'https://127.0.0.1', "http://185.252.86.114"]
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'backend_api',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -100,7 +101,7 @@ WSGI_APPLICATION = 'aaiss_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'data' / 'db.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
