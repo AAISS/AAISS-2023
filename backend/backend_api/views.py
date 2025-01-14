@@ -235,8 +235,7 @@ class PaymentViewSet(viewsets.GenericViewSet):
 
         if payment.amount < 1:
             payment.update_payment_status(Payment.PaymentStatus.PAYMENT_CONFIRMED)
-            return redirect(urllib.parse.urljoin(BASE_URL, 'callback') + '?client_ref_id=' + str(
-                payment.pk) + '&payment_status=succeeded')
+            return Response(new_detailed_response(status.HTTP_202_ACCEPTED, "Payment created successfully",{}))
 
         response = ZIFYRequest().create_payment(str(payment.pk), payment.discounted_amount, user.name,
                                                 user.phone_number,
