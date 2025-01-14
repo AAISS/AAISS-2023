@@ -11,12 +11,23 @@
 
 .logo {
     width: 5.5rem;
+    /* height: 5.5rem; */
 }
 
-#footer-title {
+.logo-container {
+    display: flex;
+    gap: 5px;
+    width: 240px;
+    justify-content: center;
+    align-items: center;
+    padding-inline: 10px;
+    box-sizing: content-box;
+}
+
+/* #footer-title {
     max-width: 300px;
     text-align: left;
-}
+} */
 
 #social-media {
     display: flex;

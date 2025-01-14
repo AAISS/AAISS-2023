@@ -2,9 +2,11 @@ import React from 'react';
 import aut from '../../assets/AUT.png';
 import ceit from '../../assets/CEIT.png';
 import ssc from '../../assets/SSC.png';
+import bale from '../../assets/bale.png';
 import '../../css/Footer.css'
 import SvgIcon from "@mui/material/SvgIcon";
 import Link from "@mui/material/Link";
+import { Margin } from '@mui/icons-material';
 
 export default function PageFooter() {
     return (
@@ -47,14 +49,17 @@ export default function PageFooter() {
                     </Link>
                 </span>
             </div>
-            <div>
+            <div className='logo-container'>
+                <a href='https://bale.ai/'>
+                    <img className="logo" src={bale} alt="Bale"/>
+                </a>
                 <img className="logo" src={aut} alt="Amirkabir University of Technology"/>
-                <img className="logo" src={ceit} alt="AUT Computer Engineering"/>
+                {/* <img className="logo" src={ceit} alt="AUT Computer Engineering"/> */}
                 <img className="logo" src={ssc} alt="AUT Student Scientific Chapter"/>
             </div>
-            <h3 id="footer-title">
+            {/* <h3 id="footer-title">
                 Student Scientific Chapter Computer Engineering Department Amirkabir University of Technology
-            </h3>
+            </h3> */}
         </div>
     );
 }

@@ -18,12 +18,28 @@ export const Presenter = ({ presenterName }) => (
 );
 
 export const Cost = ({ cost }) => (
-  <Stack flexDirection="row" alignItems="center" gap={1}>
-    <CreditCard />
-    <Typography variant="overline" sx={{ fontSize: 14 }} color="text.secondary">
-      {cost} T
+<Stack flexDirection="row" alignItems="center" gap={1}>
+  <CreditCard />
+  <Stack>
+    <Typography
+      variant="overline"
+      sx={{ fontSize: 14, color: "text.secondary" }}
+      lineHeight={1.5}
+    >
+      <span style={{ textDecoration: "line-through" }}>{cost} T</span> 0 T
+    </Typography>
+    <Typography
+      sx={{
+        fontSize: 14,
+        color: "text.secondary",
+        fontWeight: "700"
+      }}
+      lineHeight={1.5}
+    >
+      Paid by Bale Messeger
     </Typography>
   </Stack>
+</Stack>
 );
 
 const FullCapacityChip = () => (
