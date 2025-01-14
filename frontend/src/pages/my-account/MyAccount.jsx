@@ -4,6 +4,7 @@ import ItemCard from '../../components/item-card/item-card.jsx';
 import Toast from '../../components/toast/Toast.jsx';
 import useMyAccount from './useMyAccount.js';
 
+
 const TAB_ITEMS = ['Workshops', 'Presentations', 'Cart'];
 const DISCOUNT = 0.25;
 const MIN_TOTAL_PRICE_TO_GET_DISCOUNT = 200000;
@@ -175,14 +176,14 @@ const MyAccount = () => {
             <Divider sx={{ my: 2 }} />
             <Stack alignItems="center" gap={1}>
               <br />
-              Have a Discount Code?
-              <TextField
+              {/* Have a Discount Code? */}
+              {/* <TextField
                   id={"off-input-field"}
                   label={"Discount Code Here!"}
                   variant={"outlined"}
                   onChange={handleOffCodeInputHandler}
                   value={offCode}
-              />
+              /> */}
               <br />
               {renderTotalPrice()}
               <Button
