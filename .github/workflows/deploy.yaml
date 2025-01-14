@@ -55,9 +55,9 @@ jobs:
           host: ${{ vars.VM_HOST }}
           username: ${{ vars.VM_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          envs: SECRET_KEY,EMAIL_HOST_PASSWORD,ZIFY_AUTH
+          envs: SECRET_KEY,EMAIL_HOST_USER,EMAIL_HOST_PASSWORD,ZIFY_AUTH
           script: |
-            docker compose -f AAISS-2023/docker-compose.yml up -d --force-recreate --no-build
+            docker compose -f AAISS-2023/docker-compose.yml up -d --force-recreate --build
 
       - name: Cleanup docker images
         uses: appleboy/ssh-action@master
