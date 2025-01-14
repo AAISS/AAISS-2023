@@ -8,7 +8,7 @@ export function APIProvider({ children }) {
   const { accessToken, refreshToken, setAccessTokenFromLocalStorage } = useConfig();
 
   const service = axios;
-  const year = "2023";
+  const year = "2024";
 
   const [workshopsData, setWorkshopsData] = useState();
   const [presentationsData, setPresentationsData] = useState();
