@@ -5,6 +5,8 @@ const URL = {
     2021: 'api/2021/',
     2023: 'api/2023/',
     2024: 'api/2024/',
+    2025: 'api/2025/',
+    2026: 'api/2026/',
   },
   endpoints: {
     staff: 'staff/',
