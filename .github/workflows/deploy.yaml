@@ -49,6 +49,7 @@ jobs:
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
+          EMAIL_HOST_USER: ${{ vars.EMAIL_HOST_USER }}
           ZIFY_AUTH: ${{ secrets.ZIFY_AUTH }}
         with:
           host: ${{ vars.VM_HOST }}
