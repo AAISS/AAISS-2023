@@ -178,7 +178,7 @@ EMAIL_HOST_USER = env.str('EMAIL_HOST_USER', 'aaiss.ce.2024@gmail.com')
 EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD', '')
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
-DEFAULT_FROM_EMAIL = env.str('DEFAULT_FROM_EMAIL', 'aaiss.ce.aut@gmail.com')
+DEFAULT_FROM_EMAIL = env.str('DEFAULT_FROM_EMAIL', 'aaiss.ce.2024@gmail.com')
 ENABLE_SENDING_EMAIL = env.bool('ENABLE_SENDING_EMAIL', True)
 
 BASE_URL = env.str('BASE_URL', 'https://aaiss.ir/')
