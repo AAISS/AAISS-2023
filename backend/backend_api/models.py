@@ -171,7 +171,7 @@ class Workshop(models.Model):
 
 class Presentation(models.Model):
     name = models.CharField(max_length=SMALL_MAX_LENGTH)
-    teachers = models.ManyToManyField(Teacher)
+    presenters = models.ManyToManyField(Teacher)
     desc = models.CharField(max_length=BIG_MAX_LENGTH)
     year = models.IntegerField(blank=False, default=2020)
     cost = models.PositiveIntegerField(default=0)
