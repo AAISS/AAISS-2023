@@ -276,13 +276,17 @@ const LoginForm = ({ onSignUpClick }) => {
         alignItems="center"
         gap={2}
         p={8}
-        style={{ backgroundColor: 'var(--background-color)', borderRadius: 20,}}
+        className="w-full md:w-1/2 xl:w-1/3"
+        style={{ backgroundColor: 'var(--background-color)', borderRadius: 20 }}
       >
         <Typography variant="h2" fontSize={45} style={{ textAlign: 'center' }}>
           Login
         </Typography>
-        <form onSubmit={handleFormSubmit}>
-          <FormControl>
+        <form
+          onSubmit={handleFormSubmit}
+          className="w-full"
+        >
+          <FormControl className="w-full">
             <Toast
               open={openToast}
               setOpen={setOpenToast}
