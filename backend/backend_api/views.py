@@ -232,6 +232,11 @@ class PaymentViewSet(viewsets.GenericViewSet):
             except ValidationError as e:
                 return Response(e)
         payment = Payment.create_payment_for_user(user, discount)
+
+        if payment.amount < 1:
+            payment.update_payment_status(Payment.PaymentStatus.PAYMENT_CONFIRMED)
+            return Response(new_detailed_response(status.HTTP_202_ACCEPTED, "Payment created successfully",{}))
+
         response = ZIFYRequest().create_payment(str(payment.pk), payment.discounted_amount, user.name,
                                                 user.phone_number,
                                                 user.account.email)
