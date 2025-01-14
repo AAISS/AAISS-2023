@@ -60,6 +60,9 @@ export default function DrawerAppBar() {
   };
 
   const shouldShowRoute = (route) => {
+    if(route.title === 'Staff'){
+      return false;
+    }
     if (route.title === 'Signup') {
       if (accessToken || refreshToken) {
         return false;
