@@ -145,7 +145,10 @@ const MyAccount = () => {
 
     return (
       <Typography variant="overline" sx={{ fontSize: 14 }} color="text.secondary">
-        Total: {total !== 0 && <span style={{ textDecoration: "line-through" }}>{total} T</span>} 0 T
+
+        Total: {total !== 0 && <span class="text-sm " style={{ textDecoration: "line-through" }}>{total}T</span>}{' '}
+       <span class="text-lg pl-1 font-bold">0T</span>
+
       </Typography>
     );
   };
