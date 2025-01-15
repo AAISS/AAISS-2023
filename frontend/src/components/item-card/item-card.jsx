@@ -26,7 +26,8 @@ export const Cost = ({ cost }) => (
       sx={{ fontSize: 14, color: "text.secondary" }}
       lineHeight={1.5}
     >
-      <span style={{ textDecoration: "line-through" }}>{cost} T</span> 0 T
+      <span class="text-sm " style={{ textDecoration: "line-through" }}>{cost}T</span>
+       <span class="text-lg pl-1 font-bold">0T</span>
     </Typography>
     <Typography
       sx={{
@@ -36,7 +37,7 @@ export const Cost = ({ cost }) => (
       }}
       lineHeight={1.5}
     >
-      Paid by Bale Messeger
+      Paid by Bale Messenger
     </Typography>
   </Stack>
 </Stack>
