@@ -18,12 +18,29 @@ export const Presenter = ({ presenterName }) => (
 );
 
 export const Cost = ({ cost }) => (
-  <Stack flexDirection="row" alignItems="center" gap={1}>
-    <CreditCard />
-    <Typography variant="overline" sx={{ fontSize: 14 }} color="text.secondary">
-      {cost} T
+<Stack flexDirection="row" alignItems="center" gap={1}>
+  <CreditCard />
+  <Stack>
+    <Typography
+      variant="overline"
+      sx={{ fontSize: 14, color: "text.secondary" }}
+      lineHeight={1.5}
+    >
+      <span class="text-sm " style={{ textDecoration: "line-through" }}>{cost}T</span>
+       <span class="text-lg pl-1 font-bold">0T</span>
+    </Typography>
+    <Typography
+      sx={{
+        fontSize: 14,
+        color: "text.secondary",
+        fontWeight: "700"
+      }}
+      lineHeight={1.5}
+    >
+      Paid by Bale Messenger
     </Typography>
   </Stack>
+</Stack>
 );
 
 const FullCapacityChip = () => (
@@ -59,16 +76,16 @@ const ItemCard = ({
   startDate,
   endDate,
   presenterName,
-    certificateLink,
-    finished,
+  certificateLink,
+  finished,
   level,
   cost = 50000,
   purchaseState = 0, // 0 -> not purchased, 1 -> in cart, 2 -> purchased
   hasProject = false,
   prerequisites,
   syllabus,
-  remainingCapacity = 50,
-  capacity = 50,
+  remainingCapacity = 95,
+  capacity = 95,
   isFull = false,
   addToCalendarLink,
   onClickAddToCart = () => {},

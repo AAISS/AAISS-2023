@@ -184,7 +184,7 @@ EMAIL_USE_SSL = False
 DEFAULT_FROM_EMAIL = env.str('DEFAULT_FROM_EMAIL', 'aaiss.ce.2024@gmail.com')
 ENABLE_SENDING_EMAIL = env.bool('ENABLE_SENDING_EMAIL', True)
 
-BASE_URL = env.str('BASE_URL', 'https://aaiss.ir/')
+BASE_URL = env.str('BASE_URL', 'https://autaaiss.com/')
 
 # https://docs.djangoproject.com/en/4.2/releases/3.2/#customizing-type-of-auto-created-primary-keys
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

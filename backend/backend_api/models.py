@@ -151,8 +151,8 @@ class Workshop(models.Model):
         base_url = "https://www.google.com/calendar/render?action=TEMPLATE"
         workshop_title = escape(self.name)
         workshop_description = escape(self.desc)
-        start_datetime = self.start_date.strftime("%Y%m%dT%H%M%S")
-        end_datetime = self.end_date.strftime("%Y%m%dT%H%M%S")
+        start_datetime = self.start_date.strftime("%Y%m%dT%H%M%SZ")
+        end_datetime = self.end_date.strftime("%Y%m%dT%H%M%SZ")
 
         teachers_names = " ".join([teacher.name for teacher in self.teachers.all()])
         event_details = f"Teachers: {teachers_names}\nDescription: {workshop_description}"
@@ -223,8 +223,8 @@ class Presentation(models.Model):
         base_url = "https://www.google.com/calendar/render?action=TEMPLATE"
         presentation_title = escape(self.name)
         presentation_description = escape(self.desc)
-        start_datetime = self.start_date.strftime("%Y%m%dT%H%M%S")
-        end_datetime = self.end_date.strftime("%Y%m%dT%H%M%S")
+        start_datetime = self.start_date.strftime("%Y%m%dT%H%M%SZ")
+        end_datetime = self.end_date.strftime("%Y%m%dT%H%M%SZ")
 
         presenters_names = " ".join([presenter.name for presenter in self.presenters.all()])
         event_details = f"Presenters: {presenters_names}\nDescription: {presentation_description}"
