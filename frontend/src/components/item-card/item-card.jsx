@@ -109,7 +109,7 @@ const ItemCard = ({
         );
       case 1:
         return (
-          <Button variant="text" color="error" size="small" disabled={isFull} onClick={onClickRemoveFromCart}>
+          <Button variant="text" color="error" size="small" onClick={onClickRemoveFromCart}>
             Remove
           </Button>
         );
