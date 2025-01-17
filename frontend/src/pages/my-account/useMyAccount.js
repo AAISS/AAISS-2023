@@ -78,6 +78,11 @@ export default function useMyAccount() {
                         message: "Invalid Offer Code! Please Try Again",
                         alertType: "error"
                     })
+                } else if (paymentData.data?.message?.includes("is full")) {
+                    setToastData({
+                        message: "Some items have already reached their full capacity! Please remove them and try again",
+                        alertType: "error"
+                    })
                 } else {
                     setToastData({
                         message: "There was an Error Regarding Your Payment! Please Try Again Later",
