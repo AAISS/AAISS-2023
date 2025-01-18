@@ -66,7 +66,7 @@ export default function WorkshopsPage() {
     return (
         <section
         >
-            {toastData && (
+            {toastData && openToast && (
                 <Toast open={openToast} setOpen={setOpenToast} alertType={toastData.type} message={toastData.message}/>
             )}
             {/*<div className="filter-dropdown-container">*/}
