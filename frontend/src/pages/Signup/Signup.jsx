@@ -106,7 +106,7 @@ const SignUpForm = ({ onLoginClick }) => {
       case 400:
         toastDataTemp.message = 'User with This Email Already Exists!';
         toastDataTemp.alertType = 'error';
-        break;
+        break;  
       default:
         toastDataTemp.message = 'Unexpected Error! Please Try Again Later.';
         toastDataTemp.alertType = 'error';
@@ -242,7 +242,15 @@ const LoginForm = ({ onSignUpClick }) => {
   useEffect(() => {
     if (issueTokenResponse == null) return;
 
-    setToastData(Helper.getToastDataFromResponse(issueTokenResponse));
+    if (issueTokenResponse.status === 400) {}
+
+    if (issueTokenResponse.status === 401) {
+      setToastData({message: "Wrong mail or password", alertType: "error"});
+    } else if (issueTokenResponse.status === 400) {
+      setToastData({message: "Have you activated your account yet? check your email", alertType: "error"});
+    }  else {
+      setToastData(Helper.getToastDataFromResponse(issueTokenResponse));
+    }
     setOpenToast(true);
 
     localStorage['user'] = JSON.stringify(issueTokenResponse.data);
