@@ -19,6 +19,8 @@ services:
       SECRET_KEY: ${SECRET_KEY}
       EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
       ZIFY_AUTH: ${ZIFY_AUTH}
+      SMS_KEY: ${SMS_KEY}
+      SMS_LINE_NUMBER: ${SMS_LINE_NUMBER}
     volumes:
       - ./backend/data:/backend-aaiss/data
       - ./backend/static:/backend-aaiss/static
