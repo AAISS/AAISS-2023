@@ -131,6 +131,12 @@ export default function useWorkshopsPage() {
         const notEligibleItems = parsedData.slice(0, index)
         parsedData = parsedData.slice(index)
         parsedData.push(...notEligibleItems)
+        console.log(parsedData)
+        const testItemIndex = parsedData.findIndex(
+                el => el.name === "Test Title"
+            )
+        if (testItemIndex !== -1)
+            parsedData.splice(testItemIndex, 1)
         setParsedItemsList(parsedData);
         setFileteredItems(parsedData);
 
