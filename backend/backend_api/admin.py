@@ -7,6 +7,7 @@ from aaiss_backend.settings import SKYROOM_BASE_URL
 from backend_api import models
 from backend_api.email import MailerThread
 from backend_api.models import Discount, Presentation, PresentationParticipation, WorkshopRegistration
+from backend_api.sms import SMSThread
 from utils.skyroom_exporter import SkyroomCredentials, convert_credentials_to_csv_response
 
 
@@ -104,7 +105,7 @@ class PresentationAdmin(admin.ModelAdmin):
 
     list_display = ('__str__', 'level', 'no_of_participants', 'year')
     readonly_fields = ('participants',)
-    actions = ['export_login_credentials', 'send_registration_emails']
+    actions = ['export_login_credentials', 'send_registration_emails', 'send_registration_sms']
     action_form = PresentationForm
 
     class Meta:
@@ -138,6 +139,24 @@ class PresentationAdmin(admin.ModelAdmin):
                                                   'meeting_title': presentation.name,
                                               })).start()
 
+    @admin.action(description='Send registration sms')
+    def send_registration_sms(self, request, obj):
+        for presentation in obj:
+            mobiles = {
+                str(registration.user.phone_number)
+                for registration in presentation.presentationparticipation_set.filter(
+                    status=PresentationParticipation.StatusChoices.PURCHASED
+                )
+            }
+
+            message_text = (
+                f"Dear User, this is a friendly reminder to join us for the upcoming presentation '{presentation.name}'. "
+                f"We look forward to your participation! Date: {presentation.start_date}"
+            )
+
+            if mobiles:
+                SMSThread(message_text, list(mobiles)).start()
+
 
 class WorkshopAdmin(admin.ModelAdmin):
     class WorkshopForm(ActionForm):
@@ -146,7 +165,7 @@ class WorkshopAdmin(admin.ModelAdmin):
 
     list_display = ('__str__', 'capacity', 'cost', 'has_project', 'level', 'no_of_participants', 'year')
     readonly_fields = ('participants',)
-    actions = ['export_login_credentials', 'send_registration_emails']
+    actions = ['export_login_credentials', 'send_registration_emails', 'send_registration_sms']
     action_form = WorkshopForm
 
     class Meta:
@@ -179,6 +198,24 @@ class WorkshopAdmin(admin.ModelAdmin):
                                                   'meeting_type': 'workshop',
                                                   'meeting_title': workshop.name,
                                               })).start()
+
+    @admin.action(description='Send registration sms')
+    def send_registration_sms(self, request, obj):
+        for workshop in obj:
+            mobiles = {
+                str(registration.user.phone_number)
+                for registration in workshop.workshopregistration_set.filter(
+                    status=WorkshopRegistration.StatusChoices.PURCHASED
+                )
+            }
+
+            message_text = (
+                f"Dear User, this is a friendly reminder to join us for the upcoming workshop '{workshop.name}'. "
+                f"We look forward to your participation! Date: {workshop.start_date}"
+            )
+
+            if mobiles:
+                SMSThread(message_text, list(mobiles)).start()
 
 
 class MiscAdmin(admin.ModelAdmin):

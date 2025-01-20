@@ -170,6 +170,8 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 X_API_KEY = env.str('X_API_KEY', '')
 X_SANDBOX = env.str('X_SANDBOX', '')
+SMS_KEY = env.str('SMS_KEY', '')
+SMS_LINE_NUMBER = env.str('SMS_LINE_NUMBER', '')
 
 SERVER_EMAIL = 'smtp-relay.sendinblue.com'
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
