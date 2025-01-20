@@ -51,11 +51,13 @@ jobs:
           EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
           EMAIL_HOST_USER: ${{ vars.EMAIL_HOST_USER }}
           ZIFY_AUTH: ${{ secrets.ZIFY_AUTH }}
+          SMS_KEY: ${{ secrets.SMS_KEY }}
+          SMS_LINE_NUMBER: ${{ secrets.SMS_LINE_NUMBER }}
         with:
           host: ${{ vars.VM_HOST }}
           username: ${{ vars.VM_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          envs: SECRET_KEY,EMAIL_HOST_USER,EMAIL_HOST_PASSWORD,ZIFY_AUTH
+          envs: SECRET_KEY,EMAIL_HOST_USER,EMAIL_HOST_PASSWORD,ZIFY_AUTH,SMS_KEY,SMS_LINE_NUMBER
           script: |
             docker compose -f AAISS-2023/docker-compose.yml up -d --force-recreate --build
 
