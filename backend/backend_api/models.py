@@ -265,9 +265,13 @@ class Account(AbstractBaseUser, PermissionsMixin):
         self.activation_code = create_random_string(self._ACTIVATION_CODE_LENGTH)
         self.save()
         registration_url = urljoin(BASE_URL, reverse('activate') + "?" + f"token={self.activation_code}")
-        MailerThread("AAISS registration email", [self.email],
-                     render_to_string('registration_email.html',
-                                      {'registration_url': registration_url})).start()
+        email_data = {
+            "email": self.email,
+            "subject": "AAISS registration email",
+            "content": render_to_string('registration_email.html',
+                                      {'registration_url': registration_url})
+        }
+        MailerThread([email_data]).start()
 
 
 class User(models.Model):

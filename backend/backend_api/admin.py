@@ -126,18 +126,20 @@ class PresentationAdmin(admin.ModelAdmin):
     @admin.action(description='Send registration emails')
     def send_registration_emails(self, request, obj):
         for presentation in obj:
-            for registration in presentation.presentationparticipation_set.filter(
-                    status=PresentationParticipation.StatusChoices.PURCHASED):
-                MailerThread(f"AAISS login credentials for {presentation.name}",
-                             [registration.user.account.email],
-                             render_to_string('login_credentials.html',
-                                              {
-                                                  'username': registration.username,
-                                                  'password': registration.password,
-                                                  'meeting_url': SKYROOM_BASE_URL + '/' + request.POST['room_name'],
-                                                  'meeting_type': 'presentation',
-                                                  'meeting_title': presentation.name,
-                                              })).start()
+            data = [{
+                "email": registration.user.account.email,
+                "subject": f"AAISS login credentials for {presentation.name}",
+                "content": render_to_string('login_credentials.html',
+                                          {
+                                              'username': registration.username,
+                                              'password': registration.password,
+                                              'meeting_url': SKYROOM_BASE_URL + '/' + request.POST['room_name'],
+                                              'meeting_type': 'presentation',
+                                              'meeting_title': presentation.name,
+                                          })
+            } for registration in presentation.presentationparticipation_set.filter(
+                    status=PresentationParticipation.StatusChoices.PURCHASED)]
+            MailerThread(data).start()
 
     @admin.action(description='Send registration sms')
     def send_registration_sms(self, request, obj):
@@ -186,18 +188,20 @@ class WorkshopAdmin(admin.ModelAdmin):
     @admin.action(description='Send registration emails')
     def send_registration_emails(self, request, obj):
         for workshop in obj:
-            for registration in workshop.workshopregistration_set.filter(
-                    status=WorkshopRegistration.StatusChoices.PURCHASED):
-                MailerThread(f"AAISS login credentials for {workshop.name}",
-                             [registration.user.account.email],
-                             render_to_string('login_credentials.html',
-                                              {
-                                                  'username': registration.username,
-                                                  'password': registration.password,
-                                                  'meeting_url': SKYROOM_BASE_URL + '/' + request.POST['room_name'],
-                                                  'meeting_type': 'workshop',
-                                                  'meeting_title': workshop.name,
-                                              })).start()
+            data = [{
+                "email": registration.user.account.email,
+                "subject": f"AAISS login credentials for {workshop.name}",
+                "content": render_to_string('login_credentials.html',
+                                          {
+                                              'username': registration.username,
+                                              'password': registration.password,
+                                              'meeting_url': SKYROOM_BASE_URL + '/' + request.POST['room_name'],
+                                              'meeting_type': 'workshop',
+                                              'meeting_title': workshop.name,
+                                          })
+            } for registration in workshop.workshopregistration_set.filter(
+                    status=WorkshopRegistration.StatusChoices.PURCHASED)]
+            MailerThread(data).start()
 
     @admin.action(description='Send registration sms')
     def send_registration_sms(self, request, obj):
