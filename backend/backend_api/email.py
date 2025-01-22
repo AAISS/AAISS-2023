@@ -12,7 +12,7 @@ class MailerThread(threading.Thread):
     _MAXIMUM_RETRIES = 10
     _SLEEP_INTERVAL_SECONDS = 60
     CHUNK_SIZE = 40
-    CHUNK_SLEEP_INTERVAL = 120 # In seconds
+    CHUNK_SLEEP_INTERVAL = 720 # In seconds
 
     def __init__(self, subject: str, targets: list[str], html_body: str):
         self.subject = subject
