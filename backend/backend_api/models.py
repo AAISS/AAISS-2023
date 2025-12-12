@@ -502,6 +502,11 @@ class Payment(models.Model):
                 self.amount * (1 - self._DISCOUNT_PERCENTAGE / 100))
         return int(self.amount * (1 - self.discount.discount_percent / 100))
 
+    def finalize_free_payment(self):
+        if self.discounted_amount > 0:
+            raise Exception("Cannot finalize free payment: Amount is greater than zero.")
+
+        self.update_payment_status(self.PaymentStatus.PAYMENT_CONFIRMED)
 
 class Committee(models.Model):
     profile = models.ImageField(verbose_name='profile', null=True, blank=True)
