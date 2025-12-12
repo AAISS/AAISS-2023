@@ -75,7 +75,7 @@ export default function useMyAccount() {
             if (paymentData.status !== 200) {
                 if (paymentData.data?.message?.split(" ")[0] === "Discount") {
                     setToastData({
-                        message: "Invalid Offer Code! Please Try Again",
+                        message: "Invalid Operation! Please Try Again",
                         alertType: "error"
                     })
                 } else if (paymentData.data?.message?.includes("is full")) {
@@ -103,7 +103,7 @@ export default function useMyAccount() {
                 getPresenterData()
             } else {
                 setToastData({
-                    message: "Invalid Offer Code! Please Try Again",
+                    message: "Invalid Operation! Please Try Again",
                     alertType: "error"
                 })
             }

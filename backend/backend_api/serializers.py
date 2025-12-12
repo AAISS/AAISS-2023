@@ -31,6 +31,9 @@ class AccountSerializer(serializers.ModelSerializer):
         model = Account
         fields = ('email', 'password')
 
+    def validate_email(self, value):
+        return value.lower().strip()
+
 
 class UserSerializer(serializers.ModelSerializer):
     account = AccountSerializer()
