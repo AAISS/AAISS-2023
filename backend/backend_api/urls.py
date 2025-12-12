@@ -60,6 +60,9 @@ user_route = [
     path('user/activate/', views.UserViewSet.as_view({
         'get': 'activate'
     }), name='activate'),
+    path('user/forgot_password/', views.UserViewSet.as_view({
+        'post': 'forgot_password'
+    }), name='forgot-password'),
     path('user/workshop/', views.WorkshopRegistrationViewSet.as_view({
         'get': 'list',
         'post': 'create',

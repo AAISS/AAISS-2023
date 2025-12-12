@@ -191,29 +191,30 @@ export function APIProvider({ children }) {
           break;
       }
 
-      const userKey = JSON.parse(localStorage.getItem('user'));
-      if (userKey == null) {
+      if (!accessToken) {
         setAddToCartResponse({ status: 401 });
-      } else {
-        const tokenStr = userKey.access;
-        await service
-          .post(`${URL.baseURL}${URL.services.default}${endpoint}`, body, {
-            headers: { Authorization: `Bearer ${tokenStr}` },
-          })
-          .then((response) => {
-            setAddToCartResponse(response);
-          })
-          .catch((error) => {
-            setAddToCartResponse(error.response);
-            if (!error) return;
-
-            if (error.response.status === 401) {
-              updateAccessTokenWithRefreshToken();
-            }
-          });
+        return;
       }
+
+      await service
+        .post(`${URL.baseURL}${URL.services.default}${endpoint}`, body, {
+          headers: {
+            Authorization: getAccessTokenHeader(),
+          },
+        })
+        .then((response) => {
+          setAddToCartResponse(response);
+        })
+        .catch((error) => {
+          setAddToCartResponse(error.response);
+          if (!error) return;
+
+          if (error.response.status === 401) {
+            updateAccessTokenWithRefreshToken();
+          }
+        });
     },
-    [service],
+    [service, getAccessTokenHeader, updateAccessTokenWithRefreshToken, accessToken],
   );
 
   const getPresenterData = useCallback(
