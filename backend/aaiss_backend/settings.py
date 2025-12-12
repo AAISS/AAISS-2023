@@ -25,8 +25,8 @@ SECRET_KEY = env.str("SECRET_KEY", 'orlch#mu_+2-my=fo)akh_3+^j7+7tc@v*-*z^(g*%(&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG", False)
 
-ALLOWED_HOSTS = ['autaaiss.com', '127.0.0.1', 'localhost', "185.252.86.114"]
-CSRF_TRUSTED_ORIGINS = ['https://autaaiss.com', 'https://localhost', 'https://127.0.0.1', "http://185.252.86.114"]
+ALLOWED_HOSTS = ['autaaiss.com', '127.0.0.1', 'localhost', "https://aaiss.ceit-ssc.ir/"]
+CSRF_TRUSTED_ORIGINS = ['https://autaaiss.com', 'https://localhost', 'https://127.0.0.1', "https://aaiss.ceit-ssc.ir/"]
 
 # Application definition
 
@@ -184,7 +184,7 @@ EMAIL_USE_SSL = False
 DEFAULT_FROM_EMAIL = env.str('DEFAULT_FROM_EMAIL', 'aaiss.ce.2024@gmail.com')
 ENABLE_SENDING_EMAIL = env.bool('ENABLE_SENDING_EMAIL', True)
 
-BASE_URL = env.str('BASE_URL', 'https://autaaiss.com/')
+BASE_URL = env.str('BASE_URL', 'https://aaiss.ceit-ssc.ir/')
 
 # https://docs.djangoproject.com/en/4.2/releases/3.2/#customizing-type-of-auto-created-primary-keys
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -195,5 +195,4 @@ PAYWALL = env.str("PAYWALL", "ZIFY")
 
 #ZIFY
 ZIFY_AUTH = env.str("ZIFY_AUTH", "")
-
 SKYROOM_BASE_URL = env.str("SKYROOM_URL", "https://www.skyroom.online/ch/aut_ceit_ssc")
