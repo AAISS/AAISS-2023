@@ -1,6 +1,5 @@
 import csv
 from dataclasses import dataclass
-
 from django.http import HttpResponse
 
 
