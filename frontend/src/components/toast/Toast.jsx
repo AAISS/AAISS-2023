@@ -20,7 +20,7 @@ export default function Toast({
   duration = 6000,
   vertical = 'top', //'top', 'bottom'
   horizontal = 'right', //'left', 'center', 'right'
-  message = 'fill me',
+  message = 'Done',
   alertType = 'success', //'error', 'warning', 'info', 'success',
   open,
   setOpen,

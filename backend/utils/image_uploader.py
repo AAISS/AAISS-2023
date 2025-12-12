@@ -1,5 +1,4 @@
 import os
-
 from aaiss_backend.settings import MEDIA_URL, BASE_URL
 
 

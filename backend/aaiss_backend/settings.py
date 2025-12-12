@@ -172,6 +172,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 CORS_URLS_REGEX = r'^/api/.*$'
 CORS_ORIGIN_ALLOW_ALL = True
 
+CALLBACK_URL = "https://aaiss.ceit-ssc.ir/api/payment/verify/"
 X_API_KEY = env.str('X_API_KEY', '')
 X_SANDBOX = env.str('X_SANDBOX', '')
 SMS_KEY = env.str('SMS_KEY', '')

@@ -1,6 +1,4 @@
-import datetime
 import urllib.parse
-
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.shortcuts import get_object_or_404, redirect
 from rest_framework import status, mixins
@@ -13,12 +11,13 @@ from rest_framework.permissions import (
 )
 from rest_framework.response import Response
 
+from aaiss_backend import settings
 from aaiss_backend.settings import BASE_URL
 from backend_api import models
 from backend_api import serializers
 from backend_api.models import User, Account, Payment, Staff, WorkshopRegistration, PresentationParticipation, Discount
 from backend_api.serializers import WorkshopRegistrationSerializer, PresentationParticipationSerializer
-from payment_backends.zify import ZIFYRequest, ZIFY_STATUS_OK
+from payment_backends.zarinpal import ZarinPalRequest
 from utils.renderers import new_detailed_response
 
 
@@ -77,7 +76,7 @@ class PresenterViewSet(viewsets.ViewSet):
     serializer_class = serializers.PresenterSerializer
 
     def list(self, request, year=None, **kwargs):
-        queryset = models.Teacher.objects.all()
+        queryset = models.Presenter.objects.all()
         if year is not None:
             queryset = queryset.filter(year=year)
 
@@ -87,7 +86,7 @@ class PresenterViewSet(viewsets.ViewSet):
         return Response(response)
 
     def retrieve(self, request, year=None, pk=None):
-        queryset = models.Teacher.objects.all()
+        queryset = models.Presenter.objects.all()
         if year is not None:
             queryset = queryset.filter(year=year)
 
@@ -224,6 +223,7 @@ class PaymentViewSet(viewsets.GenericViewSet):
         except ObjectDoesNotExist:
             return Response(new_detailed_response(
                 status.HTTP_400_BAD_REQUEST, "User not found"))
+
         discount = None
         discount_code = request.data.get('discount_code')
         if discount_code is not None:
@@ -235,45 +235,74 @@ class PaymentViewSet(viewsets.GenericViewSet):
             try:
                 discount.is_usable(user)
             except ValidationError as e:
-                return Response(e)
-        payment = Payment.create_payment_for_user(user, discount)
+                return Response(new_detailed_response(status.HTTP_400_BAD_REQUEST, e.message))
 
-        if True:
-            payment.update_payment_status(Payment.PaymentStatus.PAYMENT_CONFIRMED)
-            return Response(new_detailed_response(status.HTTP_202_ACCEPTED, "Payment created successfully",{}))
+        try:
+            payment = Payment.create_payment_for_user(user, discount)
+        except Exception as e:
+            return Response(new_detailed_response(status.HTTP_400_BAD_REQUEST, str(e)))
 
-        response = ZIFYRequest().create_payment(str(payment.pk), payment.discounted_amount, user.name,
-                                                user.phone_number,
-                                                user.account.email)
-        if response['status'] == ZIFY_STATUS_OK:
-            payment.track_id = response['data']['order']
+        zp = ZarinPalRequest()
+        callback_with_id = f"{settings.CALLBACK_URL}?clientrefid={payment.pk}"
+
+        response = zp.create_payment(
+            order_id=str(payment.pk),
+            amount=payment.discounted_amount,
+            name=user.name,
+            phone=user.phone_number,
+            mail=user.account.email,
+            desc=f"Payment for {user.name}",
+            callback=callback_with_id
+        )
+
+        if response['status'] == ZarinPalRequest.STATUS_OK:
+            payment.track_id = response['id']
             payment.save()
-            return Response(new_detailed_response(status.HTTP_200_OK, "Payment created successfully",
-                                                  {'payment_url': ZIFYRequest.get_order_url(payment.track_id)}))
+            return Response(new_detailed_response(
+                status.HTTP_200_OK,
+                "Payment created successfully",
+                {'payment_url': response['link']}
+            ))
         else:
-            return Response(
-                new_detailed_response(response['status'], response["message"]))
+            return Response(new_detailed_response(
+                status.HTTP_400_BAD_REQUEST,
+                response.get("error", "Payment creation failed")
+            ))
 
-    @action(methods=['GET', 'POST'], detail=False)
+    @action(methods=['GET', 'POST'], detail=False, permission_classes=[AllowAny])
     def verify(self, request):
         pid = request.query_params.get('clientrefid')
+        authority = request.query_params.get('Authority')
+
         if pid is None:
             return Response(new_detailed_response(
-                status.HTTP_400_BAD_REQUEST, "clientrefid is required"))
+                status.HTTP_400_BAD_REQUEST, "clientrefid (Payment ID) is required"))
+
         try:
             payment = Payment.objects.get(pk=pid)
         except ObjectDoesNotExist:
             return Response(new_detailed_response(
-                status.HTTP_400_BAD_REQUEST, "Payment not found"))
-        response = ZIFYRequest().verify_payment(payment.track_id)
-        if response['status'] == ZIFY_STATUS_OK:
+                status.HTTP_400_BAD_REQUEST, "Payment record not found"))
+
+        status_param = request.query_params.get('Status')
+        if status_param == 'NOK':
+            payment.update_payment_status(Payment.PaymentStatus.PAYMENT_REJECTED)
+            return redirect(urllib.parse.urljoin(BASE_URL, 'callback') +
+                            f'?client_ref_id={payment.pk}&payment_status=failed')
+
+        auth_to_verify = authority
+
+        zp = ZarinPalRequest()
+        response = zp.verify_payment(order_id=payment.pk, payment_id=auth_to_verify)
+
+        if response['status'] == ZarinPalRequest.STATUS_OK:
             payment.update_payment_status(Payment.PaymentStatus.PAYMENT_CONFIRMED)
-            return redirect(urllib.parse.urljoin(BASE_URL, 'callback') + '?client_ref_id=' + str(
-                payment.pk) + '&payment_status=succeeded')
+            return redirect(urllib.parse.urljoin(BASE_URL, 'callback') +
+                            f'?client_ref_id={payment.pk}&payment_status=succeeded')
         else:
             payment.update_payment_status(Payment.PaymentStatus.PAYMENT_REJECTED)
-            return redirect(urllib.parse.urljoin(BASE_URL, 'callback') + '?client_ref_id=' + str(
-                payment.pk) + '&payment_status=failed')
+            return redirect(urllib.parse.urljoin(BASE_URL, 'callback') +
+                            f'?client_ref_id={payment.pk}&payment_status=failed')
 
 
 class StaffViewSet(viewsets.GenericViewSet,
@@ -314,7 +343,11 @@ class WorkshopRegistrationViewSet(viewsets.GenericViewSet,
     serializer_class = WorkshopRegistrationSerializer
 
     def get_queryset(self):
-        return WorkshopRegistration.objects.filter(user=User.objects.get(account=self.request.user))
+        user = models.User.objects.filter(account=self.request.user).first()
+        if user is None:
+            return WorkshopRegistration.objects.none()
+
+        return WorkshopRegistration.objects.filter(user=user)
 
     def create(self, request, *args, **kwargs):
         data = super().create(request, *args, **kwargs)
@@ -345,7 +378,11 @@ class PresentationRegistrationViewSet(viewsets.GenericViewSet,
     serializer_class = PresentationParticipationSerializer
 
     def get_queryset(self):
-        return PresentationParticipation.objects.filter(user=User.objects.get(account=self.request.user))
+        user = models.User.objects.filter(account=self.request.user).first()
+        if user is None:
+            return PresentationParticipation.objects.none()
+
+        return PresentationParticipation.objects.filter(user=user)
 
     def create(self, request, *args, **kwargs):
         data = super().create(request, *args, **kwargs)

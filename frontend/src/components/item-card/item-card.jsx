@@ -17,30 +17,28 @@ export const Presenter = ({ presenterName }) => (
   </Stack>
 );
 
-export const Cost = ({ cost }) => (
-<Stack flexDirection="row" alignItems="center" gap={1}>
-  <CreditCard />
-  <Stack>
-    <Typography
-      variant="overline"
-      sx={{ fontSize: 14, color: "text.secondary" }}
-      lineHeight={1.5}
-    >
-      <span class="text-sm " style={{ textDecoration: "line-through" }}>{cost}T</span>
-       <span class="text-lg pl-1 font-bold">0T</span>
-    </Typography>
-    <Typography
-      sx={{
-        fontSize: 14,
-        color: "text.secondary",
-        fontWeight: "700"
-      }}
-      lineHeight={1.5}
-    >
-    </Typography>
-  </Stack>
-</Stack>
-);
+export const Cost = ({ cost }) => {
+  const isFree = cost === 0;
+  const costText = isFree ? 'Free' : `${cost}T`;
+  const textColor = isFree ? 'text.secondary' : 'text.primary';
+
+  return (
+    <Stack flexDirection="row" alignItems="center" gap={1}>
+      <CreditCard />
+      <Typography
+        variant="body1"
+        sx={{
+          fontSize: 14,
+          fontWeight: isFree ? '400' : '700',
+          color: textColor,
+        }}
+        lineHeight={1.5}
+      >
+        {costText}
+      </Typography>
+    </Stack>
+  );
+};
 
 const FullCapacityChip = () => (
   <Chip
