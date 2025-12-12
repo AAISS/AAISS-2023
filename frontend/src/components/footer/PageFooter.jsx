@@ -2,7 +2,7 @@ import React from 'react';
 import aut from '../../assets/AUT.png';
 import ceit from '../../assets/CEIT.png';
 import ssc from '../../assets/SSC.png';
-import bale from '../../assets/bale.png';
+import OMPFinex from '../../assets/OMPFinex.png';
 import '../../css/Footer.css'
 import SvgIcon from "@mui/material/SvgIcon";
 import Link from "@mui/material/Link";
@@ -50,12 +50,15 @@ export default function PageFooter() {
                 </span>
             </div>
             <div className='logo-container'>
-                <a href='https://bale.ai/'>
-                    <img className="logo" src={bale} alt="Bale"/>
+                <a href='https://www.ompfinex.com/'>
+                    <img className="logo" src={OMPFinex} alt="OMPFinex"/>
                 </a>
-                <img className="logo" src={aut} alt="Amirkabir University of Technology"/>
-                {/* <img className="logo" src={ceit} alt="AUT Computer Engineering"/> */}
-                <img className="logo" src={ssc} alt="AUT Student Scientific Chapter"/>
+                <a href='https://aut.ac.ir/'>
+                    <img className="logo" src={aut} alt="Amirkabir University of Technology"/>
+                </a>
+                <a href='https://ceit-ssc.ir/'>
+                    <img className="logo" src={ssc} alt="AUT Student Scientific Chapter"/>
+                </a>
             </div>
             {/* <h3 id="footer-title">
                 Student Scientific Chapter Computer Engineering Department Amirkabir University of Technology

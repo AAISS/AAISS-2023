@@ -37,7 +37,6 @@ export const Cost = ({ cost }) => (
       }}
       lineHeight={1.5}
     >
-      Paid by Bale Messenger
     </Typography>
   </Stack>
 </Stack>
