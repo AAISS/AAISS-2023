@@ -183,41 +183,45 @@ export function APIProvider({ children }) {
       let endpoint = '';
       switch (type) {
         case 'presentation':
-          body.presentation = id + '';
+          body.presentation = String(id);
           endpoint = URL.endpoints.user.presentation;
           break;
         case 'workshop':
-          body.workshop = id + '';
+          body.workshop = String(id);
           endpoint = URL.endpoints.user.workshop;
           break;
         default:
           break;
       }
 
-      if (!accessToken) {
-        setAddToCartResponse({ status: 401 });
-        return;
+      let localUser = null;
+      try { localUser = JSON.parse(localStorage.getItem('user')); } catch (e) { /* ignore */ }
+      const token = localUser?.access ?? localUser?.token?.access ?? null;
+
+      const headers = {};
+      if (token) headers.Authorization = `Bearer ${token}`;
+
+      try {
+        console.debug('Adding to cart:', { endpoint, body, headers });
+        const response = await service.post(
+          `${URL.baseURL}${URL.services.default}${endpoint}`,
+          body,
+          { headers }
+        );
+        setAddToCartResponse(response);
+        console.debug('Add to cart response:', response);
+        return response;
+      } catch (err) {
+        console.debug('Add to cart error:', err?.response ?? err);
+        setAddToCartResponse(err?.response ?? { status: 500, data: { detail: 'Network Error' } });
+
+        if (err?.response?.status === 401) {
+          updateAccessTokenWithRefreshToken();
+        }
+        return Promise.reject(err);
       }
-
-      await service
-        .post(`${URL.baseURL}${URL.services.default}${endpoint}`, body, {
-          headers: {
-            Authorization: getAccessTokenHeader(),
-          },
-        })
-        .then((response) => {
-          setAddToCartResponse(response);
-        })
-        .catch((error) => {
-          setAddToCartResponse(error.response);
-          if (!error) return;
-
-          if (error.response.status === 401) {
-            updateAccessTokenWithRefreshToken();
-          }
-        });
     },
-    [service, getAccessTokenHeader, updateAccessTokenWithRefreshToken, accessToken],
+    [service, updateAccessTokenWithRefreshToken]
   );
 
   const getPresenterData = useCallback(
