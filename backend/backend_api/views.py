@@ -1,5 +1,6 @@
 import urllib.parse
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect
 from rest_framework import status, mixins
 from rest_framework import viewsets
@@ -18,6 +19,7 @@ from backend_api import serializers
 from backend_api.models import User, Account, Payment, Staff, WorkshopRegistration, PresentationParticipation, Discount
 from backend_api.serializers import WorkshopRegistrationSerializer, PresentationParticipationSerializer
 from payment_backends.zarinpal import ZarinPalRequest
+from utils.random import generate_temp_password
 from utils.renderers import new_detailed_response
 
 
@@ -212,6 +214,53 @@ class UserViewSet(viewsets.GenericViewSet,
         account.is_active = True
         account.save()
         return redirect(urllib.parse.urljoin(BASE_URL, 'signup') + '?login=true')
+
+    @action(methods=['POST'], detail=False, permission_classes=[AllowAny])
+    def forgot_password(self, request):
+        email = request.data.get('email')
+
+        if not email:
+            return Response(new_detailed_response(
+                status.HTTP_400_BAD_REQUEST, "Email is required to reset password."))
+
+        try:
+            account = Account.objects.get(email__iexact=email)
+            new_password = generate_temp_password(8)
+            account.set_password(new_password)
+            account.save()
+
+            subject = 'AAISS Password Reset'
+            message = (
+                f"Dear {account.user.name},\n\n"
+                f"Your password has been successfully reset. \n"
+                f"Your new password is: {new_password}\n\n"
+                f"Thank you,\nAAISS Team"
+            )
+
+            send_mail(
+                subject,
+                message,
+                settings.DEFAULT_FROM_EMAIL,
+                [account.email],
+                fail_silently=True,
+            )
+
+            return Response(new_detailed_response(
+                status.HTTP_200_OK,
+                "If an account is associated with this email, a temporary password has been sent."
+            ))
+
+        except ObjectDoesNotExist:
+            return Response(new_detailed_response(
+                status.HTTP_200_OK,
+                "If an account is associated with this email, a temporary password has been sent."
+            ))
+        except Exception as e:
+            print(f"Error sending password reset email: {e}")
+            return Response(new_detailed_response(
+                status.HTTP_500_INTERNAL_SERVER_ERROR,
+                "An internal error occurred while processing the request. Please try again later."
+            ))
 
 
 class PaymentViewSet(viewsets.GenericViewSet):

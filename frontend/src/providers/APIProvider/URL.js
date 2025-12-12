@@ -17,6 +17,7 @@ const URL = {
       activate: 'activate/',
       presentation: 'user/presentation/',
       workshop: 'user/workshop/',
+      forgotPassword: 'user/forgot_password/',
     },
     token: {
       default: 'token/',
