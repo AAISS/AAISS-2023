@@ -44,7 +44,10 @@ class TeacherViewSet(viewsets.ViewSet):
     serializer_class = serializers.TeacherSerializer
 
     def list(self, request, year=None, **kwargs):
-        queryset = models.Teacher.objects.filter(year=year)
+        queryset = models.Teacher.objects.all()
+        if year is not None:
+            queryset = queryset.filter(year=year)
+
         serializer = self.serializer_class(queryset, many=True)
         for teacher_data in serializer.data:
             teacher = get_object_or_404(queryset, pk=teacher_data['id'])
@@ -56,9 +59,10 @@ class TeacherViewSet(viewsets.ViewSet):
         return Response(response)
 
     def retrieve(self, request, year=None, pk=None):
-        if year is None:
-            year = datetime.datetime.now().year
-        queryset = models.Teacher.objects.filter(year=year)
+        queryset = models.Teacher.objects.all()
+        if year is not None:
+            queryset = queryset.filter(year=year)
+
         teacher = get_object_or_404(queryset, pk=pk)
         serializer = self.serializer_class(teacher)
         workshops = []
@@ -73,18 +77,20 @@ class PresenterViewSet(viewsets.ViewSet):
     serializer_class = serializers.PresenterSerializer
 
     def list(self, request, year=None, **kwargs):
-        if year is None:
-            year = datetime.datetime.now().year
-        queryset = models.Presenter.objects.filter(year=year)
+        queryset = models.Teacher.objects.all()
+        if year is not None:
+            queryset = queryset.filter(year=year)
+
         serializer = self.serializer_class(queryset, many=True)
         response = list(serializer.data)
         response.sort(key=lambda k: k['order'])
         return Response(response)
 
     def retrieve(self, request, year=None, pk=None):
-        if year is None:
-            year = datetime.datetime.now().year
-        queryset = models.Presenter.objects.filter(year=year)
+        queryset = models.Teacher.objects.all()
+        if year is not None:
+            queryset = queryset.filter(year=year)
+
         presenter = get_object_or_404(queryset, pk=pk)
         serializer = self.serializer_class(presenter)
         presentations = []
@@ -101,16 +107,18 @@ class WorkshopViewSet(viewsets.GenericViewSet,
     serializer_class = serializers.WorkshopSerializer
     queryset = models.Workshop.objects.all()
 
+    def get_queryset(self, year=None):
+        queryset = models.Workshop.objects.all()
+        if year is not None:
+            queryset = queryset.filter(year=year)
+        return queryset
+
     def list(self, request, year=None, **kwargs):
-        if year is None:
-            year = datetime.datetime.now().year
-        self.queryset = models.Workshop.objects.filter(year=year).order_by('start_date')
+        self.queryset = self.get_queryset(year).order_by('start_date')
         return super().list(request, **kwargs)
 
     def retrieve(self, request, year=None, pk=None):
-        if year is None:
-            year = datetime.datetime.now().year
-        self.queryset = models.Workshop.objects.filter(year=year)
+        self.queryset = self.get_queryset(year)
         return super().retrieve(request, pk=pk)
 
 
@@ -118,18 +126,19 @@ class PresentationViewSet(viewsets.GenericViewSet,
                           mixins.ListModelMixin,
                           mixins.RetrieveModelMixin):
     serializer_class = serializers.PresentationSerializer
-    queryset = models.Presentation.objects.all()
+
+    def get_queryset(self, year=None):
+        queryset = models.Presentation.objects.all()
+        if year is not None:
+            queryset = queryset.filter(year=year)
+        return queryset
 
     def list(self, request, year=None, **kwargs):
-        if year is None:
-            year = datetime.datetime.now().year
-        self.queryset = self.queryset.filter(year=year).order_by('start_date')
+        self.queryset = self.get_queryset(year).order_by('start_date')
         return super().list(request, **kwargs)
 
     def retrieve(self, request, year=None, pk=None):
-        if year is None:
-            year = datetime.datetime.now().year
-        self.queryset = models.Presentation.objects.filter(year=year)
+        self.queryset = self.get_queryset(year)
         return super().retrieve(request, pk=pk)
 
 
@@ -137,15 +146,11 @@ class MiscViewSet(viewsets.ViewSet):
     serializer_class = serializers.MiscSerializer
 
     def list(self, request, year=None, **kwargs):
-        if year is None:
-            year = datetime.datetime.now().year
         queryset = models.Misc.objects.all()
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request, year=None, pk=None):
-        if year is None:
-            year = datetime.datetime.now().year
         queryset = models.Misc.objects.all()
         misc = get_object_or_404(queryset, pk=pk)
         serializer = self.serializer_class(misc)
