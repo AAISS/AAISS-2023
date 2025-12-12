@@ -299,7 +299,7 @@ class PaymentViewSet(viewsets.GenericViewSet):
                 return Response(new_detailed_response(
                     status.HTTP_200_OK,
                     "Registrations successfully finalized (Total cost was free)",
-                    {'payment_url': None, 'is_free': True}  # Indicate to frontend it's free
+                    {'payment_url': None, 'is_free': True}
                 ))
             except Exception as e:
                 return Response(new_detailed_response(

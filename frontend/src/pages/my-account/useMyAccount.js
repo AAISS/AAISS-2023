@@ -70,30 +70,42 @@ export default function useMyAccount() {
         if (!paymentData)
             return
 
+        const responseData = paymentData.data.data; // Access the 'data' field inside the response body's 'data' field
+
+        if (paymentData.status === 200 && responseData && responseData.is_free === true) {
+            setOpenToast(true)
+            setToastData({
+                message: "Success! Your free items have been registered.",
+                alertType: "success"
+            })
+            setBuyButtonLoading(false)
+
+            getWorkshopsData()
+            getPresentationsData()
+            getUserWorkshops()
+            getUserPresentations()
+            getTeachersData()
+            getPresenterData()
+            return
+        }
+
         if (paymentData.status !== 200 || paymentData.data.status !== 200) {
             setOpenToast(true)
+
+            let message = "There was an Error Regarding Your Payment! Please Try Again Later";
+            let alertType = "error";
+
             if (paymentData.status !== 200) {
-                if (paymentData.data?.message?.split(" ")[0] === "Discount") {
-                    setToastData({
-                        message: "Invalid Operation! Please Try Again",
-                        alertType: "error"
-                    })
-                } else if (paymentData.data?.message?.includes("is full")) {
-                    setToastData({
-                        message: "Some items have already reached their full capacity! Please remove them and try again",
-                        alertType: "error"
-                    })
-                } else {
-                    setToastData({
-                        message: "There was an Error Regarding Your Payment! Please Try Again Later",
-                        alertType: "error"
-                    })
+                const messageDetail = paymentData.data?.message;
+                if (messageDetail?.includes("Discount")) {
+                    message = "Invalid Discount Code! Please check your code.";
+                } else if (messageDetail?.includes("is full") || messageDetail?.includes("Registraition closed")) {
+                    message = "Some items are full or registration is closed. Please remove them and try again.";
                 }
-            } else if (paymentData.status === 200 && paymentData.data.status === 202) {
-                setToastData({
-                    message: "Success! Don't forget to attend them ;)",
-                    alertType: "success"
-                })
+            }
+            else if (paymentData.status === 200 && paymentData.data.status === 202) {
+                message = "Success! Don't forget to attend them ;)";
+                alertType = "success";
 
                 getWorkshopsData()
                 getPresentationsData()
@@ -101,25 +113,42 @@ export default function useMyAccount() {
                 getUserPresentations()
                 getTeachersData()
                 getPresenterData()
-            } else {
-                setToastData({
-                    message: "Invalid Operation! Please Try Again",
-                    alertType: "error"
-                })
             }
-            setBuyButtonLoading(false)
+
+            setToastData({ message, alertType });
+            setBuyButtonLoading(false);
             return
         }
 
         setOpenToast(true)
         setToastData({
-            message: "Success! Redirecting You to the Desired Website...",
+            message: "Success! Redirecting to payment gateway...",
             alertType: "success"
         })
-        setTimeout(() => {
-            window.location.href = paymentData.data.data.payment_url
-        }, 2000)
-    }, [paymentData]);
+
+        const paymentUrl = responseData.payment_url;
+
+        if (paymentUrl) {
+            setTimeout(() => {
+                window.location.href = paymentUrl
+            }, 2000)
+        } else {
+             setToastData({
+                message: "Payment created successfully, but no redirect URL found. Please check your registrations.",
+                alertType: "warning"
+            })
+             setBuyButtonLoading(false)
+        }
+
+    }, [
+        paymentData,
+        getWorkshopsData,
+        getPresentationsData,
+        getUserWorkshops,
+        getUserPresentations,
+        getTeachersData,
+        getPresenterData
+    ]);
 
     useEffect(() => {
         if (removeFromCartResponse == null)
