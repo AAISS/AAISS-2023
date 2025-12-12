@@ -97,7 +97,6 @@ frameworks/libraries/languages:
    ```txt
     SECRET_KEY=
     DEBUG= 
-    DJANGO_ALLOWED_HOSTS=
     EMAIL_HOST=
     EMAIL_PORT=20
     EMAIL_HOST_USER=
