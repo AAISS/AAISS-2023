@@ -11,7 +11,6 @@ from rest_framework.permissions import (
     AllowAny
 )
 from rest_framework.response import Response
-
 from aaiss_backend import settings
 from aaiss_backend.settings import BASE_URL
 from backend_api import models

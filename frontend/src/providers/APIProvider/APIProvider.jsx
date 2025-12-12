@@ -31,6 +31,8 @@ export function APIProvider({ children }) {
   const [userPresentationsData, setUserPresentationsData] = useState();
   const [removeFromCartResponse, setRemoveFromCartResponse] = useState();
 
+  const normalizeEmail = (email) => (email ? email.toLowerCase().trim() : email);
+
   const getAccessTokenHeader = useCallback(() => {
     return `Bearer ${accessToken}`;
   }, [accessToken]);
@@ -62,7 +64,7 @@ export function APIProvider({ children }) {
 
   const forgotPassword = useCallback(
     async (email) => {
-      const data = { email };
+      const data = { email: normalizeEmail(email) };
       let response = null;
       let error = null;
 
@@ -162,8 +164,9 @@ export function APIProvider({ children }) {
 
   const issueToken = useCallback(
     async (data) => {
+      const payload = { ...data, email: normalizeEmail(data.email) };
       await service
-        .post(`${URL.baseURL}${URL.services.default}${URL.endpoints.token.default}`, data)
+        .post(`${URL.baseURL}${URL.services.default}${URL.endpoints.token.default}`, payload)
         .then((response) => {
           setIssueTokenResponse(response);
         })
@@ -297,8 +300,9 @@ export function APIProvider({ children }) {
 
   const updateUser = useCallback(
     async (data) => {
+      const payload = { ...data, email: normalizeEmail(data.email) };
       await service
-        .put(`${URL.baseURL}${URL.services[year]}${URL.endpoints.user.default}`, data)
+        .put(`${URL.baseURL}${URL.services[year]}${URL.endpoints.user.default}`, payload)
         .then((response) => {
           setUpdateUserData(response);
         });
@@ -308,8 +312,9 @@ export function APIProvider({ children }) {
 
   const createUser = useCallback(
     async (data) => {
+      const payload = { ...data, email: normalizeEmail(data.email) };
       await service
-        .post(`${URL.baseURL}${URL.services.default}${URL.endpoints.user.default}`, data)
+        .post(`${URL.baseURL}${URL.services.default}${URL.endpoints.user.default}`, payload)
         .then((response) => {
           setCreateUserData(response);
         })
