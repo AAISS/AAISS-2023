@@ -1,6 +1,7 @@
 import urllib.parse
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.mail import send_mail
+from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect
 from rest_framework import status, mixins
 from rest_framework import viewsets
@@ -290,6 +291,22 @@ class PaymentViewSet(viewsets.GenericViewSet):
         except Exception as e:
             return Response(new_detailed_response(status.HTTP_400_BAD_REQUEST, str(e)))
 
+        if payment.discounted_amount <= 0:
+            try:
+                with transaction.atomic():
+                    payment.finalize_free_payment()
+
+                return Response(new_detailed_response(
+                    status.HTTP_200_OK,
+                    "Registrations successfully finalized (Total cost was free)",
+                    {'payment_url': None, 'is_free': True}  # Indicate to frontend it's free
+                ))
+            except Exception as e:
+                return Response(new_detailed_response(
+                    status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    f"Error finalizing free payment: {str(e)}"
+                ))
+
         zp = ZarinPalRequest()
         callback_with_id = f"{settings.CALLBACK_URL}?clientrefid={payment.pk}"
 
@@ -309,7 +326,7 @@ class PaymentViewSet(viewsets.GenericViewSet):
             return Response(new_detailed_response(
                 status.HTTP_200_OK,
                 "Payment created successfully",
-                {'payment_url': response['link']}
+                {'payment_url': response['link'], 'is_free': False}
             ))
         else:
             return Response(new_detailed_response(
