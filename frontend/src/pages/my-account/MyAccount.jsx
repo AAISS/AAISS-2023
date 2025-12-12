@@ -124,9 +124,10 @@ const MyAccount = () => {
     };
   };
 
-  const renderTotalPrice = () => {
+const renderTotalPrice = () => {
     const { total, discountedPrice } = calculateTotalCost();
-    if (discountedPrice) {
+
+    if (discountedPrice !== null) {
       return (
         <Stack flexDirection="row" alignItems="center" gap={1}>
           <Typography variant="overline" sx={{ fontSize: 14 }} color="text.secondary">
@@ -143,12 +144,18 @@ const MyAccount = () => {
       );
     }
 
+    if (total === 0) {
+      return (
+        <Typography variant="overline" sx={{ fontSize: 15, fontWeight: 'bolder', color: 'var(--success-color)' }}>
+          Total: FREE
+        </Typography>
+      );
+    }
+
     return (
       <Typography variant="overline" sx={{ fontSize: 14 }} color="text.secondary">
-
-        Total: {total !== 0 && <span class="text-sm " style={{ textDecoration: "line-through" }}>{total}T</span>}{' '}
-       <span class="text-lg pl-1 font-bold">0T</span>
-
+        Total:
+        <span class="text-lg pl-1 font-bold">{total} T</span>
       </Typography>
     );
   };

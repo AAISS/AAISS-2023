@@ -60,6 +60,26 @@ export function APIProvider({ children }) {
     refreshAccessToken();
   }, [refreshAccessToken]);
 
+  const forgotPassword = useCallback(
+    async (email) => {
+      const data = { email };
+      let response = null;
+      let error = null;
+
+      try {
+        response = await service.post(
+          `${URL.baseURL}${URL.services.default}${URL.endpoints.user.forgotPassword}`,
+          data
+        );
+      } catch (e) {
+        error = e.response || { status: 500, data: { detail: 'Network Error' } };
+      }
+
+      return { response, error };
+    },
+    [service],
+  );
+
   const removeFromUserCart = useCallback(
     async ({ id, type }) => {
       let endpoint;
@@ -375,6 +395,7 @@ export function APIProvider({ children }) {
     setPresentationsData,
     issueToken,
     issueTokenResponse,
+    forgotPassword,
     getWorkshopsData,
     presentationsData,
     getPresentationsData,
