@@ -29,7 +29,7 @@ const NavBarImage = () => (
     style={{
       width: '100px',
       height: 'inherit',
-      paddingRight: 24,
+      // paddingRight: 24,
     }}
   />
 );

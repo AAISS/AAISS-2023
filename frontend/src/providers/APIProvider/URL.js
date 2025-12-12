@@ -1,5 +1,5 @@
 const URL = {
-  baseURL: 'https://autaaiss.com/',
+  baseURL: 'https://aaiss.ceit-ssc.ir/',
   services: {
     default: 'api/',
     2021: 'api/2021/',

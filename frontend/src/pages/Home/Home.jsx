@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 import Button from '@mui/material/Button';
-import banner from '../../assets/Brain.png';
+import banner from '../../assets/OMP-asset.png';
 import '../../css/Home.css';
 
 const Home = () => {

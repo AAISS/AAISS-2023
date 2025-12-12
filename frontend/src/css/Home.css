@@ -1,14 +1,19 @@
 .home {
-    height: 100%;
     width: 100%;
+    height: 80vh;              /* or any fixed responsive height */
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 2rem;                  /* spacing between image and text */
+    box-sizing: border-box;
 }
 
 .home img {
-    max-width: 550px;
+    height: 60%;                /* <— THIS is what you wanted */
+    width: auto;                /* maintain aspect ratio */
+    max-height: 60%;            /* prevents overflow */
     animation: fadeFromLeft .9s ease-in-out;
+    object-fit: contain;
 }
 
 #home-title {

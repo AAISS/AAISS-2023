@@ -81,6 +81,7 @@ html {
   width: 10%;
   height: 100%;
 }
+
 .mobile-nav-container {
   display: none;
   brgba(255, 255, 255, 0.5)nd-color: rgba(255, 255, 255, 0.5);
@@ -116,4 +117,20 @@ html {
     top: 0;
     flex-direction: column;
   }
+}
+
+@media (min-width: 600px) {
+  .logo-item {
+    padding-right: 1.5rem;
+  }
+}
+
+.MuiDrawer-paper .logo-item {
+  padding: 0;
+  text-align: center;
+}
+
+.MuiDrawer-paper .logo-item img {
+  display: block;
+  margin: 0 auto;
 }

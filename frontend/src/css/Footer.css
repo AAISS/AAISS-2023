@@ -10,14 +10,15 @@
 }
 
 .logo {
-    width: 5.5rem;
-    /* height: 5.5rem; */
+    width: auto;
+    height: 3.5rem;
 }
 
 .logo-container {
     display: flex;
     gap: 5px;
-    width: 240px;
+    width: 350px;
+    height: auto;
     justify-content: center;
     align-items: center;
     padding-inline: 10px;
