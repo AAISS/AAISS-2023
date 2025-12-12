@@ -1,67 +1,34 @@
-autaaiss.com {
-        @statics {
-                path /static/* /media/*
-        }
-        @backend {
-                path /admin* /api*
-        }
-        @frontend {
-            not path /static/* /admin* /api* /media*
-        }
+aaiss.ceit-ssc.ir {
+    @statics path /static/* /media/*
+    @backend path /admin* /api*
+    @frontend not path /static/* /admin* /api* /media*
 
-        file_server @statics {
-                root /
-        }
+    handle @statics {
+        root * /
+        file_server
+    }
 
-        reverse_proxy @backend {
-                to backend:6446
-        }
+    handle @backend {
+        reverse_proxy backend:6446
+    }
 
-        handle @frontend {
-            # TODO: dockerize the frontend project to be able to build the dist directory automatically
-            root * /dist
-            try_files {path} /index.html
-            file_server
-        }
+    # TODO: dockerize the frontend project to be able to build the dist directory automatically
+    handle @frontend {
+        root * /dist
+        try_files {path} /index.html
+        file_server
+    }
 
-        log {
-                level error
-                output stdout
-        }
+    log {
+        level error
+        output stdout
+    }
 }
 
-http://185.252.86.114 {
-        @statics {
-                path /static/* /media/*
-        }
-        @backend {
-                path /admin* /api*
-        }
-        @frontend {
-            not path /static/* /admin* /api* /media*
-        }
-
-        file_server @statics {
-                root /
-        }
-
-        reverse_proxy @backend {
-                to backend:6446
-        }
-
-        handle @frontend {
-            # TODO: dockerize the frontend project to be able to build the dist directory automatically
-            root * /dist
-            try_files {path} /index.html
-            file_server
-        }
-
-        log {
-                level error
-                output stdout
-        }
+www.aaiss.ceit-ssc.ir {
+    redir https://aaiss.ceit-ssc.ir{uri} permanent
 }
 
-www.autaaiss.com {
-        redir http://autaaiss.ir{uri}
+autaaiss.com, www.autaaiss.com {
+    redir https://aaiss.ceit-ssc.ir{uri} permanent
 }
