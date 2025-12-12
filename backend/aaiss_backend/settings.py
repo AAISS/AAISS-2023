@@ -26,7 +26,11 @@ SECRET_KEY = env.str("SECRET_KEY", 'orlch#mu_+2-my=fo)akh_3+^j7+7tc@v*-*z^(g*%(&
 DEBUG = env.bool("DEBUG", False)
 
 ALLOWED_HOSTS = ['autaaiss.com', '127.0.0.1', 'localhost', "aaiss.ceit-ssc.ir", "ceit-ssc.ir"]
-CSRF_TRUSTED_ORIGINS = ['https://autaaiss.com', 'https://localhost', 'https://127.0.0.1', "https://aaiss.ceit-ssc.ir/"]
+CSRF_TRUSTED_ORIGINS = [
+    'https://autaaiss.com', 'https://www.autaaiss.com', 'https://aaiss.ceit-ssc.ir', 'https://www.aaiss.ceit-ssc.ir',
+    'https://localhost', 'https://127.0.0.1', 'http://localhost', 'http://127.0.0.1',
+]
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Application definition
 
