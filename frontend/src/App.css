@@ -118,3 +118,19 @@ html {
     flex-direction: column;
   }
 }
+
+@media (min-width: 600px) {
+  .logo-item {
+    padding-right: 1.5rem;
+  }
+}
+
+.MuiDrawer-paper .logo-item {
+  padding: 0;
+  text-align: center;
+}
+
+.MuiDrawer-paper .logo-item img {
+  display: block;
+  margin: 0 auto;
+}
