@@ -87,7 +87,7 @@ export default function DrawerAppBar() {
             shouldShowRoute(ROUTES[name]) && (
               <Link href={ROUTES[name].path} style={{ color: 'white', textDecoration: 'none' }} key={index}>
                 <ListItem disablePadding>
-                  <ListItemButton sx={{ textAlign: 'center' }}>
+                  <ListItemButton sx={{ textAlign: 'center', textTransform: 'uppercase' }}>
                     <ListItemText primary={name} />
                   </ListItemButton>
                 </ListItem>
@@ -128,7 +128,7 @@ export default function DrawerAppBar() {
                     // onClick={() => setCurrentRoute(ROUTES[name])}
                     sx={{
                       color: '#fff',
-                      paddingRight: 2,
+                      // paddingRight: 2,
                     }}
                   >
                     {name}
