@@ -14,7 +14,7 @@ export default function MainContent() {
       <header>
         <DrawerAppBar />
       </header>
-      <main>
+      <main className='flex-1'>
         <Routes>
           {Object.keys(ROUTES).map((name) => {
             return <Route path={ROUTES[name].path} element={ROUTES[name]?.component} key={name} />;

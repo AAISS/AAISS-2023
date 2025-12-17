@@ -21,8 +21,8 @@ const Header = ({ name, workplace, photo }) => (
       <Typography variant="h2" fontSize="30px">
         {name}
       </Typography>
-      <Typography fontSize="15px" sx={{ fontWeight: 'lighter' }}>
-        from {workplace}
+      <Typography fontSize="15px" sx={{ fontWeight: 'bold' }}>
+        {workplace}
       </Typography>
     </Stack>
   </Stack>
@@ -37,7 +37,7 @@ const PresenterProfile = ({ name, workplace, photo, cvPath, bio }) => (
           Biography
         </Typography>
       </Divider>
-      <Typography color="text.secondary">{bio}</Typography>
+      <Typography color="text.secondary" sx={{direction: 'rtl'}}>{bio}</Typography>
       {cvPath && (
         <Stack alignItems="center" pt={5}>
           <Button href={cvPath} endIcon={<ArrowForward />}>

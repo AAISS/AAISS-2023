@@ -19,7 +19,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
-    width: 100%;
+    width: fit-content;
     height: auto;
     justify-content: center;
     align-items: center;

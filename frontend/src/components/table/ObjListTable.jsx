@@ -8,7 +8,8 @@ export default function ObjListTable({
 
     return (
         <section>
-            {!data || Object.keys(data).length === 0 ? <h1 id="loading">loading...</h1> :
+            {!data ? <h1 id="loading">loading...</h1> :
+                Object.keys(data).length === 0 ? "Nothing to display!" :
                 <div>
                     <section className={"table-container"}>
                         <h3>{title}</h3>
@@ -63,7 +64,7 @@ export default function ObjListTable({
                     </section>
                 </div>
             }
-            {data && Object.keys(data).length === 0 && "Nothing to display!"}
+            {/* {data && Object.keys(data).length === 0 && "Nothing to display!"} */}
         </section>
     )
 }
