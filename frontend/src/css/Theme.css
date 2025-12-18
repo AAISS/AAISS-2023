@@ -27,4 +27,7 @@
   --light-text-color-lighter: rgb(189, 196, 208);
   --dark-text-color: #000;
   --dark-text-color-lighter-20: #333;
+
+  /* sponsor */
+  --omp-green-light: #00b78e;
 }

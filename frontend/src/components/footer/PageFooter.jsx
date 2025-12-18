@@ -1,8 +1,7 @@
 import React from 'react';
 import aut from '../../assets/AUT.png';
-import ceit from '../../assets/CEIT.png';
 import ssc from '../../assets/SSC.png';
-import OMPFinex from '../../assets/OMPFinex.png';
+import OMPFinex from '../../assets/OMPFinex.svg';
 import '../../css/Footer.css'
 import SvgIcon from "@mui/material/SvgIcon";
 import Link from "@mui/material/Link";

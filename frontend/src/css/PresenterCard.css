@@ -6,10 +6,10 @@
   transform: scale(1.03);
 }
 
-.MuiCard-root {
+/* .MuiCard-root {
   max-width: 260px !important;
   min-width: 260px !important;
-}
+} */
 
 .presenter-card > div {
   height: 100% !important;

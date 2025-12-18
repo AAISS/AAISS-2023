@@ -11,13 +11,15 @@
 
 .logo {
     width: auto;
+    max-width: fit-content;
     height: 3.5rem;
 }
 
 .logo-container {
     display: flex;
+    flex-wrap: wrap;
     gap: 5px;
-    width: 350px;
+    width: fit-content;
     height: auto;
     justify-content: center;
     align-items: center;
