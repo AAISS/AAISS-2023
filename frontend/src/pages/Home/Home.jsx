@@ -7,16 +7,16 @@ import '../../css/Home.css';
 const Home = () => {
   return (
     <div className="home">
-      <img src={banner} alt="brain-artificial-intelligence" />
+      <img className="banner" src={banner} alt="astronaut with brain balloon" />
       <div id="home-content">
         <Typography id="home-title" pb={2}>
           Amirkabir Artificial Intelligence Student Summit
         </Typography>
-        <Typography>
+        <Typography className="flex items-center gap-1 flex-wrap">
           <a href="https://ceit-ssc.ir" className="gradient-text">
             CEIT SSC
-          </a>{' '}
-          in colaboration with{' '}
+          </a>
+          in colaboration with
           <a href="https://www.ompfinex.com/">
             <img src={omp} alt="OMPFinex logo" style={{ height: '2rem', display: 'inline' }} />
           </a>
@@ -29,6 +29,7 @@ const Home = () => {
           size="large"
           id="call-to-action-btn"
           href="/talks"
+          disabled
           sx={{
             backgroundColor: '#00b78e',
             '&:hover': {

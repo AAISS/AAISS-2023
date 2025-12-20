@@ -6,7 +6,7 @@ import URL from '../../providers/APIProvider/URL.js';
 import Image from '../image/Image.jsx';
 
 const Header = ({ name, workplace, photo }) => (
-  <Stack flexDirection="row" alignItems="center" gap={2} py={2}>
+  <Stack flexDirection="row" alignItems="center" gap={2} py={2} sx={{ direction: 'rtl' }}>
     <Image
       src={`${URL.baseURL}${photo}`}
       style={{
@@ -37,7 +37,9 @@ const PresenterProfile = ({ name, workplace, photo, cvPath, bio }) => (
           Biography
         </Typography>
       </Divider>
-      <Typography color="text.secondary" sx={{direction: 'rtl'}}>{bio}</Typography>
+      <Typography color="text.secondary" sx={{ direction: 'rtl' }}>
+        {bio}
+      </Typography>
       {cvPath && (
         <Stack alignItems="center" pt={5}>
           <Button href={cvPath} endIcon={<ArrowForward />}>

@@ -8,7 +8,7 @@
   box-sizing: border-box;
 }
 
-.home img {
+.banner {
   height: 60%; /* <— THIS is what you wanted */
   width: auto; /* maintain aspect ratio */
   max-height: 60%; /* prevents overflow */
@@ -19,6 +19,7 @@
 #home-title {
   font-size: xx-large;
   max-width: 500px;
+  font-weight: bold;
 }
 
 #home-content {
@@ -81,8 +82,9 @@
     padding-block: 4rem;
   }
 
-  .home img {
-    max-width: 400px;
+  .banner {
+    max-height: none;
+    height: 70%;
   }
 
   #home-content {

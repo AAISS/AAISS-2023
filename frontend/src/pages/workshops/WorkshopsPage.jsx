@@ -92,7 +92,7 @@ export default function WorkshopsPage() {
           flexDirection: 'column',
         }}
       >
-        <div id="filter-box">
+        <div id="filter-box" className="border border-blue-950 rounded-xl">
           <FormLabel id={'radio-container-workshops-container-label'}>Filter By:</FormLabel>
           <RadioGroup
             id={'radio-container-workshops'}

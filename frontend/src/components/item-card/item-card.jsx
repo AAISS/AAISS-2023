@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 import { Helper } from '../../utils/Helper.js';
 import MoreInfoModal from './more-info-modal';
 import DateObject from 'react-date-object';
-import persian from "react-date-object/calendars/persian";
-import persian_en from "react-date-object/locales/persian_en";
+import persian from 'react-date-object/calendars/persian';
+import persian_en from 'react-date-object/locales/persian_en';
 
 export const Presenter = ({ presenterName }) => (
   <Stack flexDirection="row" alignItems="center" gap={1}>
@@ -157,41 +157,68 @@ const ItemCard = ({
         <CardHeader
           title={title}
           subheader={isWorkshop ? 'workshop' : 'presentation'}
-          titleTypographyProps={{ variant: 'subtitle1' }}
-          subheaderTypographyProps={{ variant: 'overline' }}
-          sx={{ bgcolor: isFull && !hasBought ? 'action.disabledBackground' : 'var(--background-color-lighter-60)' }}
+          titleTypographyProps={{
+            variant: 'subtitle1',
+            sx: {
+              direction: 'rtl',
+              backgroundColor: 'rgba(0,0,0,0.1)',
+              borderRadius: '10px',
+              padding: '4px',
+              marginBottom: '4px',
+              fontWeight: 'bold',
+              fontSize: '18px',
+            },
+          }}
+          subheaderTypographyProps={{
+            variant: 'overline',
+            sx: {
+              color: 'white',
+              fontWeight: 'bold',
+            },
+          }}
+          sx={{
+            bgcolor: isFull && !hasBought ? 'action.disabledBackground' : 'var(--background-color-lighter-60)',
+          }}
         />
         <CardContent>
-          <Typography variant="body2" gutterBottom>
+          <Typography variant="body2" gutterBottom sx={{ direction: 'rtl' }}>
             {Helper.omitLongString(description, 50)}
           </Typography>
           <Typography variant="body1" sx={{ fontSize: 14, textWrap: 'nowrap' }} color="text.secondary">
-            From: {new DateObject({
-            date: new Date(startDate),
-            format: "YYYY/MM/DD, HH:mm",
-            calendar: persian,
-            locale: persian_en,
-          }).format() + ' UTC+03:30'}
+            From:{' '}
+            {new DateObject({
+              date: new Date(startDate),
+              format: 'YYYY/MM/DD, HH:mm',
+              calendar: persian,
+              locale: persian_en,
+            }).format() + ' UTC+03:30'}
           </Typography>
           <Typography variant="body1" sx={{ fontSize: 14, textWrap: 'nowrap' }} color="text.secondary">
-            To: {new DateObject({
-            date: new Date(endDate),
-            format: "YYYY/MM/DD, HH:mm",
-            calendar: persian,
-            locale: persian_en,
-          }).format() + ' UTC+03:30'}
+            To:{' '}
+            {new DateObject({
+              date: new Date(endDate),
+              format: 'YYYY/MM/DD, HH:mm',
+              calendar: persian,
+              locale: persian_en,
+            }).format() + ' UTC+03:30'}
           </Typography>
           <Divider sx={{ my: 1 }} />
           <Presenter presenterName={presenterName} />
           {levelComponentMapping[level]}
           {!hasBought && <Cost cost={cost} />}
           {!hasBought && shouldShowFullCapacity && <FullCapacityChip />}
-            {finished && <div style={{
-                backgroundColor: "#ec6803",
-                borderRadius: "5px",
-                display: "inline-block",
-                padding: "2px 5px 2px 5px"
-            }}>Finished!</div>}
+          {finished && (
+            <div
+              style={{
+                backgroundColor: '#ec6803',
+                borderRadius: '5px',
+                display: 'inline-block',
+                padding: '2px 5px 2px 5px',
+              }}
+            >
+              Finished!
+            </div>
+          )}
         </CardContent>
         <CardActions
           sx={{
@@ -208,18 +235,18 @@ const ItemCard = ({
           </Button>
           {getActionComponent()}
         </CardActions>
-          {certificateLink &&
-              <Button
-                  href={certificateLink}
-                  style={{
-                      backgroundColor: "#ec6803",
-                      color: "#fff",
-                      width: "100%",
-                  }}
-              >
-                  Download Certificate!
-              </Button>
-          }
+        {certificateLink && (
+          <Button
+            href={certificateLink}
+            style={{
+              backgroundColor: '#ec6803',
+              color: '#fff',
+              width: '100%',
+            }}
+          >
+            Download Certificate!
+          </Button>
+        )}
       </Card>
     </>
   );
@@ -243,8 +270,8 @@ ItemCard.propTypes = {
   addToCalendarLink: PropTypes.string,
   onClickAddToCart: PropTypes.func,
   remainingCapacity: PropTypes.number,
-    certificateLink: PropTypes.string,
-    finished: PropTypes.bool,
+  certificateLink: PropTypes.string,
+  finished: PropTypes.bool,
 };
 
 export default ItemCard;
