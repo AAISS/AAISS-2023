@@ -30,7 +30,7 @@
   align-items: baseline;
 }
 
-.ceit-title {
+.gradient-text {
   background: linear-gradient(
     90deg,
     var(--background-color-lighter-40) 0%,

@@ -13,17 +13,13 @@ const Home = () => {
           Amirkabir Artificial Intelligence Student Summit
         </Typography>
         <Typography>
-          <a href="https://ceit-ssc.ir" className='ceit-title'>
+          <a href="https://ceit-ssc.ir" className="gradient-text">
             CEIT SSC
-          </a>
-          {' '}
-          in colaboration with
-          {' '}
+          </a>{' '}
+          in colaboration with{' '}
           <a href="https://www.ompfinex.com/">
-            <img src={omp} alt="OMPFinex logo"
-            style={{height: '2rem', display: 'inline'}} />
+            <img src={omp} alt="OMPFinex logo" style={{ height: '2rem', display: 'inline' }} />
           </a>
-          
         </Typography>
         <Button variant="contained" size="large" id="call-to-action-btn" href="/talks">
           Participate now
