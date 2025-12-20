@@ -13,11 +13,11 @@ const ROUTES = {
     title: 'Home',
     component: <Home />,
   },
-  speakers: {
-    path: '/presenters',
-    title: 'Presenters',
-    component: <PresenterPage />,
-  },
+  // speakers: {
+  //   path: '/presenters',
+  //   title: 'Presenters',
+  //   component: <PresenterPage />,
+  // },
   speaker: {
     path: '/presenters/:id',
     title: 'Presenter',
@@ -29,11 +29,11 @@ const ROUTES = {
     title: 'talks',
     component: <WorkshopsPage />,
   },
-  schedule: {
-    path: '/schedule',
-    title: 'Schedule',
-    component: <SchedulePage />,
-  },
+  // schedule: {
+  //   path: '/schedule',
+  //   title: 'Schedule',
+  //   component: <SchedulePage />,
+  // },
   staff: {
     path: '/staff',
     title: 'Staff',
