@@ -46,7 +46,7 @@ const Syllabus = ({ syllabus }) => (
 const MoreInfoModal = ({
   visibility,
   onVisibilityChange,
-    finished,
+  finished,
   title,
   presenterName,
   cost,
@@ -75,7 +75,9 @@ const MoreInfoModal = ({
         },
       }}
     >
-      <DialogTitle variant="h5">{title}</DialogTitle>
+      <DialogTitle variant="h5" sx={{ direction: 'rtl' }}>
+        {title}
+      </DialogTitle>
       <DialogContent>
         <div
           style={{
@@ -88,12 +90,13 @@ const MoreInfoModal = ({
           {description && (
             <Typography
               style={{
+                direction: 'rtl',
                 marginLeft: '5px',
                 paddingLeft: '5px',
                 marginTop: '0px',
                 marginBottom: '10px',
-                overflowY:"auto",
-                maxHeight: "30vh",
+                overflowY: 'auto',
+                maxHeight: '30vh',
                 borderLeft: '1px solid var(--light-text-color-lighter)',
               }}
             >
