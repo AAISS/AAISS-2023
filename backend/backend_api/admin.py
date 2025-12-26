@@ -63,12 +63,18 @@ class UserAdmin(admin.ModelAdmin):
                     'url': workshop.workshop.recorded_link,
                     'name': workshop.workshop.name
                 })
-            MailerThread(f"AAISS recorded links",
-                         [user.account.email],
-                         render_to_string('record_links.html',
-                                          {
-                                              'presentations': presentation_links,
-                                          })).start()
+            MailerThread([
+                {
+                    "email": user.account.email,
+                    "subject": "AAISS recorded links",
+                    "content": render_to_string(
+                        'record_links.html',
+                        {
+                            'presentations': presentation_links,
+                        }
+                    ),
+                }
+            ]).start()
 
 
 class DiscountAdmin(admin.ModelAdmin):
