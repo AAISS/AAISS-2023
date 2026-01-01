@@ -50,7 +50,7 @@ const SignUpForm = ({ onLoginClick }) => {
   const validateForm = useCallback(() => {
     if (hasEmailError(email)) {
       setIsEmailWrong(true);
-      setEmailHelperText('Only Gmail accounts are accepted');
+      setEmailHelperText('Mail address is not valid');
       return false;
     }
     const { lengthIsOk, startsWithZeroNine } = validatePhone(phoneNumber);
@@ -106,7 +106,7 @@ const SignUpForm = ({ onLoginClick }) => {
       case 400:
         toastDataTemp.message = 'User with This Email Already Exists!';
         toastDataTemp.alertType = 'error';
-        break;  
+        break;
       default:
         toastDataTemp.message = 'Unexpected Error! Please Try Again Later.';
         toastDataTemp.alertType = 'error';
@@ -131,10 +131,7 @@ const SignUpForm = ({ onLoginClick }) => {
         <Typography variant="h2" fontSize={45} style={{ textAlign: 'center' }}>
           Sign Up
         </Typography>
-        <form
-          onSubmit={handleFormSubmit}
-          className="w-full"
-        >
+        <form onSubmit={handleFormSubmit} className="w-full">
           <FormControl className="w-full">
             <Toast
               open={openToast}
@@ -242,13 +239,14 @@ const LoginForm = ({ onSignUpClick }) => {
   useEffect(() => {
     if (issueTokenResponse == null) return;
 
-    if (issueTokenResponse.status === 400) {}
+    if (issueTokenResponse.status === 400) {
+    }
 
     if (issueTokenResponse.status === 401) {
-      setToastData({message: "Wrong mail or password", alertType: "error"});
+      setToastData({ message: 'Wrong mail or password', alertType: 'error' });
     } else if (issueTokenResponse.status === 400) {
-      setToastData({message: "Have you activated your account yet? check your email", alertType: "error"});
-    }  else {
+      setToastData({ message: 'Have you activated your account yet? check your email', alertType: 'error' });
+    } else {
       setToastData(Helper.getToastDataFromResponse(issueTokenResponse));
     }
     setOpenToast(true);
@@ -290,10 +288,7 @@ const LoginForm = ({ onSignUpClick }) => {
         <Typography variant="h2" fontSize={45} style={{ textAlign: 'center' }}>
           Login
         </Typography>
-        <form
-          onSubmit={handleFormSubmit}
-          className="w-full"
-        >
+        <form onSubmit={handleFormSubmit} className="w-full">
           <FormControl className="w-full">
             <Toast
               open={openToast}
